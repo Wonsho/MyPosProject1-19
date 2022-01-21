@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "54917421517",
+    "firebase_url": "https://myposproject-kyungsung-default-rtdb.firebaseio.com",
+    "project_id": "myposproject-kyungsung",
+    "storage_bucket": "myposproject-kyungsung.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54917421517:android:ca1609ab8221b261e48c84",
+        "android_client_info": {
+          "package_name": "com.wons.myposproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54917421517-53jruqcjeqt1536vigpvh15efnvip2vp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE5sjUHZGOxJiEIlEtM1W50MmLqQ-8ra8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54917421517-53jruqcjeqt1536vigpvh15efnvip2vp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

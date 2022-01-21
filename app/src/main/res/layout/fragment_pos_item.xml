@@ -130,6 +130,7 @@
                         android:background="@color/line_1" />
 
                     <FrameLayout
+                        android:id="@+id/framelayout_inpositem"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
