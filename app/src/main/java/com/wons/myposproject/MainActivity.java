@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.wons.myposproject.databinding.ActivityMainBinding;
+import com.wons.myposproject.itemvalues.Group;
+import com.wons.myposproject.itemvalues.Item;
 import com.wons.myposproject.main_fragments.HomeFragment;
 import com.wons.myposproject.main_fragments.InfoFragment;
 import com.wons.myposproject.main_fragments.PosItemFragment;
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
 
     }
 
