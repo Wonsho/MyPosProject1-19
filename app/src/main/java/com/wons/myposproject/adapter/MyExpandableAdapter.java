@@ -4,15 +4,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
+import com.wons.myposproject.itemvalues.Group;
+import com.wons.myposproject.itemvalues.Item;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MyExpandableAdapter extends BaseExpandableListAdapter {
 
-    ArrayList<String> parents;
-    HashMap<String, ArrayList<String>> children;
+    private ArrayList<String> parents;
+    private HashMap<String, ArrayList<String>> children;
 
-    MyExpandableAdapter() {
+    public MyExpandableAdapter() {
         parents = new ArrayList<>();
         children = new HashMap<>();
     }
@@ -64,5 +67,27 @@ public class MyExpandableAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
+    }
+
+    public void putGroupList(ArrayList<Group> groupLists) {
+        for(Group group : groupLists) {
+            parents.add(group.getKoreanName());
+            ArrayList<String> child = setChildren(group);
+            children.put(group.getKoreanName(), child);
+
+        }
+    }
+
+    private ArrayList<String> setChildren(Group group) {
+        if(children == null) {
+            children = new HashMap<>();
+        }
+        ArrayList<String> child = new ArrayList<>();
+
+        for(int i=0; i<group.getItemList().size(); i++) {
+            Item itemList = group.getItemList().get(i);
+            child.add(itemList.koreanName);
+        }
+        return child;
     }
 }

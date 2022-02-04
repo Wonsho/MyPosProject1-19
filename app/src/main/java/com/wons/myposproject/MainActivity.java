@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,7 @@ import com.wons.myposproject.main_fragments.InfoFragment;
 import com.wons.myposproject.main_fragments.PosItemFragment;
 
 public class MainActivity extends AppCompatActivity {
-
+    // TODO: 2022-02-04 데이터베이스 빌드, 뷰모델 생성(날씨 api, 스케쥴) 
     ActivityMainBinding binding;
     MainViewModel viewModel;
     @Override
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return new HomeFragment();
     }
+
 
 
 

@@ -1,12 +1,20 @@
 package com.wons.myposproject.itemvalues;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+@Entity
 public class Value {
 
+    @PrimaryKey
+    @NonNull
     public String itemCode;
+
+
     public String upDate;
     public String X0;
     public String X1;
