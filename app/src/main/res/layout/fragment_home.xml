@@ -157,16 +157,60 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
+
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="Today's Memo"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:gravity="center_vertical"
-                            android:layout_marginLeft="30dp"/>
+                            android:layout_weight="1">
+                            <TextView
+                                android:id="@+id/tv_scheduleValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="2022 / 2 / 21"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:gravity="center_vertical"
+                                android:layout_marginLeft="30dp"/>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="Schedule"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:gravity="center_vertical"
+                                android:layout_marginLeft="30dp"/>
+
+                            <LinearLayout
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:background="?attr/selectableItemBackground"
+                                android:id="@+id/layout_addSchedule"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent">
+                                <ImageView
+                                    android:paddingRight="10dp"
+                                    android:layout_margin="5dp"
+                                    android:elevation="10dp"
+                                    android:src="@drawable/ic_baseline_add_circle_outline_24"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"/>
+                                <TextView
+                                    android:textSize="20dp"
+                                    android:paddingRight="20dp"
+                                    android:gravity="center"
+                                    android:textColor="@color/black"
+                                    android:text="스케쥴 추가"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
 
                         <TextView
                             android:layout_marginLeft="10dp"
@@ -175,9 +219,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp" />
 
-                        <TextView
-                            android:gravity="center"
-                            android:text="리스트뷰로 오늘 할일 구현"
+                        <ListView
+                            android:layout_margin="10dp"
+                            android:id="@+id/lv_schedule"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_marginTop="20dp"

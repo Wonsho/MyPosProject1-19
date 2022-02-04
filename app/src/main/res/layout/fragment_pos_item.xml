@@ -135,7 +135,310 @@
                     <FrameLayout
                         android:id="@+id/framelayout_inpositem"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent" >
+
+
+                        <!--바코드 레이아웃-->
+                        <LinearLayout
+                            android:id="@+id/layout_barcode"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9">
+
+                                <ListView
+                                    android:id="@+id/lv_inPos_inBarcode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="10dp"/>
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/line_1" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center">
+
+                                <Button
+                                    android:id="@+id/btn_inPos_inBarCode_add"
+                                    android:layout_width="300dp"
+                                    android:layout_height="60dp"
+                                    android:backgroundTint="@color/line_1"
+                                    android:text="추가"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+
+
+                        <!--아이템 레이아웃-->
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/layout_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1">
+
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:backgroundTint="@color/background"
+                                        app:cardCornerRadius="20dp">
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_margin="5dp"
+                                            app:cardCornerRadius="20dp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+
+                                            <LinearLayout
+                                                android:orientation="vertical"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent">
+                                                <LinearLayout
+                                                    android:layout_weight="1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="center">
+
+                                                    <TextView
+                                                        android:id="@+id/tv_vertical"
+                                                        android:textSize="30sp"
+                                                        android:layout_gravity="center|center_horizontal|center_vertical"
+                                                        android:gravity="center|center_horizontal|center_vertical"
+                                                        android:textStyle="bold"
+                                                        android:textColor="@color/black"
+                                                        android:text="VerticalValue"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"/>
+                                                </LinearLayout>
+                                                <TextView
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:background="@color/line_1"
+                                                    android:backgroundTint="@color/line_1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="1dp"/>
+
+                                                <LinearLayout
+                                                    android:layout_weight="9"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp">
+
+                                                    <ListView
+                                                        android:id="@+id/lv_vertival"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent"/>
+
+                                                </LinearLayout>
+
+                                            </LinearLayout>
+                                        </androidx.cardview.widget.CardView>
+                                    </androidx.cardview.widget.CardView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1">
+
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:backgroundTint="@color/background"
+                                        app:cardCornerRadius="20dp">
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_margin="5dp"
+                                            app:cardCornerRadius="20dp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+                                            <LinearLayout
+                                                android:orientation="vertical"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent">
+                                                <LinearLayout
+                                                    android:layout_weight="1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="center">
+
+                                                    <TextView
+                                                        android:id="@+id/tv_horizontal"
+                                                        android:textSize="30sp"
+                                                        android:layout_gravity="center|center_horizontal|center_vertical"
+                                                        android:gravity="center|center_horizontal|center_vertical"
+                                                        android:textStyle="bold"
+                                                        android:textColor="@color/black"
+                                                        android:text="HorizontalValue"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"/>
+                                                </LinearLayout>
+                                                <TextView
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:background="@color/line_1"
+                                                    android:backgroundTint="@color/line_1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="1dp"/>
+
+                                                <LinearLayout
+                                                    android:layout_weight="9"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp">
+
+                                                    <ListView
+                                                        android:id="@+id/lv_horizontal"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent"/>
+
+                                                </LinearLayout>
+
+                                            </LinearLayout>
+
+                                        </androidx.cardview.widget.CardView>
+                                    </androidx.cardview.widget.CardView>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="5dp"
+                                    android:layout_weight="1">
+
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:backgroundTint="@color/background"
+                                        app:cardCornerRadius="20dp">
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_margin="5dp"
+                                            app:cardCornerRadius="20dp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+                                            <LinearLayout
+                                                android:orientation="vertical"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent">
+                                                <LinearLayout
+                                                    android:layout_weight="1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp"
+                                                    android:layout_gravity="center"
+                                                    android:gravity="center">
+
+                                                    <TextView
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_gravity="center|center_horizontal|center_vertical"
+                                                        android:gravity="center|center_horizontal|center_vertical"
+                                                        android:text="선택품목 단가"
+                                                        android:textColor="@color/black"
+                                                        android:textSize="30sp"
+                                                        android:textStyle="bold" />
+                                                </LinearLayout>
+                                                <TextView
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:background="@color/line_1"
+                                                    android:backgroundTint="@color/line_1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="1dp"/>
+
+                                                <LinearLayout
+                                                    android:orientation="vertical"
+                                                    android:gravity="center"
+                                                    android:layout_weight="9"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp">
+
+                                                    <TextView
+                                                        android:textStyle="bold"
+                                                        android:textSize="20sp"
+                                                        android:textColor="@color/black"
+                                                        android:text="선택의 값 ex) 10X200"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"/>
+                                                    <TextView
+                                                        android:textSize="20sp"
+                                                        android:textColor="@color/black"
+                                                        android:text="단가 : "
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"/>
+
+
+                                                </LinearLayout>
+
+                                            </LinearLayout>
+                                        </androidx.cardview.widget.CardView>
+                                    </androidx.cardview.widget.CardView>
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/line_1"
+                                android:backgroundTint="@color/line_1" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btn_add_in_pos"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|center_horizontal"
+                                    android:backgroundTint="@color/line_1"
+                                    android:gravity="center|center_horizontal"
+                                    android:text="추가하기"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </FrameLayout>
 
 
                 </LinearLayout>

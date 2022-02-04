@@ -9,6 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#EAEAEA</color>
     <color name="line_1">#AFAFAF</color>
-    <color name="vertical_value">#AFAFAF</color>
-    <color name="horizontal_value">#AFAFAF</color>
+    <color name="itemList_value">#AFAFAF</color>
 </resources>

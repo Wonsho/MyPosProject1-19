@@ -1,9 +1,16 @@
 package com.wons.myposproject.adapter;
 
+import android.content.Context;
+import android.os.Build;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
+import com.wons.myposproject.R;
 import com.wons.myposproject.itemvalues.Group;
 import com.wons.myposproject.itemvalues.Item;
 
@@ -21,32 +28,32 @@ public class MyExpandableAdapter extends BaseExpandableListAdapter {
     }
     @Override
     public int getGroupCount() {
-        return 0;
+        return parents.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 0;
+        return children.get(parents.get(groupPosition)).size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return null;
+        return parents.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return null;
+        return children.get(parents.get(groupPosition)).get(childPosition);
     }
 
     @Override
     public long getGroupId(int groupPosition) {
-        return 0;
+        return groupPosition;
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return 0;
+        return childPosition;
     }
 
     @Override
@@ -54,20 +61,38 @@ public class MyExpandableAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        return null;
+        Context context = parent.getContext();
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.expandable_list_parent, parent, false);
+        }
+        convertView.setContextClickable(true);
+        TextView tv_parent = convertView.findViewById(R.id.tv_parentValue);
+        tv_parent.setText(parents.get(groupPosition));
+        return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        return null;
+        Context context = parent.getContext();
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.expandable_list_child, parent, false);
+        }
+
+        TextView tv_child = convertView.findViewById(R.id.tv_childValue);
+        tv_child.setText(children.get(parents.get(groupPosition)).get(childPosition));
+        return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
+
 
     public void putGroupList(ArrayList<Group> groupLists) {
         for(Group group : groupLists) {

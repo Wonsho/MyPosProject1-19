@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import android.os.Bundle;
@@ -23,12 +24,14 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 2022-02-04 데이터베이스 빌드, 뷰모델 생성(날씨 api, 스케쥴) 
     ActivityMainBinding binding;
     MainViewModel viewModel;
+    public static final String TAG_DID = "DID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         binding.bottomNavi.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -1,25 +1,19 @@
 package com.wons.myposproject.schedule;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 
+@Entity
 public class Schedule {
 
-    private String date;
-    private ArrayList<String> todo;
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    public int id;
 
-    public String getDate() {
-        return date;
-    }
+    public String date;
+    public String schedule_of_date;
 
-    public ArrayList<String> getTodo() {
-        return todo;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public void setTodo(ArrayList<String> todo) {
-        this.todo = todo;
-    }
 }
