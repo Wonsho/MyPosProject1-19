@@ -116,6 +116,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_itemTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -250,9 +251,40 @@
                                                     android:backgroundTint="@color/line_1"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="1dp"/>
+                                                    <LinearLayout
+                                                        android:orientation="horizontal"
+                                                        android:layout_weight="0.5"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="0dp">
+
+                                                        <TextView
+                                                            android:textColor="@color/black"
+                                                            android:textStyle="bold"
+                                                            android:gravity="center"
+                                                            android:text="선택한 값 : "
+                                                            android:layout_weight="1"
+                                                            android:layout_width="0dp"
+                                                            android:layout_height="match_parent"/>
+                                                        <TextView
+                                                            android:id="@+id/tv_selectedVerticalValue"
+                                                            android:textColor="@color/black"
+                                                            android:textStyle="bold"
+                                                            android:gravity="center"
+                                                            android:text="null"
+                                                            android:layout_weight="1"
+                                                            android:layout_width="0dp"
+                                                            android:layout_height="match_parent"/>
+                                                    </LinearLayout>
+                                                <TextView
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:background="@color/line_1"
+                                                    android:backgroundTint="@color/line_1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="1dp"/>
 
                                                 <LinearLayout
-                                                    android:layout_weight="9"
+                                                    android:layout_weight="8.5"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="0dp">
 
@@ -270,7 +302,6 @@
 
                                 <LinearLayout
                                     android:layout_width="0dp"
-
                                     android:layout_height="match_parent"
                                     android:layout_margin="5dp"
                                     android:layout_weight="1">
@@ -314,9 +345,39 @@
                                                     android:backgroundTint="@color/line_1"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="1dp"/>
-
                                                 <LinearLayout
-                                                    android:layout_weight="9"
+                                                    android:orientation="horizontal"
+                                                    android:layout_weight="0.5"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp">
+
+                                                    <TextView
+                                                        android:textColor="@color/black"
+                                                        android:textStyle="bold"
+                                                        android:gravity="center"
+                                                        android:text="선택한 값 : "
+                                                        android:layout_weight="1"
+                                                        android:layout_width="0dp"
+                                                        android:layout_height="match_parent"/>
+                                                    <TextView
+                                                        android:id="@+id/tv_selectedHorizontalValue"
+                                                        android:textColor="@color/black"
+                                                        android:textStyle="bold"
+                                                        android:gravity="center"
+                                                        android:text="null"
+                                                        android:layout_weight="1"
+                                                        android:layout_width="0dp"
+                                                        android:layout_height="match_parent"/>
+                                                </LinearLayout>
+                                                <TextView
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:background="@color/line_1"
+                                                    android:backgroundTint="@color/line_1"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="1dp"/>
+                                                <LinearLayout
+                                                    android:layout_weight="8.5"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="0dp">
 
