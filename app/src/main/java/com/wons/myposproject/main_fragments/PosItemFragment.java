@@ -24,6 +24,7 @@ import com.wons.myposproject.itemvalues.Item;
 import com.wons.myposproject.itemvalues.Value;
 import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
+import com.wons.myposproject.pos_value.BasketSoldCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,6 +66,7 @@ public class PosItemFragment extends Fragment implements Pos {
         return binding.getRoot();
     }
 
+
     @Override
     public void setItemMenuListView() {
         MyExpandableAdapter adapter = new MyExpandableAdapter();
@@ -80,7 +82,6 @@ public class PosItemFragment extends Fragment implements Pos {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 changeView(SHOW_ITEM);
-
                 binding.tvItemTitle.setText(((TextView)v.findViewById(R.id.tv_childValue)).getText().toString());
                 setVerticalView(null); //todo 맞는 데이터 뷰 넣어주기
                 return false;
@@ -225,6 +226,10 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public void soldToCredit() {
+        //todo 바구니 객체를 만들어서 디비에 넣은후 바구니 데이터의 아이디 값을 가져와서 동일한 코드값으로 db에 저장
+
+        int basketCode = makeBasket("", BasketSoldCode.CREDIT.soldCode, "");
+        insertItemInBasket(basketCode);
 
     }
 
@@ -235,12 +240,15 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public void sold() {
+        int basketCode = makeBasket("", BasketSoldCode.NOT_CREDIT.soldCode, "");
+        insertItemInBasket(basketCode);
 
+        //todo 바구니 객체를 만들어서 디비에 넣은후 바구니 데이터의 아이디 값을 가져와서 동일한 코드값으로 db에 저장
     }
 
     @Override
-    public void insertBasket() {
-
+    public void insertItemInBasket(int basketCode) {
+        //todo 바스켓 코드 조회한후 db에 저장
     }
 
     @Override
@@ -248,64 +256,16 @@ public class PosItemFragment extends Fragment implements Pos {
         return null;
     }
 
+    @Override
     public BarCodeItem getBasketItemInDB(String code) {
 
         return null;
     }
-
-
-//    private void setItemMenuListView() {
-//        MyExpandableAdapter adapter = new MyExpandableAdapter();
-//        ExpandableListView expandableListView =binding.lvExpandable;
-//        expandableListView.setAdapter(adapter);
-//        ArrayList<Group> groupArrayList = new ArrayList<>(Arrays.asList(Group.values()));
-//        adapter.putGroupList(groupArrayList);
-//        adapter.notifyDataSetChanged();
-//        for(int i=0; i < adapter.getGroupCount() ; i++) {
-//            expandableListView.expandGroup(i);
-//        }
-//        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-//                doChangeView(SHOW_ITEM);
-//                return false;
-//            }
-//        });
-//    }
-
-//    private void setVerticalValueList() {
-//
-//    }
-//
-//    private void setHorizontalValueList() {
-//
-//    }
-
-//    private void setBasketListView(BasketItem item) {
-//        ListView lv = (ListView) binding.layoutBasket.findViewById(R.id.lv_basket);
-//        if(lv.getAdapter() == null) {
-//            BasKetListAdapter adapter = new BasKetListAdapter();
-//            lv.setAdapter(adapter);
-//        }
-//        BasKetListAdapter adapter = ((BasKetListAdapter)((ListView)binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter());
-//        adapter.addItem(item);
-//        adapter.notifyDataSetChanged();
-//    }
-
-//    private void doChangeView(int i) {
-//        switch (i) {
-//            case SHOW_BARCODE: {
-//                binding.layoutItem.setVisibility(View.GONE);
-//                binding.layoutBarcode.setVisibility(View.VISIBLE);
-//                break;
-//            }
-//            case SHOW_ITEM: {
-//                binding.layoutItem.setVisibility(View.VISIBLE);
-//                binding.layoutBarcode.setVisibility(View.GONE);
-//                break;
-//            }
-//        }
-//    }
+    @Override
+    public int makeBasket(String date, String soldCode, String time) {
+        int basketCode = 0;
+        return basketCode;
+    }
 }
 
 interface Pos {
@@ -345,7 +305,9 @@ interface Pos {
     void sold();
 
     //아이템 데이터 조회
-    void insertBasket();
+    BarCodeItem getBasketItemInDB(String code);
+    int makeBasket(String date, String soldCode, String time);
+    void insertItemInBasket(int basketCode);
 
     Value getValue(String code);
 }
