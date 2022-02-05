@@ -4,15 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import java.util.ArrayList;
-
-public class MyListAdapter extends BaseAdapter {
-
-    ArrayList<String> items;
-
-    MyListAdapter() {
-        items = new ArrayList<>();
-    }
+public class ValueAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return 0;

@@ -160,6 +160,8 @@
                             </LinearLayout>
 
                             <TextView
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:background="@color/line_1" />
@@ -172,10 +174,10 @@
 
                                 <Button
                                     android:id="@+id/btn_inPos_inBarCode_add"
-                                    android:layout_width="300dp"
-                                    android:layout_height="60dp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:backgroundTint="@color/line_1"
-                                    android:text="추가"
+                                    android:text="바구니에 담기"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
@@ -482,6 +484,7 @@
         </LinearLayout>
     </LinearLayout>
     <com.wons.myposproject.BasketLayout
+        android:id="@+id/layout_basket"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"

@@ -47,14 +47,75 @@
                         android:background="@color/line_1" />
 
                     <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/black"
                             android:gravity="center"
-                            android:text="영수증 메뉴" />
+                            android:text="품명"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:background="@color/line_1"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:text="규격"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:background="@color/line_1"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:text="단가"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:background="@color/line_1"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"/>
+                        <TextView
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:text="수량"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"/>
+                    </LinearLayout>
+                        <TextView
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:background="@color/line_1"
+                            android:backgroundTint="@color/line_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"/>
+                        <ListView
+                            android:id="@+id/lv_basket"
+                            android:layout_margin="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -95,13 +156,14 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:textColor="@color/black"
-                            android:text="가격"
-                            android:gravity="center"
+                            android:id="@+id/tv_allPrice"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="가격"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
@@ -119,6 +181,7 @@
                         android:layout_weight="1">
 
                         <TextView
+                            android:id="@+id/tv_credit_likeBtn"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -137,6 +200,7 @@
                             android:layout_marginRight="5dp"
                             android:background="@color/line_1" />
                         <TextView
+                            android:id="@+id/tv_printReceipt_likeBtn"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -155,6 +219,7 @@
                             android:layout_marginRight="5dp"
                             android:background="@color/line_1" />
                         <TextView
+                            android:id="@+id/tv_sold_likeBtn"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
