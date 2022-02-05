@@ -1,10 +1,15 @@
 package com.wons.myposproject.main_fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.BasKetListAdapter;
 import com.wons.myposproject.adapter.MyExpandableAdapter;
@@ -33,7 +41,7 @@ import java.util.List;
 public class PosItemFragment extends Fragment implements Pos {
 
     FragmentPosItemBinding binding;
-
+    private final String TAG = "PosItemFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,10 +51,12 @@ public class PosItemFragment extends Fragment implements Pos {
             @Override
             public void onClick(View v) {
                 changeView(SHOW_BARCODE);
-                BarCodeItem item = getBasketItemInDB(barcodeScan());
-                setBarcodeItemList(item);
+                barcodeScan();
+                showLog("tvBarcodeLikeBtn + onc");
             }
         });
+
+       // MainViewModel.insertBarcodeItem(getContext(), "8801121025666", "아몬드 우유", "500");
 
         binding.btnInPosInBarCodeAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +92,7 @@ public class PosItemFragment extends Fragment implements Pos {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 changeView(SHOW_ITEM);
-                binding.tvItemTitle.setText(((TextView)v.findViewById(R.id.tv_childValue)).getText().toString());
+                binding.tvItemTitle.setText(((TextView) v.findViewById(R.id.tv_childValue)).getText().toString());
                 setVerticalView(null); //todo 맞는 데이터 뷰 넣어주기
                 return false;
             }
@@ -96,10 +106,12 @@ public class PosItemFragment extends Fragment implements Pos {
                 if (binding.layoutBarcode.getVisibility() == View.VISIBLE) break;
                 binding.layoutItem.setVisibility(View.GONE);
                 binding.layoutBarcode.setVisibility(View.VISIBLE);
+                clearItemListView();
                 break;
             }
             case SHOW_ITEM: {
                 if (binding.layoutItem.getVisibility() == View.VISIBLE) break;
+                clearBarcodeView();
                 binding.layoutItem.setVisibility(View.VISIBLE);
                 binding.layoutBarcode.setVisibility(View.GONE);
                 break;
@@ -108,21 +120,21 @@ public class PosItemFragment extends Fragment implements Pos {
     }
 
     @Override
-    public String barcodeScan() {
-        String code = null;
-        //todo 바코드 스캐너 생성
-        return code;
+    public void barcodeScan() {
+        IntentIntegrator.forSupportFragment(this).initiateScan();
     }
 
     @Override
     public void clearBarcodeView() {
         ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).clearItemList();
+        ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
     public void setBarcodeItemList(BarCodeItem item) {
         ListView lv = binding.lvInPosInBarcode;
         if (lv.getAdapter() == null) {
+            showLog("setBarcodeItemList + if (lv.getAdapter() == null)");
             lv.setAdapter(new BasKetListAdapter());
         }
         if (item == null) {
@@ -131,21 +143,26 @@ public class PosItemFragment extends Fragment implements Pos {
         }
 
         //todo 수량 묻는 다이얼 로그 띄우기
+
         int quantity = 1;
         BasketItem basketItem = null;
         //todo 스캔하고 수량 입력 and 같은 바코드 찍었을시 중복체크
 
         int sameItemIndexCheck = ((BasKetListAdapter) lv.getAdapter()).checkSameItem(item.name);
-        if(sameItemIndexCheck != -1) {
-            basketItem = new BasketItem(item.name,null,item.unitPrice,"1");
+        showLog(String.valueOf(sameItemIndexCheck));
+
+        if (sameItemIndexCheck == -1) {
+            showLog("if (sameItemIndexCheck != -1)");
+            basketItem = new BasketItem(item.name, null, item.unitPrice, "1");
             ((BasKetListAdapter) lv.getAdapter()).addItem(basketItem);
 
         } else {
-          ArrayList<BasketItem> items = ((BasKetListAdapter) lv.getAdapter()).getItems();
-          basketItem = items.get((sameItemIndexCheck));
-          basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity)+quantity);
-          items.set(sameItemIndexCheck, basketItem);
-          ((BasKetListAdapter) lv.getAdapter()).setItems(items);
+            showLog("else");
+            ArrayList<BasketItem> items = ((BasKetListAdapter) lv.getAdapter()).getItems();
+            basketItem = items.get((sameItemIndexCheck));
+            basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity) + quantity);
+            items.set(sameItemIndexCheck, basketItem);
+            ((BasKetListAdapter) lv.getAdapter()).setItems(items);
         }
         ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
     }
@@ -258,13 +275,36 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public BarCodeItem getBasketItemInDB(String code) {
-
-        return null;
+        return MainViewModel.getBarcodeItem(getContext(), code);
     }
+
     @Override
     public int makeBasket(String date, String soldCode, String time) {
         int basketCode = 0;
         return basketCode;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("Pos", "onActivityResult");
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(getActivity(), "취소되었습니다", Toast.LENGTH_SHORT).show();
+                setBarcodeItemList(null);
+            } else {
+                Toast.makeText(getContext(), "Scanned" + result.getContents(), Toast.LENGTH_SHORT).show();
+                BarCodeItem item = getBasketItemInDB(result.getContents());
+                setBarcodeItemList(item);
+            }
+        } else {
+            Log.d("Pos", "onActivityResult6");
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void showLog(String msg) {
+        Log.e(TAG, msg);
     }
 }
 
@@ -277,7 +317,7 @@ interface Pos {
     void changeView(int actionCode);
 
     //바코드 스캔 버튼을 누를시
-    String barcodeScan();
+    void barcodeScan();
 
     void clearBarcodeView();
 
@@ -306,7 +346,9 @@ interface Pos {
 
     //아이템 데이터 조회
     BarCodeItem getBasketItemInDB(String code);
+
     int makeBasket(String date, String soldCode, String time);
+
     void insertItemInBasket(int basketCode);
 
     Value getValue(String code);

@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.wons.myposproject.itemvalues.Value;
+import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.schedule.Schedule;
 
 @Dao
@@ -18,16 +19,26 @@ public interface MyDao {
     @Insert
     void insertSchedule(Schedule schedule);
 
+    @Insert
+    void insertBarcodeItem(BarCodeItem barCodeItem);
+
+    @Delete
+    void deleteBarcodeItem(BarCodeItem barCodeItem);
     @Delete
     void deleteValueData(Value value);
     @Delete
     void deleteSchedule(Schedule schedule);
 
     @Update
+    void upDataBarcodeItem(BarCodeItem barCodeItem);
+    @Update
     void upDataValueData(Value value);
     @Update
     void upDataSchedule(Schedule schedule);
 
+
+    @Query("SELECT * FROM Barcodeitem WHERE barCode = :barcode")
+    BarCodeItem getBarcodeItem(String barcode);
 
     @Query("SELECT * FROM Value WHERE itemCode = :valueCode")
     Value getValueData(String valueCode);

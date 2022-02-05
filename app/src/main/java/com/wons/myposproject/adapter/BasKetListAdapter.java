@@ -1,6 +1,7 @@
 package com.wons.myposproject.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,8 +74,9 @@ public class BasKetListAdapter extends BaseAdapter {
     }
 
     public int checkSameItem(String name){
+        int i = 0;
         for(BasketItem item : items) {
-            int i = 0;
+            Log.e("Adapter", "checkSameItem: " + item.itemName + name);
             if(item.itemName.equals(name)) {
                 return i;
             }

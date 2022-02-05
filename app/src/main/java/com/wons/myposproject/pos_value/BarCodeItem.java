@@ -13,8 +13,9 @@ public class BarCodeItem {
     public String name;
     public String unitPrice;
 
-    BarCodeItem(String barCode, String name) {
+    public BarCodeItem(String barCode, String name, String unitPrice) {
         this.barCode = barCode;
         this.name = name;
+        this.unitPrice = unitPrice;
     }
 }

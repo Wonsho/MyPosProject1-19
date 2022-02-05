@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.room.Database;
 import androidx.room.Room;
 
+import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.util.HashMap;
@@ -28,6 +29,11 @@ public class MainViewModel extends ViewModel {
         return mainDataBase;
     }
 
+    public static BarCodeItem getBarcodeItem(Context context, String barcode) {
+        myDao = getMainDataBase(context).getDao();
+        return myDao.getBarcodeItem(barcode);
+    }
+
     public static void deleteSchedule(Context context, Schedule schedule) {
         myDao = getMainDataBase(context).getDao();
         myDao.deleteSchedule(schedule);
@@ -40,5 +46,10 @@ public class MainViewModel extends ViewModel {
     public static Schedule[] getSchedule(Context context, String date) {
         myDao = getMainDataBase(context).getDao();
         return myDao.getSelectedScheduleList(date);
+    }
+
+    public static void insertBarcodeItem(Context context, String barcode, String itemName, String unitPrice) {
+        myDao = getMainDataBase(context).getDao();
+        myDao.insertBarcodeItem(new BarCodeItem(barcode, itemName, unitPrice));
     }
 }
