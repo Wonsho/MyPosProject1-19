@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.wons.myposproject.R;
 import com.wons.myposproject.databinding.FragmentHomeBinding;
@@ -17,7 +18,7 @@ public final class DialogUtils {
 
     public static AlertDialog getAlertDialogWhenAddedSchedule(Activity activity, DialogCallback callback, FragmentHomeBinding binding) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("스케쥴 추가");
+        builder.setTitle("스케쥴을 적어주세요");
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_view_schedule, null);
         EditText et_schedule = view.findViewById(R.id.et_schedule);
         builder.setView(view);
@@ -78,6 +79,34 @@ public final class DialogUtils {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+            }
+        });
+
+        return builder.create();
+    }
+
+    public static AlertDialog getOnlyCheckQuantity(Activity activity, DialogCallback callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("수량을 입력해주세요");
+        View view = LayoutInflater.from(activity).inflate(R.layout.dialog_view_schedule, null);
+        EditText et = view.findViewById(R.id.et_schedule);
+        et.setHint("수량 입력");
+        builder.setView(view);
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    callback.onResult(et.getText().toString());
+
+                } catch (Exception e) {
+                    Toast.makeText(activity, "숫자가 아닙니다", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

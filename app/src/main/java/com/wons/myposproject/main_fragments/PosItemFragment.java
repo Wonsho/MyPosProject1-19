@@ -2,6 +2,7 @@ package com.wons.myposproject.main_fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,8 +145,15 @@ public class PosItemFragment extends Fragment implements Pos {
         }
 
         //todo 수량 묻는 다이얼 로그 띄우기
-
-        int quantity = 1;
+        final int[] quantity = new int[1];
+        AlertDialog alertDialog = DialogUtils.getOnlyCheckQuantity(getActivity(), new DialogCallback() {
+            @Override
+            public void onResult(Object value) {
+                quantity[0] = Integer.parseInt((String) value);
+                Log.e(TAG, String.valueOf(quantity[0]));
+            }
+        });
+        alertDialog.show();
         BasketItem basketItem = null;
         //todo 스캔하고 수량 입력 and 같은 바코드 찍었을시 중복체크
 
@@ -153,14 +162,14 @@ public class PosItemFragment extends Fragment implements Pos {
 
         if (sameItemIndexCheck == -1) {
             showLog("if (sameItemIndexCheck != -1)");
-            basketItem = new BasketItem(item.name, null, item.unitPrice, "1");
+            basketItem = new BasketItem(item.name, null, item.unitPrice, String.valueOf(quantity[0]));
             ((BasKetListAdapter) lv.getAdapter()).addItem(basketItem);
 
         } else {
             showLog("else");
             ArrayList<BasketItem> items = ((BasKetListAdapter) lv.getAdapter()).getItems();
             basketItem = items.get((sameItemIndexCheck));
-            basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity) + quantity);
+            basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity) + quantity[0]);
             items.set(sameItemIndexCheck, basketItem);
             ((BasKetListAdapter) lv.getAdapter()).setItems(items);
         }
@@ -175,6 +184,7 @@ public class PosItemFragment extends Fragment implements Pos {
         }
         if ((((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).getCount()) != 0) {
             Toast.makeText(getContext(), "바구니에 담았습니다", Toast.LENGTH_SHORT).show();
+            binding.drawer.openDrawer(Gravity.RIGHT);
         } else {
             Toast.makeText(getContext(), "바구니에 담을 아이템이 없습니다", Toast.LENGTH_SHORT).show();
         }
@@ -224,6 +234,7 @@ public class PosItemFragment extends Fragment implements Pos {
             Toast.makeText(getContext(), "선택을 다시 확인해주세요", Toast.LENGTH_SHORT).show();
             return;
         }
+        binding.drawer.openDrawer(Gravity.RIGHT);
         setBasketView(item);
         clearItemListView();
     }
@@ -290,7 +301,6 @@ public class PosItemFragment extends Fragment implements Pos {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText(getActivity(), "취소되었습니다", Toast.LENGTH_SHORT).show();
                 setBarcodeItemList(null);
             } else {
                 Toast.makeText(getContext(), "Scanned" + result.getContents(), Toast.LENGTH_SHORT).show();

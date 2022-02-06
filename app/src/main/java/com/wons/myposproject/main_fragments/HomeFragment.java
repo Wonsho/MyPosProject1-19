@@ -20,6 +20,7 @@ import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.adapter.ScheduleAdapter;
 import com.wons.myposproject.databinding.FragmentHomeBinding;
 
+import com.wons.myposproject.itemvalues.Value;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.text.Format;
@@ -47,9 +48,9 @@ public class HomeFragment extends Fragment {
                 showDidLog("layoutAddSchedule + onClick");
                 DialogCallback callback = new DialogCallback() {
                     @Override
-                    public void onResult(Schedule value) {
-                        changeData(value, INSERT);
-                        setListView(value.date);
+                    public void onResult(Object value) {
+                        changeData((Schedule) value, INSERT);
+                        setListView(((Schedule) value).date);
                     }
                 };
                 AlertDialog alertDialog = DialogUtils.getAlertDialogWhenAddedSchedule(getActivity(), callback, binding);
@@ -63,9 +64,9 @@ public class HomeFragment extends Fragment {
                 Schedule schedule = (Schedule) parent.getAdapter().getItem(position);
                 DialogCallback callback = new DialogCallback() {
                     @Override
-                    public void onResult(Schedule value) {
-                        changeData(value, DELETE);
-                        setListView(value.date);
+                    public void onResult(Object value) {
+                        changeData((Schedule) value, DELETE);
+                        setListView(((Schedule) value).date);
                     }
                 };
                 AlertDialog alertDialog = DialogUtils.getDeleteDialog(getActivity(), callback , schedule);
