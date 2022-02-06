@@ -102,9 +102,11 @@ public final class DialogUtils {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    callback.onResult(et.getText().toString());
+                    Log.e("Dialog","callback");
+                    callback.onResult(et.getText().toString().trim());
 
                 } catch (Exception e) {
+                    Log.e("Dialog","Exception" + e.getMessage());
                     Toast.makeText(activity, "숫자가 아닙니다", Toast.LENGTH_SHORT).show();
                 }
             }

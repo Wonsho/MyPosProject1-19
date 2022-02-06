@@ -2,6 +2,7 @@ package com.wons.myposproject.main_fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,16 +51,15 @@ public class PosItemFragment extends Fragment implements Pos {
         binding = FragmentPosItemBinding.inflate(inflater, container, false);
         setItemMenuListView();
         binding.tvBarcodeLikeBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 changeView(SHOW_BARCODE);
+                binding.tvItemTitle.setText("Item");
                 barcodeScan();
                 showLog("tvBarcodeLikeBtn + onc");
             }
         });
-
-       // MainViewModel.insertBarcodeItem(getContext(), "8801121025666", "아몬드 우유", "500");
-
         binding.btnInPosInBarCodeAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,48 +128,36 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public void clearBarcodeView() {
+        setBarcodeItemList(null, -1);
         ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).clearItemList();
         ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
-    public void setBarcodeItemList(BarCodeItem item) {
+    public void setBarcodeItemList(BarCodeItem item, int quantity) {
         ListView lv = binding.lvInPosInBarcode;
         if (lv.getAdapter() == null) {
             showLog("setBarcodeItemList + if (lv.getAdapter() == null)");
             lv.setAdapter(new BasKetListAdapter());
         }
         if (item == null) {
-            Toast.makeText(getContext(), "해당 값이 없습니다", Toast.LENGTH_SHORT).show();
+            showLog("setBarcodeItemList + if (item == null)");
             return;
         }
-
-        //todo 수량 묻는 다이얼 로그 띄우기
-        final int[] quantity = new int[1];
-        AlertDialog alertDialog = DialogUtils.getOnlyCheckQuantity(getActivity(), new DialogCallback() {
-            @Override
-            public void onResult(Object value) {
-                quantity[0] = Integer.parseInt((String) value);
-                Log.e(TAG, String.valueOf(quantity[0]));
-            }
-        });
-        alertDialog.show();
         BasketItem basketItem = null;
-        //todo 스캔하고 수량 입력 and 같은 바코드 찍었을시 중복체크
-
         int sameItemIndexCheck = ((BasKetListAdapter) lv.getAdapter()).checkSameItem(item.name);
         showLog(String.valueOf(sameItemIndexCheck));
 
         if (sameItemIndexCheck == -1) {
             showLog("if (sameItemIndexCheck != -1)");
-            basketItem = new BasketItem(item.name, null, item.unitPrice, String.valueOf(quantity[0]));
+            basketItem = new BasketItem(item.name, null, item.unitPrice, String.valueOf(quantity));
             ((BasKetListAdapter) lv.getAdapter()).addItem(basketItem);
 
         } else {
             showLog("else");
             ArrayList<BasketItem> items = ((BasKetListAdapter) lv.getAdapter()).getItems();
             basketItem = items.get((sameItemIndexCheck));
-            basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity) + quantity[0]);
+            basketItem.quantity = String.valueOf(Integer.parseInt(basketItem.quantity) + quantity);
             items.set(sameItemIndexCheck, basketItem);
             ((BasKetListAdapter) lv.getAdapter()).setItems(items);
         }
@@ -207,7 +195,7 @@ public class PosItemFragment extends Fragment implements Pos {
         if (value == null) {
             ((ValueAdapter) lv.getAdapter()).setValue(new ArrayList<>());
             Toast.makeText(getContext(), "데이터가 없습니다", Toast.LENGTH_SHORT).show();
-//            binding.tvItemTitle.setText("Item");
+//            binding.tvItemTitle.setText("Item"); // 완성 되면 주석 해제
 //            binding.layoutItem.setVisibility(View.GONE);
             return;
         }
@@ -297,18 +285,30 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d("Pos", "onActivityResult");
+        Log.e("Pos", "onActivityResult");
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                setBarcodeItemList(null);
+                Log.e("Pos", "onActivityResult + if (result.getContents() == null)");
+                setBarcodeItemList(null, -1);
             } else {
-                Toast.makeText(getContext(), "Scanned" + result.getContents(), Toast.LENGTH_SHORT).show();
+                Log.e("Pos", "onActivityResult + Scanned" + result.getContents());
                 BarCodeItem item = getBasketItemInDB(result.getContents());
-                setBarcodeItemList(item);
+                if(item == null) {
+                    Toast.makeText(getContext(), "해당하는 품목이 없습니다", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                AlertDialog alertDialog = DialogUtils.getOnlyCheckQuantity(getActivity(), new DialogCallback() {
+                    @Override
+                    public void onResult(Object value) {
+                        Log.e("Pos", "onActivityResult + before setBarcodeItemList");
+                        setBarcodeItemList(item, Integer.parseInt((String)value));
+                    }
+                });
+                alertDialog.show();
             }
         } else {
-            Log.d("Pos", "onActivityResult6");
+            Log.e("Pos", "onActivityResult6");
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -331,7 +331,7 @@ interface Pos {
 
     void clearBarcodeView();
 
-    void setBarcodeItemList(BarCodeItem item);
+    void setBarcodeItemList(BarCodeItem item, int quantity);
 
     void onClickAddButtonInBarCodeList();
 
