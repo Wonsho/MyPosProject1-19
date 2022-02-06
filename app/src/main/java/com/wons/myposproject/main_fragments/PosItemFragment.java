@@ -10,7 +10,9 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
+import android.telecom.Call;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,6 +39,9 @@ import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
 import com.wons.myposproject.pos_value.BasketSoldCode;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +50,12 @@ public class PosItemFragment extends Fragment implements Pos {
 
     FragmentPosItemBinding binding;
     private final String TAG = "PosItemFragment";
+    private final int FROM_ON_CREATE = 0;
+    private final int FROM_OTHER = 1;
+    private final int ACTION_CODE_INSERT = 1;
+    private final int ACTION_CODE_DELETE_SELECTED = 0;
+    private final int ACTION_CODE_DELETE_ALL = -1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +71,11 @@ public class PosItemFragment extends Fragment implements Pos {
                 showLog("tvBarcodeLikeBtn + onc");
             }
         });
+        if (((MainViewModel.getLiveDataBasketList()).size()) != 0) {
+            for (BasketItem item : MainViewModel.getLiveDataBasketList()) {
+                setBasketView(item, FROM_ON_CREATE);
+            }
+        }
         binding.btnInPosInBarCodeAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +87,58 @@ public class PosItemFragment extends Fragment implements Pos {
             @Override
             public void onClick(View v) {
                 onClickAddItemButton();
+            }
+        });
+        binding.layoutBasket.findViewById(R.id.tv_clearList_likeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = DialogForBoolean.dialogForYesOrNo("전부 삭제하겠습니까?", null, getActivity(), new DialogCallback() {
+                    @Override
+                    public void onResult(Object value) {
+                        if (value.equals(true)) {
+                            Toast.makeText(getActivity(), "모두 삭제되었습ㄴ니다", Toast.LENGTH_SHORT).show();
+                            changedBasketData(-1, ACTION_CODE_DELETE_ALL);
+                        }
+                    }
+                }, "예", "아니요");
+                alertDialog.show();
+            }
+        });
+        ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog alertDialog = DialogForBoolean.dialogForYesOrNo("삭제하겠습니까?", null, getActivity(), new DialogCallback() {
+                    @Override
+                    public void onResult(Object value) {
+                        if (value.equals(true)) {
+                            Toast.makeText(getActivity(), "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            changedBasketData(position, ACTION_CODE_DELETE_SELECTED);
+                        }
+                    }
+                }, "예", "아니요");
+                alertDialog.show();
+
+                return false;
+            }
+        });
+        binding.layoutBasket.findViewById(R.id.tv_credit_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "눌림", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        binding.layoutBasket.findViewById(R.id.tv_sold_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "눌림", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        binding.layoutBasket.findViewById(R.id.tv_printReceipt_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "눌림", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -166,9 +234,8 @@ public class PosItemFragment extends Fragment implements Pos {
 
     @Override
     public void onClickAddButtonInBarCodeList() {
-
         for (BasketItem item : ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).getItems()) {
-            setBasketView(item);
+            setBasketView(item, FROM_OTHER);
         }
         if ((((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter()).getCount()) != 0) {
             Toast.makeText(getContext(), "바구니에 담았습니다", Toast.LENGTH_SHORT).show();
@@ -223,12 +290,12 @@ public class PosItemFragment extends Fragment implements Pos {
             return;
         }
         binding.drawer.openDrawer(Gravity.RIGHT);
-        setBasketView(item);
+        setBasketView(item, FROM_OTHER);
         clearItemListView();
     }
 
     @Override
-    public void setBasketView(BasketItem item) {
+    public void setBasketView(BasketItem item, int from) {
         ListView lv = binding.layoutBasket.findViewById(R.id.lv_basket);
         if (lv.getAdapter() == null) {
             lv.setAdapter(new BasKetListAdapter());
@@ -238,6 +305,54 @@ public class PosItemFragment extends Fragment implements Pos {
         }
         ((BasKetListAdapter) lv.getAdapter()).addItem(item);
         ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
+        if (!(from == FROM_OTHER)) {
+        } else {
+            changeLiveData(item, ACTION_CODE_INSERT);
+        }
+    }
+
+    public void changedBasketData(int index, int actionCode) {
+
+        if (((BasKetListAdapter) ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter()) == null)
+            return;
+        switch (actionCode) {
+            case ACTION_CODE_DELETE_ALL: {
+                ((BasKetListAdapter) ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter()).clearItemList();
+                ((BasKetListAdapter) ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter()).notifyDataSetChanged();
+                changeLiveData(null, ACTION_CODE_DELETE_ALL);
+                break;
+            }
+            case ACTION_CODE_INSERT: {
+
+                break;
+            }
+            case ACTION_CODE_DELETE_SELECTED: {
+                ((BasKetListAdapter) ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter()).deleteItem(index);
+                ((BasKetListAdapter) ((ListView) binding.layoutBasket.findViewById(R.id.lv_basket)).getAdapter()).notifyDataSetChanged();
+                changeLiveData(null, ACTION_CODE_DELETE_SELECTED);
+                break;
+            }
+        }
+    }
+
+    public void changeLiveData(BasketItem item, int actionCode) {
+        switch (actionCode) {
+            case ACTION_CODE_INSERT: {
+                ArrayList<BasketItem> basketItemArrayList = MainViewModel.getLiveDataBasketList();
+                basketItemArrayList.add(item);
+                MainViewModel.setLiveDataBasketList(basketItemArrayList);
+                break;
+            }
+            case ACTION_CODE_DELETE_SELECTED: {
+
+                break;
+            }
+
+            case ACTION_CODE_DELETE_ALL: {
+
+                break;
+            }
+        }
     }
 
     @Override
@@ -294,7 +409,7 @@ public class PosItemFragment extends Fragment implements Pos {
             } else {
                 Log.e("Pos", "onActivityResult + Scanned" + result.getContents());
                 BarCodeItem item = getBasketItemInDB(result.getContents());
-                if(item == null) {
+                if (item == null) {
                     Toast.makeText(getContext(), "해당하는 품목이 없습니다", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -302,7 +417,7 @@ public class PosItemFragment extends Fragment implements Pos {
                     @Override
                     public void onResult(Object value) {
                         Log.e("Pos", "onActivityResult + before setBarcodeItemList");
-                        setBarcodeItemList(item, Integer.parseInt((String)value));
+                        setBarcodeItemList(item, Integer.parseInt((String) value));
                     }
                 });
                 alertDialog.show();
@@ -346,7 +461,7 @@ interface Pos {
     void onClickAddItemButton();
 
     //최종 공통
-    void setBasketView(BasketItem item); //아이템 넣어주기
+    void setBasketView(BasketItem item, int from); //아이템 넣어주기
 
     void soldToCredit();
 

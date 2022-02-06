@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.wons.myposproject.R;
 import com.wons.myposproject.pos_value.BasketItem;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class BasKetListAdapter extends BaseAdapter {
@@ -46,14 +47,15 @@ public class BasKetListAdapter extends BaseAdapter {
         tv_name = convertView.findViewById(R.id.tv_itemName);
         tv_name.setText(basketItem.itemName);
 
+        DecimalFormat df = new DecimalFormat("###,###,###");
         tv_standard = convertView.findViewById(R.id.tv_itemStandard);
         tv_standard.setText(basketItem.itemStandard);
 
         tv_quantity = convertView.findViewById(R.id.tv_itemQuantity);
-        tv_quantity.setText(basketItem.quantity);
+        tv_quantity.setText(df.format(Integer.parseInt(basketItem.quantity.trim())));
 
         tv_unitPrice = convertView.findViewById(R.id.tv_itemUnitPrice);
-        tv_unitPrice.setText(basketItem.unitPrice);
+        tv_unitPrice.setText(df.format(Integer.parseInt(basketItem.unitPrice.trim())));
         return convertView;
     }
 

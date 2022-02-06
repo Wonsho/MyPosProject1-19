@@ -111,11 +111,37 @@
                             android:backgroundTint="@color/line_1"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"/>
-                        <ListView
-                            android:id="@+id/lv_basket"
-                            android:layout_margin="5dp"
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent">
+                            <ListView
+                                android:layout_weight="9"
+                                android:id="@+id/lv_basket"
+                                android:layout_margin="5dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"/>
+                            <TextView
+                                android:layout_marginRight="5dp"
+                                android:layout_marginLeft="5dp"
+                                android:background="@color/line_1"
+                                android:backgroundTint="@color/line_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"/>
+                            <TextView
+                                android:id="@+id/tv_clearList_likeButton"
+                                android:background="?attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:textSize="15sp"
+                                android:textColor="@color/black"
+                                android:gravity="center"
+                                android:text="모두 삭제 하기"
+                                android:layout_weight="1"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"/>
+                        </LinearLayout>
+
                     </LinearLayout>
                 </LinearLayout>
 
