@@ -27,7 +27,7 @@ public class ScheduleAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Schedule getItem(int position) {
         return schedules.get(position);
     }
 

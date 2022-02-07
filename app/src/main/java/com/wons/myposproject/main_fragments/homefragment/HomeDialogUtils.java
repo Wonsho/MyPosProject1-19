@@ -25,11 +25,7 @@ public final class HomeDialogUtils {
                 Log.d("TAG", "DiaLog On Click Positive");
                 String msg = et_schedule.getText().toString();
                 if (!msg.isEmpty()) {
-                    String date = binding.tvScheduleValue.getText().toString();
-                    Schedule schedule = new Schedule();
-                    schedule.date = date;
-                    schedule.schedule_of_date = msg;
-                    callback.onResult(schedule);
+                    callback.onResult(msg);
                 }
             }
         });
@@ -41,12 +37,12 @@ public final class HomeDialogUtils {
         });
         return builder.create();
     }
-    public static AlertDialog getDeleteDialog(Activity activity, HomeDialogCallback callback, Schedule schedule) {
+    public static AlertDialog getDeleteDialog(Activity activity, HomeDialogCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               callback.onResult(schedule);
+               callback.onResultBoolean(true);
             }
         });
         builder.setMessage("선택한 스케쥴을 삭제하시겠습니까?");
@@ -61,3 +57,4 @@ public final class HomeDialogUtils {
     }
     private HomeDialogUtils(){}
 }
+
