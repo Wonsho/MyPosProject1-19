@@ -94,6 +94,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
         super(context, binding);
         this.fragment = fragment;
         setBarcodeItemView(null);
+        setItemMenuListView();
         onClick();
     }
 
@@ -113,7 +114,9 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
         binding.tvBarcodeLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeView(ItemViewCode.BARCODE);
+                if(binding.layoutBarcode.getVisibility() != View.VISIBLE){
+                    changeView(ItemViewCode.BARCODE);
+                }
                 barcodeScan(fragment);
                 Log.e("tvBarcodeLikeBtn", "Onc");
             }
@@ -134,6 +137,8 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                     return;
                 }
                 PosItemFragmentMovement.super.changeBasketListData(ActionCode.ACTION_CODE_INSERT, adapter.getItems());
+                adapter.setItems(new ArrayList<>());
+                adapter.notifyDataSetChanged();
             }
         });
         binding.btnAddInPos.setOnClickListener(new View.OnClickListener() {
@@ -219,8 +224,27 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                 Log.e("changeView", "ITEM_LIST_VIEW");
                 binding.layoutItem.setVisibility(View.VISIBLE);
                 binding.layoutBarcode.setVisibility(View.GONE);
+                //todo 클리어뷰
                 break;
             }
+        }
+        clearView();
+    }
+    private void clearView() {
+        ((BasKetListAdapter)(binding.lvInPosInBarcode.getAdapter())).setItems(new ArrayList<>());
+        ((BasKetListAdapter)(binding.lvInPosInBarcode.getAdapter())).notifyDataSetChanged();
+        //todo 아이템 레이아웃 클리어 해주기
+
+    }
+    private void setItemMenuListView() {
+        MyExpandableAdapter adapter = new MyExpandableAdapter();
+        ExpandableListView expandableListView = binding.lvExpandable;
+        expandableListView.setAdapter(adapter);
+        ArrayList<Group> groupArrayList = new ArrayList<>(Arrays.asList(Group.values()));
+        adapter.putGroupList(groupArrayList);
+        adapter.notifyDataSetChanged();
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
+            expandableListView.expandGroup(i);
         }
     }
 }
@@ -228,7 +252,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
 class BasketLayoutMovement extends LogicInPosFragment {
     BasketLayoutMovement(Context context, FragmentPosItemBinding binding) {
         super(context, binding);
-        getBasketListData();
+        setBasketListView();
         setOnclick();
     }
 
@@ -282,7 +306,10 @@ class BasketLayoutMovement extends LogicInPosFragment {
                     @Override
                     public void callBack(Boolean yOrN) {
                         if (yOrN) {
-                            changeBasketListData(ActionCode.ACTION_CODE_SELECTED_DELETE, new ArrayList<BasketItem>(Arrays.asList(MainViewModel.getLiveDataBasketList().get(position))));
+                            ListView lv = basket.findViewById(R.id.lv_basket);
+                            ArrayList<BasketItem> arr = new ArrayList<>();
+                            arr.add((BasketItem) ((BasKetListAdapter)lv.getAdapter()).getItem(position));
+                            changeBasketListData(ActionCode.ACTION_CODE_SELECTED_DELETE,arr);
                         }
                     }
 
@@ -296,9 +323,9 @@ class BasketLayoutMovement extends LogicInPosFragment {
         });
     }
 
-    private void getBasketListData() {
+    private ArrayList<BasketItem> getBasketListData() {
         ArrayList<BasketItem> basketItemArrayList = MainViewModel.getLiveDataBasketList();
-        setBasketListView(basketItemArrayList);
+        return basketItemArrayList;
     }
 
     public void changeBasketListData(ActionCode actionCode, ArrayList<BasketItem> items) {
@@ -307,7 +334,6 @@ class BasketLayoutMovement extends LogicInPosFragment {
                 if (MainViewModel.getLiveDataBasketList().size() != 0) {
                     MainViewModel.setLiveDataBasketList(new ArrayList<>());
                     Toast.makeText(context, "모두 삭제 되었습니다", Toast.LENGTH_SHORT).show();
-                    getBasketListData();
                 } else {
                     Toast.makeText(context, "삭제할 데이터가 없습니다", Toast.LENGTH_SHORT).show();
                 }
@@ -316,13 +342,11 @@ class BasketLayoutMovement extends LogicInPosFragment {
             case ACTION_CODE_INSERT: {
                 if (items.size() == 0 || items == null) {
                     Toast.makeText(context, "추가할 데이터가 없습니다", Toast.LENGTH_SHORT).show();
-                    break;
+                    return;
                 }
-                ArrayList<BasketItem> basketItems = super.checkSameNameItem(MainViewModel.getLiveDataBasketList(), items);
+                ArrayList<BasketItem> basketItems = super.checkSameNameItem(getBasketListData(), items);
                 Toast.makeText(context, "바구니에 추가 되었습니다", Toast.LENGTH_SHORT).show();
-                Log.e("ACTION_CODE_INSERT","passed" + basketItems.size());
                 MainViewModel.setLiveDataBasketList(basketItems);
-                getBasketListData();
                 break;
             }
             case ACTION_CODE_SELECTED_DELETE: {
@@ -332,24 +356,25 @@ class BasketLayoutMovement extends LogicInPosFragment {
                 }
                 Toast.makeText(context, "삭제 되었습니다", Toast.LENGTH_SHORT).show();
                 MainViewModel.setLiveDataBasketList(arrayList);
-                getBasketListData();
                 break;
             }
         }
+        setBasketListView();
     }
 
-    private void setBasketListView(ArrayList<BasketItem> items) {
+    private void setBasketListView() {
         ListView lv = basket.findViewById(R.id.lv_basket);
+        ArrayList<BasketItem> basketItemArrayList = getBasketListData();
         if (lv.getAdapter() == null) {
             lv.setAdapter(new BasKetListAdapter());
+        } if(basketItemArrayList.size() == 0) {
+            ((BasKetListAdapter) lv.getAdapter()).setItems(new ArrayList<>());
+        } else {
+            ((BasKetListAdapter) lv.getAdapter()).setItems(basketItemArrayList);
         }
-        if (items.size() == 0 || items == null) {
-            return;
-        }
-        Log.e("setBasketListView","passed null");
-        ((BasKetListAdapter) lv.getAdapter()).setItems(items);
         ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
     }
+
 
     private void soldBasket() {
     }
@@ -395,42 +420,3 @@ class LogicInPosFragment {
         return originBasketItemArrayList;
     }
 }
-
-
-//final class MenuListLayoutMovement {
-//
-//    private MenuListLayoutMovement() {
-//    }
-//
-//    private FragmentPosItemBinding binding;
-//    private static final MenuListLayoutMovement menuListLayoutMovement = new MenuListLayoutMovement();
-//
-//    public static MenuListLayoutMovement getMenuListLayout() {
-//        return menuListLayoutMovement;
-//    }
-//
-//    public void setOnclickAndInit(FragmentPosItemBinding binding, Context context) {
-//        this.binding = binding;
-//        setItemMenuListView();
-//    }
-//
-//    public void setItemMenuListView() {
-//        MyExpandableAdapter adapter = new MyExpandableAdapter();
-//        ExpandableListView expandableListView = binding.lvExpandable;
-//        expandableListView.setAdapter(adapter);
-//        ArrayList<Group> groupArrayList = new ArrayList<>(Arrays.asList(Group.values()));
-//        adapter.putGroupList(groupArrayList);
-//        adapter.notifyDataSetChanged();
-//        for (int i = 0; i < adapter.getGroupCount(); i++) {
-//            expandableListView.expandGroup(i);
-//        }
-//        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-//                binding.tvItemTitle.setText(((TextView) v.findViewById(R.id.tv_childValue)).getText().toString());
-//                return false;
-//            }
-//        });
-//    }
-//}
-

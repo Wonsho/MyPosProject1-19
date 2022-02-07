@@ -29,15 +29,21 @@ public class MainViewModel extends ViewModel {
         if(liveDataBasketList == null) {
             liveDataBasketList = new MutableLiveData<>();
             liveDataBasketList.setValue(new ArrayList<BasketItem>());
+            Log.e(TAG, "getLiveDataBasketList = getLiveDataBasketList was null but now  list size is" + liveDataBasketList.getValue().size());
+        }
+        Log.e(TAG, "getLiveDataBasketList = list size is" + liveDataBasketList.getValue().size());
+        for (BasketItem item : liveDataBasketList.getValue()) {
+            Log.e(TAG, "getLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
         }
         return liveDataBasketList.getValue();
     }
 
     public static void setLiveDataBasketList(ArrayList<BasketItem> itemArrayList) {
+        for (BasketItem item : itemArrayList) {
+            Log.e(TAG, "setLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
+        }
        liveDataBasketList.setValue(itemArrayList);
     }
-
-
 
 
     public static MainDataBase getMainDataBase(Context context) {
