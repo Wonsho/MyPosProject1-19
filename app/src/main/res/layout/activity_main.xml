@@ -14,7 +14,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="com.wons.myposproject.main_fragments.HomeFragment"
+            android:name="com.wons.myposproject.main_fragments.homefragment.HomeFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

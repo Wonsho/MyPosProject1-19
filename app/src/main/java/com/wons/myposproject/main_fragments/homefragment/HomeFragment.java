@@ -1,11 +1,11 @@
-package com.wons.myposproject.main_fragments;
+package com.wons.myposproject.main_fragments.homefragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.room.Insert;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +19,6 @@ import com.wons.myposproject.MainActivity;
 import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.adapter.ScheduleAdapter;
 import com.wons.myposproject.databinding.FragmentHomeBinding;
-
-import com.wons.myposproject.itemvalues.Value;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.text.Format;
@@ -46,14 +44,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showDidLog("layoutAddSchedule + onClick");
-                DialogCallback callback = new DialogCallback() {
+                HomeDialogCallback callback = new HomeDialogCallback() {
                     @Override
-                    public void onResult(Object value) {
+                    public void onResult(Schedule value) {
                         changeData((Schedule) value, INSERT);
                         setListView(((Schedule) value).date);
                     }
                 };
-                AlertDialog alertDialog = DialogUtils.getAlertDialogWhenAddedSchedule(getActivity(), callback, binding);
+                AlertDialog alertDialog = HomeDialogUtils.getAlertDialogWhenAddedSchedule(getActivity(), callback, binding);
                 alertDialog.show();
             }
         });
@@ -62,19 +60,56 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Schedule schedule = (Schedule) parent.getAdapter().getItem(position);
-                DialogCallback callback = new DialogCallback() {
+                HomeDialogCallback callback = new HomeDialogCallback() {
                     @Override
-                    public void onResult(Object value) {
+                    public void onResult(Schedule value) {
                         changeData((Schedule) value, DELETE);
                         setListView(((Schedule) value).date);
                     }
                 };
-                AlertDialog alertDialog = DialogUtils.getDeleteDialog(getActivity(), callback , schedule);
+                AlertDialog alertDialog = HomeDialogUtils.getDeleteDialog(getActivity(), callback, schedule);
                 alertDialog.show();
                 return false;
             }
         });
+
         return binding.getRoot();
+    }
+
+    private static final class SetSchedule {
+        static final int CHANGE_CODE_INSERT = 0;
+        static final int CHANGE_CODE_DELETE = 1;
+
+        SetSchedule(String date) {
+            getScheduleOnRoomDB(date);
+        }
+
+        SetSchedule(Schedule schedule, int changeCode) {
+            changeScheduleInDB(schedule, changeCode);
+        }
+
+
+        static void changeScheduleInDB(Schedule schedule, int changeCode) {
+            switch (changeCode) {
+                case CHANGE_CODE_DELETE: {
+                    break;
+                }
+                case CHANGE_CODE_INSERT: {
+                    break;
+                }
+            }
+        }
+
+        static void setListView(ArrayList<Schedule> scheduleArrayList) {
+
+        }
+
+        static void getScheduleOnRoomDB(String date) {
+
+
+//            setListView();
+        }
+
     }
 
 
@@ -123,36 +158,17 @@ public class HomeFragment extends Fragment {
 
     private void setListView(String date) {
         showDidLog("setListView");
-        if(binding.lvSchedule.getAdapter() == null) {
+        if (binding.lvSchedule.getAdapter() == null) {
             ScheduleAdapter adapter = new ScheduleAdapter();
             binding.lvSchedule.setAdapter(adapter);
         }
-        ((ScheduleAdapter)binding.lvSchedule.getAdapter()).setSchedules(new ArrayList<>(Arrays.asList(getData(date))));
-        ((ScheduleAdapter)binding.lvSchedule.getAdapter()).notifyDataSetChanged();
+        ((ScheduleAdapter) binding.lvSchedule.getAdapter()).setSchedules(new ArrayList<>(Arrays.asList(getData(date))));
+        ((ScheduleAdapter) binding.lvSchedule.getAdapter()).notifyDataSetChanged();
 
     }
-
-//    private AlertDialog getDeleteDialog(Context context, Schedule schedule) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                changeData(schedule, DELETE);
-//                setListView(schedule.date);
-//            }
-//        });
-//        builder.setMessage("선택한 스케쥴을 삭제하시겠습니까?");
-//        builder.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//            }
-//        });
-//
-//        return builder.create();
-//    }
 
     private void showDidLog(String msg) {
-        Log.d(MainActivity.TAG_DID,TAG +" : "+ msg);
+        Log.d(MainActivity.TAG_DID, TAG + " : " + msg);
     }
 }
+

@@ -5,20 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.wons.myposproject.databinding.ActivityMainBinding;
-import com.wons.myposproject.itemvalues.Group;
-import com.wons.myposproject.itemvalues.Item;
-import com.wons.myposproject.main_fragments.HomeFragment;
+import com.wons.myposproject.main_fragments.homefragment.HomeFragment;
 import com.wons.myposproject.main_fragments.InfoFragment;
-import com.wons.myposproject.main_fragments.PosItemFragment;
+import com.wons.myposproject.main_fragments.posfregment.PosItemFragment;
 
 public class MainActivity extends AppCompatActivity {
     // TODO: 2022-02-04 데이터베이스 빌드, 뷰모델 생성(날씨 api, 스케쥴) 
