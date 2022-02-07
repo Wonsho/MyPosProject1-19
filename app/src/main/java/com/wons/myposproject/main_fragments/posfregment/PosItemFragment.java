@@ -40,6 +40,8 @@ import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
 import com.wons.myposproject.pos_value.BasketSoldCode;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -53,6 +55,8 @@ enum ItemViewCode {
     BARCODE,
     ITEM_LIST_VIEW;
 }
+
+// TODO: 2022-02-08  리스트 추가할때 버그 있음!!!!!!!!!!!!!!!!!!!! 그거 해결해야됨 
 
 public class PosItemFragment extends Fragment {
     private final String TAG = "PosItemFragment";
@@ -139,6 +143,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                 PosItemFragmentMovement.super.changeBasketListData(ActionCode.ACTION_CODE_INSERT, adapter.getItems());
                 adapter.setItems(new ArrayList<>());
                 adapter.notifyDataSetChanged();
+                binding.drawer.openDrawer(Gravity.RIGHT);
             }
         });
         binding.btnAddInPos.setOnClickListener(new View.OnClickListener() {
@@ -372,6 +377,13 @@ class BasketLayoutMovement extends LogicInPosFragment {
         } else {
             ((BasKetListAdapter) lv.getAdapter()).setItems(basketItemArrayList);
         }
+        DecimalFormat df = new DecimalFormat("###,###,###");
+        TextView tv = basket.findViewById(R.id.tv_allPrice);
+        int price = 0;
+        for(BasketItem item : basketItemArrayList) {
+            price += (Integer.parseInt(item.unitPrice.trim()) * Integer.parseInt(item.quantity.trim()));
+        }
+        tv.setText(df.format(price));
         ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
     }
 

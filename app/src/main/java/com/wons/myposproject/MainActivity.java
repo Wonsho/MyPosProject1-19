@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+//        MainViewModel.insertBarcodeItem(getApplicationContext(), "8801008271904", "볼펜", "200");
     }
 
 
