@@ -373,18 +373,22 @@ class LogicInPosFragment {
         this.binding = binding;
     }
 
+    @SuppressLint("LongLogTag")
     ArrayList<BasketItem> checkSameNameItem(ArrayList<BasketItem> originItems, ArrayList<BasketItem> needCheckItems) {
-        Log.e("checkSameNameItem","originItems.size() : "+originItems.size() + "needCheckItems.size" +  needCheckItems.size());
+        Log.e("checkSameNameItem","originItems.size() : "+originItems.size() + " needCheckItems.size : " +  needCheckItems.size());
         ArrayList<BasketItem> originBasketItemArrayList = originItems;
         if(originBasketItemArrayList.size() == 0) {
+            Log.e("checkSameNameItem", "if(originBasketItemArrayList.size() == 0)" + originBasketItemArrayList.size());
             return needCheckItems;
         }
         for (int i = 0; i < needCheckItems.size(); i++) {
             for (int j = 0; j < originBasketItemArrayList.size(); j++) {
                 if (needCheckItems.get(i).itemName.equals(originBasketItemArrayList.get(j).itemName)) {
-                    originBasketItemArrayList.get(j).quantity = String.valueOf(Integer.parseInt(originBasketItemArrayList.get(i).quantity) + Integer.parseInt(needCheckItems.get(i).quantity));
+                    originBasketItemArrayList.get(j).quantity = String.valueOf(Integer.parseInt(originBasketItemArrayList.get(j).quantity) + Integer.parseInt(needCheckItems.get(i).quantity));
+                    Log.e("checkSameNameItem1"," String.valueOf(Integer.parseInt(originBasketItemArrayList.get("+j+").quantity) = " +originBasketItemArrayList.get(j).quantity+"  Integer.parseInt(needCheckItems.get("+i+").quantity)) = "+needCheckItems.get(i).quantity);
                 } else {
                     originBasketItemArrayList.add(needCheckItems.get(i));
+                    Log.e("checkSameNameItem2"," originBasketItemArrayList.add(needCheckItems.get("+i+")) = " + originItems.get(i).quantity);
                 }
             }
         }

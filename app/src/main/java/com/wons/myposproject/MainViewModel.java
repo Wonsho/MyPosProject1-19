@@ -33,9 +33,12 @@ public class MainViewModel extends ViewModel {
         return liveDataBasketList.getValue();
     }
 
-    public static void setLiveDataBasketList(ArrayList<BasketItem> liveDataBasketList) {
-        MainViewModel.liveDataBasketList.setValue(liveDataBasketList);
+    public static void setLiveDataBasketList(ArrayList<BasketItem> itemArrayList) {
+       liveDataBasketList.setValue(itemArrayList);
     }
+
+
+
 
     public static MainDataBase getMainDataBase(Context context) {
         if(mainDataBase == null) {

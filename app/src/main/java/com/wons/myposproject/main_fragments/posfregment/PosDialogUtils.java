@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wons.myposproject.R;
 
@@ -35,7 +36,7 @@ public final class PosDialogUtils {
         builder.setTitle("수량을 입력해주세요");
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_quantity_view, null);
         TextView tv = view.findViewById(R.id.tv_setNumber);
-        Button button1, button2,button3, button4, button5, button6, button7, button8, button9,buttonD;
+        Button button1, button2,button3, button4, button5, button6, button7, button8, button9,buttonD, button0;
         button1 = view.findViewById(R.id.btn_1);
         button2 = view.findViewById(R.id.btn_2);
         button3 = view.findViewById(R.id.btn_3);
@@ -46,12 +47,18 @@ public final class PosDialogUtils {
         button8 = view.findViewById(R.id.btn_8);
         button9 = view.findViewById(R.id.btn_9);
         buttonD = view.findViewById(R.id.btn_delete);
-        Button[] buttons = {button1, button2,button3, button4, button5, button6, button7, button8, button9};
+        button0 = view.findViewById(R.id.btn_0);
+        Button[] buttons = {button0,button1, button2,button3, button4, button5, button6, button7, button8, button9};
         for(Button button : buttons) {
             button.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
+                    if(tv.getText().toString().isEmpty()) {
+                        if(v.getId() == R.id.btn_0) {
+                            return;
+                        }
+                    }
                     tv.setText(tv.getText().toString()+((Button)v).getText().toString());
                 }
             });
