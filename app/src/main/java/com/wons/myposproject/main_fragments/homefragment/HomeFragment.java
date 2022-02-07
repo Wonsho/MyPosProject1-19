@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
 
         Format format = new SimpleDateFormat("yyyy / M / d");
         String date = format.format(binding.calenderView.getDate());
-        SetScheduleListView setScheduleListView = SetScheduleListView.getSetSchedule();
+        SetScheduleListView setScheduleListView = new SetScheduleListView();
         setScheduleListView.setListView(getActivity(), date, binding.lvSchedule);
         setText(date);
 
@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 String date = year + " / " + (month+1) + " / " + dayOfMonth;
-                SetScheduleListView setScheduleListView = SetScheduleListView.getSetSchedule();
                 setScheduleListView.setListView(getActivity(), date, binding.lvSchedule);
                 setText(date);
             }
@@ -65,11 +64,8 @@ public class HomeFragment extends Fragment {
                         setScheduleListView.changeListViewData(getActivity(), schedule, SetScheduleListView.ACTION_CODE_INSERT, binding.lvSchedule);
                         Toast.makeText(getActivity(), "추가 되었습니다", Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
-                    public void onResultBoolean(boolean yesOrNo) {
-
-                    }
+                    public void onResultBoolean(boolean yesOrNo) { return;}
                 }, binding);
                 alertDialog.show();
             }
@@ -110,8 +106,6 @@ final class SetScheduleListView {
     static final int ACTION_CODE_DELETE = 1;
     private Context context;
     private ListView lv;
-    private static SetScheduleListView setSchedule = new SetScheduleListView();
-
     public void setListView(Context context, String date, ListView lv) {
         this.context = context;
         this.lv = lv;
@@ -145,11 +139,6 @@ final class SetScheduleListView {
     }
     private void getScheduleOnRoomDB(String date) {
         setListView(new ArrayList<>(Arrays.asList(MainViewModel.getSchedule(context, date))));
-    }
-    private SetScheduleListView() { }
-
-    public static SetScheduleListView getSetSchedule() {
-        return setSchedule;
     }
 }
 class SetWeatherView {

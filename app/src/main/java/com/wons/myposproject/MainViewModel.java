@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.room.Database;
 import androidx.room.Room;
 
+import com.wons.myposproject.main_fragments.posfregment.PosDialogCallback;
 import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
 import com.wons.myposproject.schedule.Schedule;
@@ -22,7 +23,6 @@ public class MainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
     private static MainDataBase mainDataBase;
     private static MyDao myDao;
-
     private static MutableLiveData<ArrayList<BasketItem>> liveDataBasketList;
 
     public static ArrayList<BasketItem> getLiveDataBasketList() {
