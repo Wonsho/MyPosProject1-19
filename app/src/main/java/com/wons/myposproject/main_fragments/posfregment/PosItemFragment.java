@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -19,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,17 +27,12 @@ import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.BasKetListAdapter;
 import com.wons.myposproject.adapter.MyExpandableAdapter;
-import com.wons.myposproject.adapter.ValueAdapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
-import com.wons.myposproject.databinding.ViewInLayoutBasketBinding;
 import com.wons.myposproject.itemvalues.Group;
-import com.wons.myposproject.itemvalues.Value;
 import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
-import com.wons.myposproject.pos_value.BasketSoldCode;
 
 import java.text.DecimalFormat;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -56,17 +47,17 @@ enum ItemViewCode {
     ITEM_LIST_VIEW;
 }
 
-// TODO: 2022-02-08  리스트 추가할때 버그 있음!!!!!!!!!!!!!!!!!!!! 그거 해결해야됨 
+// TODO: 2022-02-08  리스트 추가할때 버그 있음
 
 public class PosItemFragment extends Fragment {
     private final String TAG = "PosItemFragment";
-    PosItemFragmentMovement movement;
+    PosItemMovement movement;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentPosItemBinding binding = FragmentPosItemBinding.inflate(inflater, container, false);
-        movement = new PosItemFragmentMovement(getContext(), this, binding);
+        movement = new PosItemMovement(getContext(), this, binding);
         return binding.getRoot();
     }
 
@@ -91,10 +82,10 @@ public class PosItemFragment extends Fragment {
 }
 
 
-final class PosItemFragmentMovement extends BasketLayoutMovement {
+final class PosItemMovement extends BasketLayoutMovement {
     private final Fragment fragment;
 
-    PosItemFragmentMovement(Context context, Fragment fragment, FragmentPosItemBinding binding) {
+    PosItemMovement(Context context, Fragment fragment, FragmentPosItemBinding binding) {
         super(context, binding);
         this.fragment = fragment;
         setBarcodeItemView(null);
@@ -104,6 +95,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
 
     private void onClick() {
 
+        //todo 오른쪽메뉴 버튼
         binding.lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -115,6 +107,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                 return false;
             }
         });
+        //todo 바코드 버튼 누를때
         binding.tvBarcodeLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +118,8 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                 Log.e("tvBarcodeLikeBtn", "Onc");
             }
         });
+
+        //todo 바코드 레이아웃 리스트의 아이템을 눌렀을때
         binding.lvInPosInBarcode.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -132,6 +127,8 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                 return false;
             }
         });
+
+        //todo 바코드 레이아웃의 아이템을 Basket레이아웃으로 옮기는 버튼
         binding.btnInPosInBarCodeAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,12 +137,14 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
                     Toast.makeText(context, "먼저 상품을 추가해 주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                PosItemFragmentMovement.super.changeBasketListData(ActionCode.ACTION_CODE_INSERT, adapter.getItems());
+                PosItemMovement.super.changeBasketListData(ActionCode.ACTION_CODE_INSERT, adapter.getItems());
                 adapter.setItems(new ArrayList<>());
                 adapter.notifyDataSetChanged();
                 binding.drawer.openDrawer(Gravity.RIGHT);
             }
         });
+
+        //todo 아직 해당사항 없음
         binding.btnAddInPos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +171,8 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
         });
     }
 
-
+// todo 조회된 바코드로 상품 검색
+    //todo 조회가 완료되면 바코드 리스트뷰에 추가 하기
     public void searchBarcodeItemInDB(String barcode) {
         Log.e("searchBarcodeItemInDB", barcode);
         BarCodeItem item = MainViewModel.getBarcodeItem(context, barcode);
@@ -184,15 +184,20 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
             @Override
             public void callBack(Boolean yOrN) {
             }
-
             @Override
             public void callBackString(String str) {
-                setBarcodeItemView(new BasketItem(item.name, null, item.unitPrice, str));
+                if(!str.isEmpty()) {
+                    setBarcodeItemView(new BasketItem(item.name, null, item.unitPrice, str.trim()));
+                } else {
+                    Toast.makeText(context, "수량입력이 안되었습니다", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         alertDialog.show();
     }
 
+
+    //todo 바코드 조회후 셋 해주기
     private void setBarcodeItemView(BasketItem item) {
         ListView lv = binding.lvInPosInBarcode;
         if (lv.getAdapter() == null) {
@@ -202,12 +207,8 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
             return;
         }
         BasKetListAdapter adapter = ((BasKetListAdapter) lv.getAdapter());
-        ArrayList<BasketItem> originItems = adapter.getItems();
-        if(originItems.size() != 0) {
-            adapter.setItems(super.checkSameNameItem(originItems, new ArrayList<>(Arrays.asList(item))));
-        } else {
-            adapter.addItem(item);
-        }
+//        ArrayList<BasketItem> originItems = adapter.getItems();
+        adapter.addItem(item);
         adapter.notifyDataSetChanged();
     }
 
@@ -254,7 +255,7 @@ final class PosItemFragmentMovement extends BasketLayoutMovement {
     }
 }
 
-class BasketLayoutMovement extends LogicInPosFragment {
+class BasketLayoutMovement extends LogicInPos {
     BasketLayoutMovement(Context context, FragmentPosItemBinding binding) {
         super(context, binding);
         setBasketListView();
@@ -349,9 +350,8 @@ class BasketLayoutMovement extends LogicInPosFragment {
                     Toast.makeText(context, "추가할 데이터가 없습니다", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ArrayList<BasketItem> basketItems = super.checkSameNameItem(getBasketListData(), items);
                 Toast.makeText(context, "바구니에 추가 되었습니다", Toast.LENGTH_SHORT).show();
-                MainViewModel.setLiveDataBasketList(basketItems);
+                MainViewModel.setLiveDataBasketList(items);
                 break;
             }
             case ACTION_CODE_SELECTED_DELETE: {
@@ -400,17 +400,19 @@ class BasketLayoutMovement extends LogicInPosFragment {
     }
 }
 
-class LogicInPosFragment {
+class LogicInPos {
 
     Context context;
     FragmentPosItemBinding binding;
 
-    public LogicInPosFragment(Context context, FragmentPosItemBinding binding) {
+    public LogicInPos(Context context, FragmentPosItemBinding binding) {
         this.context = context;
         this.binding = binding;
     }
 
     @SuppressLint("LongLogTag")
+    //todo 규격이 null 이면 이름만 체크
+    //  null 이 아니면 규격 == 이름 체크
     ArrayList<BasketItem> checkSameNameItem(ArrayList<BasketItem> originItems, ArrayList<BasketItem> needCheckItems) {
         Log.e("checkSameNameItem","originItems.size() : "+originItems.size() + " needCheckItems.size : " +  needCheckItems.size());
         ArrayList<BasketItem> originBasketItemArrayList = originItems;
