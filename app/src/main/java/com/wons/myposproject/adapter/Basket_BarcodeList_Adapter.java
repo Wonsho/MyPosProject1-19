@@ -111,7 +111,7 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
         items.set(i, item1);
     }
 
-    public void setItems(ArrayList<BasketTypeItem> items) {
-        this.items = items;
+    public void itemClear() {
+        this.items = new ArrayList<>();
     }
 }

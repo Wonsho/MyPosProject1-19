@@ -1,4 +1,4 @@
-package com.wons.myposproject.main_fragments.posfregment;
+package com.wons.myposproject.main_fragments.posfregment.itemvalues;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

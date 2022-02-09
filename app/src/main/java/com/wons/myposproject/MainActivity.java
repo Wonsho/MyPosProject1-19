@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//        MainViewModel.insertBarcodeItem(getApplicationContext(), "215491631584", "샘플3", "2500");
-//        MainViewModel.insertBarcodeItem(getApplicationContext(), "4897036692073", "샘플2", "3000");
-
     }
 
 

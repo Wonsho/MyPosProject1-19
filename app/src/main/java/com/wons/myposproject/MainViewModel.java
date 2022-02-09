@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
-import com.wons.myposproject.main_fragments.posfregment.BarCodeItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.BarCodeItem;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.schedule.Schedule;
 
@@ -21,28 +21,19 @@ public class MainViewModel extends ViewModel {
     private static MutableLiveData<ArrayList<BasketTypeItem>> liveDataBasketList;
 
     public static ArrayList<BasketTypeItem> getLiveDataBasketList() {
-        if(liveDataBasketList == null) {
+        if (liveDataBasketList == null) {
             liveDataBasketList = new MutableLiveData<>();
             liveDataBasketList.setValue(new ArrayList<BasketTypeItem>());
-            Log.e(TAG, "getLiveDataBasketList = getLiveDataBasketList was null but now  list size is" + liveDataBasketList.getValue().size());
-        }
-        Log.e(TAG, "getLiveDataBasketList = list size is" + liveDataBasketList.getValue().size());
-        for (BasketTypeItem item : liveDataBasketList.getValue()) {
-            Log.e(TAG, "getLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
-        }
-        return liveDataBasketList.getValue();
+        } return liveDataBasketList.getValue();
     }
 
     public static void setLiveDataBasketList(ArrayList<BasketTypeItem> itemArrayList) {
-        for (BasketTypeItem item : itemArrayList) {
-            Log.e(TAG, "setLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
-        }
-       liveDataBasketList.setValue(itemArrayList);
+        liveDataBasketList.setValue(itemArrayList);
     }
 
 
     public static MainDataBase getMainDataBase(Context context) {
-        if(mainDataBase == null) {
+        if (mainDataBase == null) {
             Log.d(TAG, "getMainDataBase = database is null");
             mainDataBase = Room.databaseBuilder(context, MainDataBase.class, "mainDataBase").allowMainThreadQueries().build();
             Log.d(TAG, "database build");
@@ -59,6 +50,7 @@ public class MainViewModel extends ViewModel {
         myDao = getMainDataBase(context).getDao();
         myDao.deleteSchedule(schedule);
     }
+
     public static void insertSchedule(Context context, Schedule schedule) {
         myDao = getMainDataBase(context).getDao();
         myDao.insertSchedule(schedule);
