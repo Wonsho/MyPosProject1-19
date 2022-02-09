@@ -551,7 +551,7 @@
                                 android:orientation="horizontal">
 
                                 <Button
-                                    android:id="@+id/btn_add_in_pos"
+                                    android:id="@+id/btn_add_in_pos_to_basket"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center|center_horizontal"

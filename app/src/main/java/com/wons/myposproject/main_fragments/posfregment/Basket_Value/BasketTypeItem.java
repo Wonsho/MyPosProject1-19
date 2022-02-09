@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 // TODO: 2022-02-05 어떤 품목이 팔렸었냐
 @Entity
-public class BasketItem {
+public class BasketTypeItem {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -19,7 +19,7 @@ public class BasketItem {
     public String quantity;
     public String basketCode;
 
-    public BasketItem(String itemName, String itemStandard, String unitPrice, String quantity) {
+    public BasketTypeItem(String itemName, String itemStandard, String unitPrice, String quantity) {
         this.itemName = itemName;
         this.itemStandard = itemStandard;
         this.unitPrice = unitPrice;

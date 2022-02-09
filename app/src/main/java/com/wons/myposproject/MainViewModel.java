@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.room.Room;
 
 import com.wons.myposproject.main_fragments.posfregment.BarCodeItem;
-import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketItem;
+import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.util.ArrayList;
@@ -18,23 +18,23 @@ public class MainViewModel extends ViewModel {
     private static final String TAG = "MainViewModel";
     private static MainDataBase mainDataBase;
     private static MyDao myDao;
-    private static MutableLiveData<ArrayList<BasketItem>> liveDataBasketList;
+    private static MutableLiveData<ArrayList<BasketTypeItem>> liveDataBasketList;
 
-    public static ArrayList<BasketItem> getLiveDataBasketList() {
+    public static ArrayList<BasketTypeItem> getLiveDataBasketList() {
         if(liveDataBasketList == null) {
             liveDataBasketList = new MutableLiveData<>();
-            liveDataBasketList.setValue(new ArrayList<BasketItem>());
+            liveDataBasketList.setValue(new ArrayList<BasketTypeItem>());
             Log.e(TAG, "getLiveDataBasketList = getLiveDataBasketList was null but now  list size is" + liveDataBasketList.getValue().size());
         }
         Log.e(TAG, "getLiveDataBasketList = list size is" + liveDataBasketList.getValue().size());
-        for (BasketItem item : liveDataBasketList.getValue()) {
+        for (BasketTypeItem item : liveDataBasketList.getValue()) {
             Log.e(TAG, "getLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
         }
         return liveDataBasketList.getValue();
     }
 
-    public static void setLiveDataBasketList(ArrayList<BasketItem> itemArrayList) {
-        for (BasketItem item : itemArrayList) {
+    public static void setLiveDataBasketList(ArrayList<BasketTypeItem> itemArrayList) {
+        for (BasketTypeItem item : itemArrayList) {
             Log.e(TAG, "setLiveDataBasketList = list item name is " + item.itemName + "list item quantity is "+ item.quantity);
         }
        liveDataBasketList.setValue(itemArrayList);
