@@ -20,8 +20,5 @@ public class InfoFragment extends Fragment {
         binding = FragmentInfoBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
-
-        //todo 바코드 아이템 리스트 보여주기 및 아이템 추가기능
-        //  외상손님 조회 기능 --> 외상이 계산 되었으면 체크를 하여 외상 데이터에서 지움
     }
 }

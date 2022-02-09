@@ -15,7 +15,7 @@ import com.wons.myposproject.R;
 public final class PosDialogUtils {
     public AlertDialog getAlertDialogForBasketDelete(Context context, PosDialogCallback callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("선택한 항목을 삭제하시겠습니까?");
+        builder.setTitle("삭제하시겠습니까?");
         builder.setNegativeButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

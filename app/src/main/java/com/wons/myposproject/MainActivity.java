@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 2022-02-04 데이터베이스 빌드, 뷰모델 생성(날씨 api, 스케쥴) 
     ActivityMainBinding binding;
     MainViewModel viewModel;
-    public static final String TAG = "MainActivity";
+    public static final String TAG_DID = "DID";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-
+//        MainViewModel.insertBarcodeItem(getApplicationContext(), "8801008271904", "볼펜", "200");
     }
 
 

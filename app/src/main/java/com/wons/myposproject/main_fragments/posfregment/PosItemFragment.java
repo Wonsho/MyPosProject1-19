@@ -1,6 +1,5 @@
 package com.wons.myposproject.main_fragments.posfregment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +27,19 @@ import com.wons.myposproject.adapter.BasKetListAdapter;
 import com.wons.myposproject.adapter.MyExpandableAdapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
 import com.wons.myposproject.itemvalues.Group;
+import com.wons.myposproject.itemvalues.GroupCode;
+import com.wons.myposproject.itemvalues.Value;
 import com.wons.myposproject.pos_value.BarCodeItem;
 import com.wons.myposproject.pos_value.BasketItem;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 enum ActionCode {
-    ACTION_CODE_INSERT,
-    ACTION_CODE_SELECTED_DELETE,
-    ACTION_CODE_ALL_DELETE;
+    INSERT,
+    SELECTED_DELETE,
+    ALL_DELETE,
+    NOTHING;
 }
 
 enum ItemViewCode {
@@ -47,17 +47,27 @@ enum ItemViewCode {
     ITEM_LIST_VIEW;
 }
 
-// TODO: 2022-02-08  리스트 추가할때 버그 있음
+enum SetCheckCode {
+    NEED_CHECK,
+    NON_NEED;
+}
 
 public class PosItemFragment extends Fragment {
-    private final String TAG = "PosItemFragment";
-    PosItemMovement movement;
-
+    private FragmentPosItemBinding binding;
+    public static final String TAG = "PosItemFragment";
+    private ForItemMenu forItemMenu;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentPosItemBinding binding = FragmentPosItemBinding.inflate(inflater, container, false);
-        movement = new PosItemMovement(getContext(), this, binding);
+        binding = FragmentPosItemBinding.inflate(inflater, container, false);
+        forItemMenu =  new ForItemMenu(getContext(), binding, this);
+        MyExpandableAdapter adapter = new MyExpandableAdapter();
+        binding.lvExpandable.setAdapter(adapter);
+        adapter.putGroupList(new ArrayList<>(Arrays.asList(Group.values())));
+        adapter.notifyDataSetChanged();
+        for (int i = 0; i < adapter.getGroupCount(); i++) {
+            binding.lvExpandable.expandGroup(i);
+        }
         return binding.getRoot();
     }
 
@@ -69,368 +79,344 @@ public class PosItemFragment extends Fragment {
             if (result.getContents() == null) {
                 Log.e("Pos", "onActivityResult + if (result.getContents() == null)");
             } else {
+                forItemMenu.searchItemInDB(ItemViewCode.BARCODE, result.getContents());
                 Log.e("Pos", "onActivityResult + Scanned" + result.getContents());
-                movement.searchBarcodeItemInDB(result.getContents());
             }
         } else {
             Log.e("Pos", "onActivityResult6");
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
 }
 
 
-final class PosItemMovement extends BasketLayoutMovement {
-    private final Fragment fragment;
+//todo 메뉴의 선택에 따라 바코드뷰를 띄워주거나 아이템리스트 뷰를 띄워줌 , 바코드 버튼을 누르면 바코드 스캔 시작
 
-    PosItemMovement(Context context, Fragment fragment, FragmentPosItemBinding binding) {
+class ForItemMenu extends ForItemListView {
+    Fragment fragment;
+    ForItemMenu(Context context, FragmentPosItemBinding binding, Fragment fragment) {
         super(context, binding);
         this.fragment = fragment;
-        setBarcodeItemView(null);
-        setItemMenuListView();
         onClick();
     }
 
     private void onClick() {
-
-        //todo 오른쪽메뉴 버튼
-        binding.lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                // TODO: 아이템 뷰의 레이아웃을 바꿔주고 기존의 바코드 리스트뷰는 초기화
-                //  왼쪽 아이템 메뉴 클릭후 그 아이템 값을 가져와 tv_itemTitle 와
-                //  tv_vertical, tv_horizontal 과 vertical리스트에 vertical값을 쀼려줌
-                Log.e("lvExpandable", "Onc");
-                changeView(ItemViewCode.ITEM_LIST_VIEW);
-                return false;
-            }
-        });
-        //todo 바코드 버튼 누를때
+        //todo 비코드 스캔 버튼
         binding.tvBarcodeLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.layoutBarcode.getVisibility() != View.VISIBLE){
-                    changeView(ItemViewCode.BARCODE);
-                }
-                barcodeScan(fragment);
-                Log.e("tvBarcodeLikeBtn", "Onc");
+
+                IntentIntegrator.forSupportFragment(fragment).initiateScan();
+                itemLayoutChange(ItemViewCode.BARCODE);
             }
         });
 
-        //todo 바코드 레이아웃 리스트의 아이템을 눌렀을때
-        binding.lvInPosInBarcode.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        //todo 아이템 메뉴 클릭 버튼
+        binding.lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo 바코드 리스트를 롱클릭후 삭제
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                //todo
+
+                itemLayoutChange(ItemViewCode.ITEM_LIST_VIEW);
                 return false;
             }
         });
 
-        //todo 바코드 레이아웃의 아이템을 Basket레이아웃으로 옮기는 버튼
-        binding.btnInPosInBarCodeAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BasKetListAdapter adapter = ((BasKetListAdapter) binding.lvInPosInBarcode.getAdapter());
-                if(adapter.getCount() == 0) {
-                    Toast.makeText(context, "먼저 상품을 추가해 주세요", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                PosItemMovement.super.changeBasketListData(ActionCode.ACTION_CODE_INSERT, adapter.getItems());
-                adapter.setItems(new ArrayList<>());
-                adapter.notifyDataSetChanged();
-                binding.drawer.openDrawer(Gravity.RIGHT);
-            }
-        });
-
-        //todo 아직 해당사항 없음
-        binding.btnAddInPos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // todo 볼트 아이템 추가버튼
-                // TODO: 아이템을 조회후 선택한 항목이 없거나 오류인 경우 return
-                //  else 면 dialog를 띄워준후 바구니에 넣기
-                //  그다음 horizontalView 선택품목 단가 뷰 클리어
-                //  drawer 나오게 하기
-            }
-        });
-        binding.lvVertival.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo verticalText에 선택한 항목을 셋 해줌
-                // horizontal값 조회후
-                // 그다음 horizontal에 맞는 리스트를 뿌려줌
-            }
-        });
-        binding.lvHorizontal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo horizontal 에 선택한 항목을 셋 해줌
-            }
-        });
     }
 
-// todo 조회된 바코드로 상품 검색
-    //todo 조회가 완료되면 바코드 리스트뷰에 추가 하기
-    public void searchBarcodeItemInDB(String barcode) {
-        Log.e("searchBarcodeItemInDB", barcode);
-        BarCodeItem item = MainViewModel.getBarcodeItem(context, barcode);
-        if (item == null) {
-            Toast.makeText(context, "해당하는 품목이 없습니다", Toast.LENGTH_SHORT).show();
-            return;
+    private void itemLayoutChange(ItemViewCode code) {
+        switch (code) {
+            case ITEM_LIST_VIEW: {
+                binding.layoutItem.setVisibility(View.VISIBLE);
+                binding.layoutBarcode.setVisibility(View.GONE);
+                whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, binding.lvInPosInBarcode);
+                break;
+            }
+            case BARCODE: {
+                binding.layoutItem.setVisibility(View.GONE);
+                binding.layoutBarcode.setVisibility(View.VISIBLE);
+                break;
+            }
         }
+    }
+
+    public void searchItemInDB(ItemViewCode code, String itemValue) {
+        switch (code) {
+            case BARCODE: {
+                BarCodeItem item = MainViewModel.getBarcodeItem(context, itemValue);
+                if(item!=null) {
+                    checkQuantity(item);
+                    break;
+                }
+                Toast.makeText(context, "해당 품목이 없습니다", Toast.LENGTH_SHORT).show();
+            }
+            case ITEM_LIST_VIEW: {
+
+                //todo setListVertical 동작
+                break;
+            }
+        }
+
+    }
+
+    private void checkQuantity(BarCodeItem item) {
+
         AlertDialog alertDialog = new PosDialogUtils().getDialogForItemQuantity(context, new PosDialogCallback() {
             @Override
             public void callBack(Boolean yOrN) {
+                return;
             }
+
             @Override
             public void callBackString(String str) {
-                if(!str.isEmpty()) {
-                    setBarcodeItemView(new BasketItem(item.name, null, item.unitPrice, str.trim()));
-                } else {
-                    Toast.makeText(context, "수량입력이 안되었습니다", Toast.LENGTH_SHORT).show();
+                if(str.isEmpty()) {
+                    Toast.makeText(context, "수량을 다시 입력해주세요", Toast.LENGTH_SHORT).show();
+                    checkQuantity(item);
+                    return;
                 }
+                whatDoYouWantToDoInListView(ActionCode.INSERT, binding.lvInPosInBarcode, new ArrayList<>(Arrays.asList(new BasketItem(item.name,null,item.unitPrice,str.trim()))));
+                Toast.makeText(context, "추가 되었습니다", Toast.LENGTH_SHORT).show();
             }
         });
         alertDialog.show();
     }
-
-
-    //todo 바코드 조회후 셋 해주기
-    private void setBarcodeItemView(BasketItem item) {
-        ListView lv = binding.lvInPosInBarcode;
-        if (lv.getAdapter() == null) {
-            lv.setAdapter(new BasKetListAdapter());
-        }
-        if(item == null) {
-            return;
-        }
-        BasKetListAdapter adapter = ((BasKetListAdapter) lv.getAdapter());
-//        ArrayList<BasketItem> originItems = adapter.getItems();
-        adapter.addItem(item);
-        adapter.notifyDataSetChanged();
-    }
-
-
-    private void barcodeScan(Fragment fragment) {
-        IntentIntegrator.forSupportFragment(fragment).initiateScan();
-    }
-
-
-    private void changeView(ItemViewCode itemViewCode) {
-        switch (itemViewCode) {
-            case BARCODE: {
-                Log.e("changeView", "BARCODE");
-                binding.layoutBarcode.setVisibility(View.VISIBLE);
-                binding.layoutItem.setVisibility(View.GONE);
-                break;
-            }
-            case ITEM_LIST_VIEW: {
-                Log.e("changeView", "ITEM_LIST_VIEW");
-                binding.layoutItem.setVisibility(View.VISIBLE);
-                binding.layoutBarcode.setVisibility(View.GONE);
-                //todo 클리어뷰
-                break;
-            }
-        }
-        clearView();
-    }
-    private void clearView() {
-        ((BasKetListAdapter)(binding.lvInPosInBarcode.getAdapter())).setItems(new ArrayList<>());
-        ((BasKetListAdapter)(binding.lvInPosInBarcode.getAdapter())).notifyDataSetChanged();
-        //todo 아이템 레이아웃 클리어 해주기
+    public void setListVerticalValue(Value verticalValue) {
 
     }
-    private void setItemMenuListView() {
-        MyExpandableAdapter adapter = new MyExpandableAdapter();
-        ExpandableListView expandableListView = binding.lvExpandable;
-        expandableListView.setAdapter(adapter);
-        ArrayList<Group> groupArrayList = new ArrayList<>(Arrays.asList(Group.values()));
-        adapter.putGroupList(groupArrayList);
-        adapter.notifyDataSetChanged();
-        for (int i = 0; i < adapter.getGroupCount(); i++) {
-            expandableListView.expandGroup(i);
-        }
+
+    private void setListHorizontalValue(ArrayList<String> horizontalValue) {
+
     }
 }
 
-class BasketLayoutMovement extends LogicInPos {
-    BasketLayoutMovement(Context context, FragmentPosItemBinding binding) {
+class ForItemListView extends ForBasketView {
+    ForItemListView(Context context, FragmentPosItemBinding binding) {
         super(context, binding);
-        setBasketListView();
-        setOnclick();
     }
 
-    BasketLayout basket = super.binding.layoutBasket;
+}
 
-    private void setOnclick() {
-        basket.findViewById(R.id.tv_credit_likeBtn).setOnClickListener(new View.OnClickListener() {
+
+//todo 바스켓 뷰   판매, 외상, 영수증 버튼 기능 미완성 // 작동 가능
+class ForBasketView extends ForSetView {
+    BasketLayout basketLayout;
+    ListView basketListView;
+
+    ForBasketView(Context context, FragmentPosItemBinding binding) {
+        super(context, binding);
+        basketLayout = binding.layoutBasket;
+        basketListView = basketLayout.findViewById(R.id.lv_basket);
+        onclick();
+        whatDoYouWantToDoInListView(ActionCode.NOTHING, basketListView, MainViewModel.getLiveDataBasketList());
+    }
+
+    private void onclick() {
+
+        //todo 모두 지우는 버튼
+        basketLayout.findViewById(R.id.tv_clearList_likeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo 외상버튼
-            }
-        });
-        basket.findViewById(R.id.tv_printReceipt_likeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "준비중....", Toast.LENGTH_SHORT).show();
-                // todo 영수증 출력
-            }
-        });
-        basket.findViewById(R.id.tv_sold_likeBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //todo 계산 완료
-            }
-        });
-        basket.findViewById(R.id.tv_clearList_likeButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PosDialogUtils utils = new PosDialogUtils();
-                AlertDialog alertDialog = utils.getAlertDialogForBasketDelete(context, new PosDialogCallback() {
+                AlertDialog alertDialog = new PosDialogUtils().getAlertDialogForBasketDelete(context, new PosDialogCallback() {
                     @Override
                     public void callBack(Boolean yOrN) {
-                        if (yOrN) {
-                            changeBasketListData(ActionCode.ACTION_CODE_ALL_DELETE, new ArrayList<>());
+                        if (basketListView.getAdapter().getCount() == 0) {
+                            Toast.makeText(context, "먼저 항목을 추가해주세요", Toast.LENGTH_SHORT).show();
+                            return;
                         }
+                        if (yOrN) {
+                            whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
+                            Toast.makeText(context, "전부 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                            setPriceTextView();
+                        }
+
                     }
 
                     @Override
                     public void callBackString(String str) {
+                        if (str == null) {
+                            return;
+                        }
 
                     }
                 });
-                alertDialog.setTitle("전부 삭제 하시겠습니까?");
                 alertDialog.show();
             }
         });
-        ((ListView) basket.findViewById(R.id.lv_basket)).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        basketListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                new PosDialogUtils().getAlertDialogForBasketDelete(context, new PosDialogCallback() {
+
+                AlertDialog alertDialog = new PosDialogUtils().getAlertDialogForBasketDelete(context, new PosDialogCallback() {
                     @Override
                     public void callBack(Boolean yOrN) {
                         if (yOrN) {
-                            ListView lv = basket.findViewById(R.id.lv_basket);
-                            ArrayList<BasketItem> arr = new ArrayList<>();
-                            arr.add((BasketItem) ((BasKetListAdapter)lv.getAdapter()).getItem(position));
-                            changeBasketListData(ActionCode.ACTION_CODE_SELECTED_DELETE,arr);
+                            whatDoYouWantToDoInListView(ActionCode.SELECTED_DELETE, basketListView, position);
+                            Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                            setPriceTextView();
                         }
+
                     }
 
                     @Override
                     public void callBackString(String str) {
+                        if (str == null) {
+                            return;
+                        }
 
                     }
-                }).show();
+                });
+                alertDialog.show();
                 return false;
             }
         });
-    }
+        //todo 외상 버튼
+        basketLayout.findViewById(R.id.tv_credit_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo 외상 로직 짜기
 
-    private ArrayList<BasketItem> getBasketListData() {
-        ArrayList<BasketItem> basketItemArrayList = MainViewModel.getLiveDataBasketList();
-        return basketItemArrayList;
-    }
-
-    public void changeBasketListData(ActionCode actionCode, ArrayList<BasketItem> items) {
-        switch (actionCode) {
-            case ACTION_CODE_ALL_DELETE: {
-                if (MainViewModel.getLiveDataBasketList().size() != 0) {
-                    MainViewModel.setLiveDataBasketList(new ArrayList<>());
-                    Toast.makeText(context, "모두 삭제 되었습니다", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "삭제할 데이터가 없습니다", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
-            case ACTION_CODE_INSERT: {
-                if (items.size() == 0 || items == null) {
-                    Toast.makeText(context, "추가할 데이터가 없습니다", Toast.LENGTH_SHORT).show();
+                if (MainViewModel.getLiveDataBasketList().size() == 0) {
+                    Toast.makeText(context, "상품을 추가 해주세요 ", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(context, "바구니에 추가 되었습니다", Toast.LENGTH_SHORT).show();
-                MainViewModel.setLiveDataBasketList(items);
-                break;
+                Toast.makeText(context, "외상 등록 되었습니다", Toast.LENGTH_SHORT).show();
+                whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
+                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                setPriceTextView();
             }
-            case ACTION_CODE_SELECTED_DELETE: {
-                ArrayList<BasketItem> arrayList = MainViewModel.getLiveDataBasketList();
-                for (BasketItem item : items) {
-                    arrayList.remove(item);
+        });
+
+        //todo 판매 버튼
+        basketLayout.findViewById(R.id.tv_sold_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (MainViewModel.getLiveDataBasketList().size() == 0) {
+                    Toast.makeText(context, "상품을 추가 해주세요 ", Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                Toast.makeText(context, "삭제 되었습니다", Toast.LENGTH_SHORT).show();
-                MainViewModel.setLiveDataBasketList(arrayList);
-                break;
+                Toast.makeText(context, "판매 완료 되었습니다", Toast.LENGTH_SHORT).show();
+                whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
+                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                setPriceTextView();
+            }
+        });
+        //todo 프린트 영수증 버튼
+        basketLayout.findViewById(R.id.tv_printReceipt_likeBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MainViewModel.getLiveDataBasketList().size() == 0) {
+                    Toast.makeText(context, "상품을 추가 해주세요 ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(context, "준비중 ...", Toast.LENGTH_SHORT).show();
+                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                setPriceTextView();
+            }
+        });
+
+    }
+
+    private void setPriceTextView() {
+        ArrayList<BasketItem> items = MainViewModel.getLiveDataBasketList();
+        int price = 0;
+        if (items.size() == 0) {
+            price = price;
+        } else {
+            for (BasketItem item : items) {
+                price += (Integer.parseInt(item.unitPrice.trim()) * Integer.parseInt(item.quantity.trim()));
             }
         }
-        setBasketListView();
-    }
-
-    private void setBasketListView() {
-        ListView lv = basket.findViewById(R.id.lv_basket);
-        ArrayList<BasketItem> basketItemArrayList = getBasketListData();
-        if (lv.getAdapter() == null) {
-            lv.setAdapter(new BasKetListAdapter());
-        } if(basketItemArrayList.size() == 0) {
-            ((BasKetListAdapter) lv.getAdapter()).setItems(new ArrayList<>());
-        } else {
-            ((BasKetListAdapter) lv.getAdapter()).setItems(basketItemArrayList);
-        }
-        DecimalFormat df = new DecimalFormat("###,###,###");
-        TextView tv = basket.findViewById(R.id.tv_allPrice);
-        int price = 0;
-        for(BasketItem item : basketItemArrayList) {
-            price += (Integer.parseInt(item.unitPrice.trim()) * Integer.parseInt(item.quantity.trim()));
-        }
-        tv.setText(df.format(price));
-        ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
-    }
-
-
-    private void soldBasket() {
-    }
-
-    private void creditBasket() {
-
-    }
-
-    private void printReceipt() {
-
+        ((TextView) basketLayout.findViewById(R.id.tv_allPrice)).setText(String.valueOf(price));
     }
 }
 
-class LogicInPos {
-
+class ForSetView {
     Context context;
     FragmentPosItemBinding binding;
 
-    public LogicInPos(Context context, FragmentPosItemBinding binding) {
+    ForSetView(Context context, FragmentPosItemBinding binding) {
         this.context = context;
         this.binding = binding;
     }
 
-    @SuppressLint("LongLogTag")
-    //todo 규격이 null 이면 이름만 체크
-    //  null 이 아니면 규격 == 이름 체크
-    ArrayList<BasketItem> checkSameNameItem(ArrayList<BasketItem> originItems, ArrayList<BasketItem> needCheckItems) {
-        Log.e("checkSameNameItem","originItems.size() : "+originItems.size() + " needCheckItems.size : " +  needCheckItems.size());
-        ArrayList<BasketItem> originBasketItemArrayList = originItems;
-        if(originBasketItemArrayList.size() == 0) {
-            Log.e("checkSameNameItem", "if(originBasketItemArrayList.size() == 0)" + originBasketItemArrayList.size());
-            return needCheckItems;
-        }
-        for (int i = 0; i < needCheckItems.size(); i++) {
-            for (int j = 0; j < originBasketItemArrayList.size(); j++) {
-                if (needCheckItems.get(i).itemName.equals(originBasketItemArrayList.get(j).itemName)) {
-                    originBasketItemArrayList.get(j).quantity = String.valueOf(Integer.parseInt(originBasketItemArrayList.get(j).quantity) + Integer.parseInt(needCheckItems.get(i).quantity));
-                    Log.e("checkSameNameItem1"," String.valueOf(Integer.parseInt(originBasketItemArrayList.get("+j+").quantity) = " +originBasketItemArrayList.get(j).quantity+"  Integer.parseInt(needCheckItems.get("+i+").quantity)) = "+needCheckItems.get(i).quantity);
-                } else {
-                    originBasketItemArrayList.add(needCheckItems.get(i));
-                    Log.e("checkSameNameItem2"," originBasketItemArrayList.add(needCheckItems.get("+i+")) = " + originItems.get(i).quantity);
-                }
+    public void whatDoYouWantToDoInListView(ActionCode actionCode, ListView lv, int indexOfWantToChangeData) {
+        changeListView(actionCode, lv, null, indexOfWantToChangeData);
+
+    }
+
+    public void whatDoYouWantToDoInListView(ActionCode actionCode, ListView lv, ArrayList<BasketItem> wantToChangeData) {
+        changeListView(actionCode, lv, wantToChangeData, 0);
+
+    }
+
+    public void whatDoYouWantToDoInListView(ActionCode actionCode, ListView lv) {
+        changeListView(actionCode, lv, null, 0);
+
+    }
+
+
+    public void changeListView(ActionCode code, ListView lv, ArrayList<BasketItem> items, int index) {
+        ArrayList<BasketItem> wantToChangeData = null;
+        SetCheckCode checkCode = null;
+        switch (code) {
+            case ALL_DELETE: {
+                checkCode = SetCheckCode.NON_NEED;
+                wantToChangeData = new ArrayList<>();
+                break;
+            }
+            case INSERT: {
+                checkCode = SetCheckCode.NEED_CHECK;
+                wantToChangeData = items;
+                break;
+            }
+            case NOTHING: {
+                checkCode = SetCheckCode.NON_NEED;
+                wantToChangeData = items;
+                break;
+            }
+            case SELECTED_DELETE: {
+                checkCode = SetCheckCode.NON_NEED;
+                ((BasKetListAdapter) lv.getAdapter()).deleteItem(index);
+                wantToChangeData = ((BasKetListAdapter) lv.getAdapter()).getItems();
+                break;
             }
         }
-        return originBasketItemArrayList;
+        if (checkCode == SetCheckCode.NON_NEED) {
+            setDataToList(lv, wantToChangeData);
+        }
+        if (checkCode == SetCheckCode.NEED_CHECK) {
+            checkSameItemInTheViewBeforeAdd(lv, wantToChangeData);
+        }
+    }
+
+
+    private void checkSameItemInTheViewBeforeAdd(ListView lv, ArrayList<BasketItem> addedData) {
+        ArrayList<BasketItem> originDataInListView= ((BasKetListAdapter) lv.getAdapter()).getItems();
+        if (originDataInListView.size() == 0 || originDataInListView == null) {
+            setDataToList(lv, addedData);
+            return;
+        }
+        //todo 원래의 데이터와 새로 들어옴 데이터를 비교하여 넣어주기
+       for(int i=0 ; i<originDataInListView.size() ; i++ ) { //todo 원래의 데이터 값
+           for(int j=0; j<addedData.size() ;j++) { //todo 넣어줄 데이터의 값
+               if((originDataInListView.get(i).itemName == addedData.get(j).itemName) && (originDataInListView.get(i).quantity == addedData.get(j).quantity)) {
+                   originDataInListView.get(i).quantity = String.valueOf(Integer.parseInt(originDataInListView.get(i).quantity)+Integer.parseInt(addedData.get(j).quantity));
+               } else {
+                   originDataInListView.add(addedData.get(j));
+               }
+           }
+       }
+        setDataToList(lv, originDataInListView);
+    }
+
+    private void setDataToList(ListView lv, ArrayList<BasketItem> dataToSet) {
+        if (lv.getAdapter() == null) {
+            lv.setAdapter(new BasKetListAdapter());
+        }
+        ((BasKetListAdapter) lv.getAdapter()).setItems(dataToSet);
+        ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
     }
 }

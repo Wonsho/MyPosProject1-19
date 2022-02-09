@@ -63,28 +63,8 @@ public class BasKetListAdapter extends BaseAdapter {
         return items;
     }
 
-    public void addItem(BasketItem basketItem) {
-        items.add(basketItem);
-    }
-
     public void deleteItem(int i) {
         items.remove(i);
-    }
-
-    public void clearItemList() {
-        this.items = new ArrayList<>();
-    }
-
-    public int checkSameItem(String name){
-        int i = 0;
-        for(BasketItem item : items) {
-            Log.e("Adapter", "checkSameItem: " + item.itemName + name);
-            if(item.itemName.equals(name)) {
-                return i;
-            }
-            i++;
-        }
-        return -1;
     }
 
     public void setItems(ArrayList<BasketItem> items) {
