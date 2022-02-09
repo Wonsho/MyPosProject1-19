@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+//        MainViewModel.insertBarcodeItem(getApplicationContext(), "88023403", "담배", "4500");
     }
 
 

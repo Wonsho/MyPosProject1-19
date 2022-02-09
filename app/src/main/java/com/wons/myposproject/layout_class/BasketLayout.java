@@ -1,4 +1,4 @@
-package com.wons.myposproject;
+package com.wons.myposproject.layout_class;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+
+import com.wons.myposproject.R;
 
 public class BasketLayout extends LinearLayout {
     public BasketLayout(Context context) {
