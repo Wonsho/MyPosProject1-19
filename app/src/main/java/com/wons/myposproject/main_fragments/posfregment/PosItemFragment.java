@@ -410,6 +410,7 @@ class ForSetView {
            }
        }
         setDataToList(lv, originDataInListView);
+//       asd
     }
 
     private void setDataToList(ListView lv, ArrayList<BasketItem> dataToSet) {
