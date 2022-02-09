@@ -11,18 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 
 import com.wons.myposproject.R;
-import com.wons.myposproject.itemvalues.Group;
-import com.wons.myposproject.itemvalues.Item;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MyExpandableAdapter extends BaseExpandableListAdapter {
+public class PosItemMenu_Adapter extends BaseExpandableListAdapter {
 
     private ArrayList<String> parents;
     private HashMap<String, ArrayList<String>> children;
 
-    public MyExpandableAdapter() {
+    public PosItemMenu_Adapter() {
         parents = new ArrayList<>();
         children = new HashMap<>();
     }

@@ -6,8 +6,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.wons.myposproject.itemvalues.Value;
-import com.wons.myposproject.pos_value.BarCodeItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
+import com.wons.myposproject.main_fragments.posfregment.BarCodeItem;
 import com.wons.myposproject.schedule.Schedule;
 
 @Dao

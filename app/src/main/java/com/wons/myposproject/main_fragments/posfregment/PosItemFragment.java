@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -23,14 +24,12 @@ import com.google.zxing.integration.android.IntentResult;
 import com.wons.myposproject.BasketLayout;
 import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
-import com.wons.myposproject.adapter.BasKetListAdapter;
-import com.wons.myposproject.adapter.MyExpandableAdapter;
+import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
+import com.wons.myposproject.adapter.PosItemMenu_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
-import com.wons.myposproject.itemvalues.Group;
-import com.wons.myposproject.itemvalues.GroupCode;
-import com.wons.myposproject.itemvalues.Value;
-import com.wons.myposproject.pos_value.BarCodeItem;
-import com.wons.myposproject.pos_value.BasketItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
+import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,12 +55,13 @@ public class PosItemFragment extends Fragment {
     private FragmentPosItemBinding binding;
     public static final String TAG = "PosItemFragment";
     private ForItemMenu forItemMenu;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentPosItemBinding.inflate(inflater, container, false);
-        forItemMenu =  new ForItemMenu(getContext(), binding, this);
-        MyExpandableAdapter adapter = new MyExpandableAdapter();
+        forItemMenu = new ForItemMenu(getContext(), binding, this);
+        PosItemMenu_Adapter adapter = new PosItemMenu_Adapter();
         binding.lvExpandable.setAdapter(adapter);
         adapter.putGroupList(new ArrayList<>(Arrays.asList(Group.values())));
         adapter.notifyDataSetChanged();
@@ -94,6 +94,7 @@ public class PosItemFragment extends Fragment {
 
 class ForItemMenu extends ForItemListView {
     Fragment fragment;
+
     ForItemMenu(Context context, FragmentPosItemBinding binding, Fragment fragment) {
         super(context, binding);
         this.fragment = fragment;
@@ -144,7 +145,7 @@ class ForItemMenu extends ForItemListView {
         switch (code) {
             case BARCODE: {
                 BarCodeItem item = MainViewModel.getBarcodeItem(context, itemValue);
-                if(item!=null) {
+                if (item != null) {
                     checkQuantity(item);
                     break;
                 }
@@ -169,17 +170,18 @@ class ForItemMenu extends ForItemListView {
 
             @Override
             public void callBackString(String str) {
-                if(str.isEmpty()) {
+                if (str.isEmpty()) {
                     Toast.makeText(context, "수량을 다시 입력해주세요", Toast.LENGTH_SHORT).show();
                     checkQuantity(item);
                     return;
                 }
-                whatDoYouWantToDoInListView(ActionCode.INSERT, binding.lvInPosInBarcode, new ArrayList<>(Arrays.asList(new BasketItem(item.name,null,item.unitPrice,str.trim()))));
+                whatDoYouWantToDoInListView(ActionCode.INSERT, binding.lvInPosInBarcode, new ArrayList<>(Arrays.asList(new BasketItem(item.name, null, item.unitPrice, str.trim()))));
                 Toast.makeText(context, "추가 되었습니다", Toast.LENGTH_SHORT).show();
             }
         });
         alertDialog.show();
     }
+
     public void setListVerticalValue(Value verticalValue) {
 
     }
@@ -226,7 +228,7 @@ class ForBasketView extends ForSetView {
                         if (yOrN) {
                             whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
                             Toast.makeText(context, "전부 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                            MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                            MainViewModel.setLiveDataBasketList(((Basket_BarcodeList_Adapter) basketListView.getAdapter()).getItems());
                             setPriceTextView();
                         }
 
@@ -253,7 +255,7 @@ class ForBasketView extends ForSetView {
                         if (yOrN) {
                             whatDoYouWantToDoInListView(ActionCode.SELECTED_DELETE, basketListView, position);
                             Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
-                            MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                            MainViewModel.setLiveDataBasketList(((Basket_BarcodeList_Adapter) basketListView.getAdapter()).getItems());
                             setPriceTextView();
                         }
 
@@ -283,7 +285,7 @@ class ForBasketView extends ForSetView {
                 }
                 Toast.makeText(context, "외상 등록 되었습니다", Toast.LENGTH_SHORT).show();
                 whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
-                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                MainViewModel.setLiveDataBasketList(((Basket_BarcodeList_Adapter) basketListView.getAdapter()).getItems());
                 setPriceTextView();
             }
         });
@@ -299,7 +301,7 @@ class ForBasketView extends ForSetView {
                 }
                 Toast.makeText(context, "판매 완료 되었습니다", Toast.LENGTH_SHORT).show();
                 whatDoYouWantToDoInListView(ActionCode.ALL_DELETE, basketListView);
-                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                MainViewModel.setLiveDataBasketList(((Basket_BarcodeList_Adapter) basketListView.getAdapter()).getItems());
                 setPriceTextView();
             }
         });
@@ -312,7 +314,7 @@ class ForBasketView extends ForSetView {
                     return;
                 }
                 Toast.makeText(context, "준비중 ...", Toast.LENGTH_SHORT).show();
-                MainViewModel.setLiveDataBasketList(((BasKetListAdapter) basketListView.getAdapter()).getItems());
+                MainViewModel.setLiveDataBasketList(((Basket_BarcodeList_Adapter) basketListView.getAdapter()).getItems());
                 setPriceTextView();
             }
         });
@@ -332,6 +334,43 @@ class ForBasketView extends ForSetView {
         ((TextView) basketLayout.findViewById(R.id.tv_allPrice)).setText(String.valueOf(price));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ForSetView {
     Context context;
@@ -358,7 +397,7 @@ class ForSetView {
     }
 
 
-    public void changeListView(ActionCode code, ListView lv, ArrayList<BasketItem> items, int index) {
+    public void changeListView(@NonNull ActionCode code, @NonNull ListView lv, ArrayList<BasketItem> items, int index) {
         ArrayList<BasketItem> wantToChangeData = null;
         SetCheckCode checkCode = null;
         switch (code) {
@@ -379,8 +418,8 @@ class ForSetView {
             }
             case SELECTED_DELETE: {
                 checkCode = SetCheckCode.NON_NEED;
-                ((BasKetListAdapter) lv.getAdapter()).deleteItem(index);
-                wantToChangeData = ((BasKetListAdapter) lv.getAdapter()).getItems();
+                ((Basket_BarcodeList_Adapter) lv.getAdapter()).deleteItem(index);
+                wantToChangeData = ((Basket_BarcodeList_Adapter) lv.getAdapter()).getItems();
                 break;
             }
         }
@@ -394,30 +433,47 @@ class ForSetView {
 
 
     private void checkSameItemInTheViewBeforeAdd(ListView lv, ArrayList<BasketItem> addedData) {
-        ArrayList<BasketItem> originDataInListView= ((BasKetListAdapter) lv.getAdapter()).getItems();
-        if (originDataInListView.size() == 0 || originDataInListView == null) {
+        if (lv.getAdapter() == null) {
+            lv.setAdapter(new Basket_BarcodeList_Adapter());
+            Log.e(PosItemFragment.TAG, "checkSameItemInTheViewBeforeAdd_ if (lv.getAdapter() == null)");
+        }
+        ArrayList<BasketItem> originData = ((Basket_BarcodeList_Adapter) lv.getAdapter()).getItems(); // 원래 리스트뷰에 있는 데이터
+
+        if (originData.size() == 0) {
+            Log.e(PosItemFragment.TAG, "checkSameItemInTheViewBeforeAdd_  if (originData.size() == 0)");
             setDataToList(lv, addedData);
             return;
         }
-        //todo 원래의 데이터와 새로 들어옴 데이터를 비교하여 넣어주기
-       for(int i=0 ; i<originDataInListView.size() ; i++ ) { //todo 원래의 데이터 값
-           for(int j=0; j<addedData.size() ;j++) { //todo 넣어줄 데이터의 값
-               if((originDataInListView.get(i).itemName == addedData.get(j).itemName) && (originDataInListView.get(i).quantity == addedData.get(j).quantity)) {
-                   originDataInListView.get(i).quantity = String.valueOf(Integer.parseInt(originDataInListView.get(i).quantity)+Integer.parseInt(addedData.get(j).quantity));
-               } else {
-                   originDataInListView.add(addedData.get(j));
-               }
-           }
-       }
-        setDataToList(lv, originDataInListView);
-//       asd
+        for (int i = 0; i < addedData.size(); i++) { // child is i
+            for (int j = 0; j < originData.size(); j++) { // origin is j
+                if ((addedData.get(i).itemStandard == null) && (addedData.get(i).itemName).equals(originData.get(j).itemName)) {
+                    Log.e(PosItemFragment.TAG, "1");
+                    BasketItem item = originData.get(j);
+                    item.quantity = String.valueOf(Integer.parseInt(addedData.get(i).quantity) + (Integer.parseInt(originData.get(j).quantity)));
+                    originData.set(j, item);
+                    Log.e(PosItemFragment.TAG, "1-1");
+                } else if ((addedData.get(i).itemName.equals(originData.get(j).itemName)) && (addedData.get(i).itemStandard.equals(originData.get(j).itemStandard))) {
+                    Log.e(PosItemFragment.TAG, "2");
+                    BasketItem item = originData.get(j);
+                    item.quantity = String.valueOf(Integer.parseInt(addedData.get(i).quantity) + (Integer.parseInt(originData.get(j).quantity)));
+                    originData.set(j, item);
+                } else {
+                    Log.e(PosItemFragment.TAG, "3");
+                    originData.add(addedData.get(i));
+                    break;
+                }
+
+            }
+        }
+        setDataToList(lv, originData);
+
     }
 
     private void setDataToList(ListView lv, ArrayList<BasketItem> dataToSet) {
         if (lv.getAdapter() == null) {
-            lv.setAdapter(new BasKetListAdapter());
+            lv.setAdapter(new Basket_BarcodeList_Adapter());
         }
-        ((BasKetListAdapter) lv.getAdapter()).setItems(dataToSet);
-        ((BasKetListAdapter) lv.getAdapter()).notifyDataSetChanged();
+        ((Basket_BarcodeList_Adapter) lv.getAdapter()).setItems(dataToSet);
+        ((Basket_BarcodeList_Adapter) lv.getAdapter()).notifyDataSetChanged();
     }
 }

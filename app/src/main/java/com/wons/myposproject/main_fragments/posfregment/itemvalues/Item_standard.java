@@ -1,4 +1,4 @@
-package com.wons.myposproject.itemvalues;
+package com.wons.myposproject.main_fragments.posfregment.itemvalues;
 
 public enum Item_standard {
 

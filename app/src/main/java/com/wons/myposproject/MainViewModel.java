@@ -2,21 +2,16 @@ package com.wons.myposproject;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.room.Database;
 import androidx.room.Room;
 
-import com.wons.myposproject.main_fragments.posfregment.PosDialogCallback;
-import com.wons.myposproject.pos_value.BarCodeItem;
-import com.wons.myposproject.pos_value.BasketItem;
+import com.wons.myposproject.main_fragments.posfregment.BarCodeItem;
+import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketItem;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 // TODO: 2022-02-04 날씨(라이브데이터), 데이터베이스 쿼리, 외상조회
 public class MainViewModel extends ViewModel {

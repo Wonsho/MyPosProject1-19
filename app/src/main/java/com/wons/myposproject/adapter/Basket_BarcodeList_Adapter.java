@@ -1,7 +1,6 @@
 package com.wons.myposproject.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wons.myposproject.R;
-import com.wons.myposproject.pos_value.BasketItem;
+import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketItem;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class BasKetListAdapter extends BaseAdapter {
+public class Basket_BarcodeList_Adapter extends BaseAdapter {
     private ArrayList<BasketItem> items;
 
-    public BasKetListAdapter() {
+    public Basket_BarcodeList_Adapter() {
         items = new ArrayList<>();
     }
     @Override

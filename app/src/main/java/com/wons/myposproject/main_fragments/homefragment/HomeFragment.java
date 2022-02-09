@@ -6,9 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.room.Insert;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.wons.myposproject.MainActivity;
 import com.wons.myposproject.MainViewModel;
-import com.wons.myposproject.adapter.ScheduleAdapter;
+import com.wons.myposproject.adapter.Schedule_In_Home_Adapter;
 import com.wons.myposproject.databinding.FragmentHomeBinding;
 import com.wons.myposproject.schedule.Schedule;
 
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment {
         binding.lvSchedule.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Schedule schedule = ((ScheduleAdapter)(binding.lvSchedule.getAdapter())).getItem(position);
+                Schedule schedule = ((Schedule_In_Home_Adapter)(binding.lvSchedule.getAdapter())).getItem(position);
                 AlertDialog alertDialog = HomeDialogUtils.getDeleteDialog(getActivity(), new HomeDialogCallback() {
                     @Override
                     public void onResult(String smg) { return;}
@@ -132,10 +129,10 @@ final class SetScheduleListView {
     }
     private void setListView(ArrayList<Schedule> scheduleArrayList) {
         if(lv.getAdapter() == null) {
-            lv.setAdapter(new ScheduleAdapter());
+            lv.setAdapter(new Schedule_In_Home_Adapter());
         }
-        ((ScheduleAdapter) lv.getAdapter()).setSchedules(scheduleArrayList);
-        ((ScheduleAdapter) lv.getAdapter()).notifyDataSetChanged();
+        ((Schedule_In_Home_Adapter) lv.getAdapter()).setSchedules(scheduleArrayList);
+        ((Schedule_In_Home_Adapter) lv.getAdapter()).notifyDataSetChanged();
     }
     private void getScheduleOnRoomDB(String date) {
         setListView(new ArrayList<>(Arrays.asList(MainViewModel.getSchedule(context, date))));

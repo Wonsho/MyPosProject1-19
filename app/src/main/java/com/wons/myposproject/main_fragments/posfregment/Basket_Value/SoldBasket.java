@@ -1,4 +1,4 @@
-package com.wons.myposproject.pos_value;
+package com.wons.myposproject.main_fragments.posfregment.Basket_Value;
 
 // TODO: 2022-02-05 외상이냐 아니냐 , 몇시에 팔렸냐 , 날짜가 언제 팔렸냐
 
