@@ -12,6 +12,7 @@ import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeI
 import com.wons.myposproject.schedule.Schedule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 // TODO: 2022-02-04 날씨(라이브데이터), 데이터베이스 쿼리, 외상조회
 public class MainViewModel extends ViewModel {
@@ -49,6 +50,11 @@ public class MainViewModel extends ViewModel {
     public static void deleteSchedule(Context context, Schedule schedule) {
         myDao = getMainDataBase(context).getDao();
         myDao.deleteSchedule(schedule);
+    }
+
+    public static ArrayList<BarCodeItem> getAllBarcodeItemsInDB(Context context) {
+        myDao = getMainDataBase(context).getDao();
+        return new ArrayList<>(Arrays.asList(myDao.getBarcodeItemList()));
     }
 
     public static void insertSchedule(Context context, Schedule schedule) {

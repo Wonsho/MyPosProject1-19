@@ -15,12 +15,36 @@ import android.widget.Toast;
 import com.wons.myposproject.R;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.BarCodeItem;
 
+import java.text.DecimalFormat;
+
+enum ChangeCode {
+    UNIT_PRICE,
+    NAME;
+}
+
 public class InfoDialogUtils {
 
+    public AlertDialog getAskYesOrNoDialog(Context context, InfoDiaLogCallbackForBoolean callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.callBack(true);
+            }
+        });
+        builder.setTitle("삭제하시겠습니까?");
+        return builder.create();
+    }
     //todo 바코드를 쓰는 다이로그
     public AlertDialog getDialogForWriteBarcode(Context context, InfoDialogCallbackForString callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("수량을 입력해주세요");
+        builder.setTitle("바코드를 입력해주세요");
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_quantity_view, null);
         TextView tv = view.findViewById(R.id.tv_setNumber);
         Button button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonD, button0;
@@ -41,11 +65,6 @@ public class InfoDialogUtils {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
-                    if (tv.getText().toString().isEmpty()) {
-                        if (v.getId() == R.id.btn_0) {
-                            return;
-                        }
-                    }
                     tv.setText(tv.getText().toString() + ((Button) v).getText().toString());
                 }
             });
@@ -79,20 +98,38 @@ public class InfoDialogUtils {
     public AlertDialog getDialogForUpdate(Context context, BarCodeItem item, InfoDiaLogCallbackForGetItem callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("수정할 항목을 선택해주세요");
+        builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.setPositiveButton("단가 수정", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialogForChangeItem(context, new InfoDialogCallbackForString() {
+                    @Override
+                    public void callBack(String str) {
+                        if (!str.isEmpty()) {
+                            callback.callback(new BarCodeItem(item.barCode, item.name, str.trim()));
+                            Toast.makeText(context, "단가가 수정되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, ChangeCode.UNIT_PRICE);
+            }
+        });
         builder.setNegativeButton("제품명 수정", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //todo 수정하는 다이로그 띄우기
-            }
-        });
-        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        builder.setNegativeButton("바코드명 수정", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                dialogForChangeItem(context, new InfoDialogCallbackForString() {
+                    @Override
+                    public void callBack(String str) {
+                        if (!str.isEmpty()) {
+                            callback.callback(new BarCodeItem(item.barCode, str.trim(), item.unitPrice));
+                            Toast.makeText(context, "제품명이 수정되었습니다", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }, ChangeCode.NAME);
                 //todo 수정하는 다이로그 띄우기
             }
         });
@@ -106,24 +143,42 @@ public class InfoDialogUtils {
 
 
     //todo 수정할 항목을 수정하는 다이로그
-    private void dialogForChangeItem(Context context, InfoDialogCallbackForString callback) {
+    private void dialogForChangeItem(Context context, InfoDialogCallbackForString callback, ChangeCode changeCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("수정하실 내용을 적어주세요");
-        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("돌아가기", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_view_schedule, null);
-
+        EditText editText = view.findViewById(R.id.et_schedule);
+        builder.setView(view);
         builder.setNegativeButton("수정", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 if (!((EditText) view.findViewById(R.id.et_schedule)).getText().toString().isEmpty()) {
-                    callback.callBack(((EditText) view.findViewById(R.id.et_schedule)).getText().toString());
+                    switch (changeCode) {
+                    case NAME: {
+                    callback.callBack(editText.getText().toString().trim());
+                    break;
+                    }
+                    case UNIT_PRICE: {
+                        try {
+                            Integer.parseInt(editText.getText().toString());
+                            callback.callBack(editText.getText().toString().trim());
+                        } catch (Exception e) {
+                            Toast.makeText(context, "단가는 숫자로 적어주세요", Toast.LENGTH_SHORT).show();
+                            dialogForChangeItem(context, callback, changeCode);
+                        }
+                        break;
+                    }
+                }
                 } else {
-                    dialogForChangeItem(context, callback);
+                    dialogForChangeItem(context, callback, changeCode);
+                    Toast.makeText(context, "항목을 제대로 적어주세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -134,7 +189,7 @@ public class InfoDialogUtils {
     public AlertDialog getDialogForInsertBarcodeItem(Context context, String barcode, InfoDiaLogCallbackForGetItem callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("저장할 제품의 정보를 입력해주세요");
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_for_change_item_name_view, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_barcode_item_write_info_before_insert_view, null);
         EditText et_name = view.findViewById(R.id.et_itemName);
         EditText et_unitPrice = view.findViewById(R.id.et_itemUnitPrice);
         builder.setView(view);
@@ -145,14 +200,16 @@ public class InfoDialogUtils {
                 if (!(et_name.getText().toString().isEmpty()) && !(et_unitPrice.getText().toString().isEmpty())) {
                     try {
                         Integer.parseInt(et_unitPrice.getText().toString().trim());
-                        showCheckItem(context, et_name.getText().toString().trim(), et_unitPrice.getText().toString().trim(),barcode, new InfoDiaLogCallbackForBoolean() {
+                        showCheckItem(context, et_name.getText().toString().trim(), et_unitPrice.getText().toString().trim(), barcode, new InfoDiaLogCallbackForBoolean() {
                             @Override
                             public void callBack(boolean yesOrNo) {
                                 if (yesOrNo) {
+                                    Log.e("a", "true");
                                     callback.callback(new BarCodeItem(barcode, et_name.getText().toString().trim(), et_unitPrice.getText().toString().trim())); // 바코드 가져오기
                                 }
                                 if (!yesOrNo) {
-                                    return;
+                                    Log.e("a", "false");
+                                    getDialogForInsertBarcodeItem(context, barcode, callback).show();
                                 }
                             }
                         });
@@ -176,13 +233,14 @@ public class InfoDialogUtils {
         return builder.create();
     }
 
-    private void showCheckItem(Context context, String name, String unitPrice,String barcode, InfoDiaLogCallbackForBoolean callback) {
+    private void showCheckItem(Context context, String name, String unitPrice, String barcode, InfoDiaLogCallbackForBoolean callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("아래의 항목이 맞습니까?");
+        DecimalFormat df = new DecimalFormat("###,###,###");
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_for_change_item_name_view, null);
-        ((TextView)view.findViewById(R.id.tv_itemName)).setText(name);
-        ((TextView)view.findViewById(R.id.tv_itemUnitPrice)).setText(unitPrice);
-        ((TextView)view.findViewById(R.id.tv_itemBarcodeNum)).setText(barcode);
+        ((TextView) view.findViewById(R.id.tv_itemName)).setText(name);
+        ((TextView) view.findViewById(R.id.tv_itemUnitPrice)).setText(df.format(Integer.parseInt(unitPrice)));
+        ((TextView) view.findViewById(R.id.tv_itemBarcodeNum)).setText(barcode);
         builder.setView(view);
         builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
             @Override

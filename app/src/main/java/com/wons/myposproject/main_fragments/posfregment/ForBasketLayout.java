@@ -52,9 +52,9 @@ class ForBasketLayout {
                             adapter.itemClear();
                             setView();
                             Toast.makeText(context, "모두 삭제 되었습니다", Toast.LENGTH_SHORT).show();
+                            MainViewModel.setLiveDataBasketList(new ArrayList<>());
                         }
                     }
-
                     @Override
                     public void callBackString(String str) {
 
@@ -91,6 +91,7 @@ class ForBasketLayout {
     public void callSetViewFromPosMain() {
         setView();
     }
+
     private void getLiveData() {
         ArrayList<BasketTypeItem> items = MainViewModel.getLiveDataBasketList();
         adapter.addItem(items);

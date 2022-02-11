@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
+import com.wons.myposproject.main_fragments.infofragment.InfoDialogCallbackForString;
+import com.wons.myposproject.main_fragments.infofragment.InfoDialogUtils;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallback;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
@@ -60,14 +62,10 @@ public class ForBarCodeLayout {
     }
 
     private void dialogForBarcode() {
-        AlertDialog alertDialog = new PosDialogUtils().getDialogForItemQuantity(context, new PosDialogCallback() {
-            @Override
-            public void callBack(Boolean yOrN) {
-
-            }
+        AlertDialog alertDialog = new InfoDialogUtils().getDialogForWriteBarcode(context, new InfoDialogCallbackForString() {
 
             @Override
-            public void callBackString(String str) {
+            public void callBack(String str) {
                 if(!str.isEmpty()) {
                     searchBarcodeItemInDB(str);
                 }else {
@@ -76,7 +74,7 @@ public class ForBarCodeLayout {
                 }
             }
         });
-        alertDialog.setTitle("바코드를 임력해주세요");
+        alertDialog.setTitle("바코드를입력해주세요");
         alertDialog.show();
     }
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.wons.myposproject.databinding.ActivityMainBinding;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+//        MainViewModel.insertBarcodeItem(getApplicationContext(), "021616446161", "샘플1","500");
     }
 
 

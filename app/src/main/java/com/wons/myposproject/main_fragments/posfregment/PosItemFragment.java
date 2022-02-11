@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
 import com.wons.myposproject.adapter.PosItemMenu_Adapter;
@@ -83,7 +84,9 @@ public class PosItemFragment extends Fragment {
                 }
                 Toast.makeText(getContext(), "외상으로 등록되었습니다", Toast.LENGTH_SHORT).show();
                 forBasketLayout.adapter.itemClear();
+                MainViewModel.setLiveDataBasketList(new ArrayList<>());
                 forBasketLayout.callSetViewFromPosMain();
+
             }
         });
         //todo 영수증 클릭 버튼
@@ -104,6 +107,7 @@ public class PosItemFragment extends Fragment {
                 }
                 Toast.makeText(getContext(), "계산이 완료되었습니다", Toast.LENGTH_SHORT).show();
                 forBasketLayout.adapter.itemClear();
+                MainViewModel.setLiveDataBasketList(new ArrayList<>());
                 forBasketLayout.callSetViewFromPosMain();
             }
         });
@@ -147,10 +151,10 @@ public class PosItemFragment extends Fragment {
         }
     }
 }
-
-class ForItemLayout {
-
-}
+//
+//class ForItemLayout {
+//
+//}
 
 
 

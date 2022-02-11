@@ -45,4 +45,7 @@ public interface MyDao {
 
     @Query("SELECT * FROM SCHEDULE WHERE date = :date")
     Schedule[] getSelectedScheduleList(String date);
+
+    @Query("SELECT * FROM BarCodeItem")
+    BarCodeItem[] getBarcodeItemList();
 }

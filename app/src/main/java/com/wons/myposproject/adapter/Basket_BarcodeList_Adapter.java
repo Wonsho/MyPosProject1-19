@@ -69,10 +69,6 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
         items.remove(i);
     }
 
-    public void deleteAllItems() {
-        items = new ArrayList<>();
-    }
-
     public void addItem(BasketTypeItem item) {
         sameCheckItem(item);
     }
@@ -112,6 +108,6 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
     }
 
     public void itemClear() {
-        this.items = new ArrayList<>();
+        items = new ArrayList<>();
     }
 }
