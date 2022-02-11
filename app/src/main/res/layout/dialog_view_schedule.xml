@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <EditText
         android:layout_margin="10dp"
-        android:hint="할일을 적어주세요"
+        android:hint="적어주세요"
         android:id="@+id/et_schedule"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

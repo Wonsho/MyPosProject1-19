@@ -19,6 +19,7 @@ public class ForBarCodeLayout {
     Context context;
     FragmentPosItemBinding binding;
     ListView lv;
+
     public ForBarCodeLayout(Context context, FragmentPosItemBinding binding) {
         this.context = context;
         this.binding = binding;
@@ -26,6 +27,7 @@ public class ForBarCodeLayout {
         setView();
         onClick();
     }
+
     private void onClick() {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -48,7 +50,36 @@ public class ForBarCodeLayout {
                 return false;
             }
         });
+
+        binding.btnAddBarcodeInPos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogForBarcode();
+            }
+        });
     }
+
+    private void dialogForBarcode() {
+        AlertDialog alertDialog = new PosDialogUtils().getDialogForItemQuantity(context, new PosDialogCallback() {
+            @Override
+            public void callBack(Boolean yOrN) {
+
+            }
+
+            @Override
+            public void callBackString(String str) {
+                if(!str.isEmpty()) {
+                    searchBarcodeItemInDB(str);
+                }else {
+                    Toast.makeText(context, "바코드를 입력해주세요",Toast.LENGTH_SHORT).show();
+                    dialogForBarcode();
+                }
+            }
+        });
+        alertDialog.setTitle("바코드를 임력해주세요");
+        alertDialog.show();
+    }
+
     public void searchBarcodeItemInDB(String barcode) {
         BarCodeItem item = MainViewModel.getBarcodeItem(context, barcode);
         if (item == null) {

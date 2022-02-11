@@ -61,6 +61,15 @@ public class MainViewModel extends ViewModel {
         return myDao.getSelectedScheduleList(date);
     }
 
+    public static void upDateBarcodeItem(Context context, BarCodeItem item) {
+        myDao = getMainDataBase(context).getDao();
+        myDao.upDataBarcodeItem(item);
+    }
+
+    public static void deleteBarcodeItem(Context context, BarCodeItem item) {
+        myDao = getMainDataBase(context).getDao();
+        myDao.deleteBarcodeItem(item);
+    }
     public static void insertBarcodeItem(Context context, String barcode, String itemName, String unitPrice) {
         myDao = getMainDataBase(context).getDao();
         myDao.insertBarcodeItem(new BarCodeItem(barcode, itemName, unitPrice));

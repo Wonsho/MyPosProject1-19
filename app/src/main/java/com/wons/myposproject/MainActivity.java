@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationBarView;
 import com.wons.myposproject.databinding.ActivityMainBinding;
 import com.wons.myposproject.main_fragments.homefragment.HomeFragment;
-import com.wons.myposproject.main_fragments.InfoFragment;
+import com.wons.myposproject.main_fragments.infofragment.InfoFragment;
 import com.wons.myposproject.main_fragments.posfregment.PosItemFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        MainViewModel.insertBarcodeItem(getApplicationContext(), "88023403", "담배", "4500");
     }
 
 

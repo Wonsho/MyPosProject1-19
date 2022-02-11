@@ -150,7 +150,7 @@
                         <LinearLayout
                             android:background="@color/white"
                             android:id="@+id/layout_barcode"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical">
@@ -219,15 +219,31 @@
                                 android:layout_height="1dp"/>
 
                             <LinearLayout
+                                android:orientation="vertical"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="9">
 
                                 <ListView
+                                    android:layout_weight="1"
                                     android:id="@+id/lv_inPos_inBarcode"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="0dp"
                                     android:layout_margin="10dp"/>
+
+
+                                <Button
+                                    android:layout_gravity="right"
+                                    android:layout_marginRight="10dp"
+                                    android:id="@+id/btn_add_barcodeInPos"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/line_1"
+                                    android:text="수동으로 바코드 적기"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="5dp"/>
 
                             </LinearLayout>
 
@@ -239,20 +255,27 @@
                                 android:background="@color/line_1" />
 
                             <LinearLayout
+                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="1"
-                                android:gravity="center">
-
+                                android:gravity="right">
                                 <Button
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginRight="10dp"
                                     android:id="@+id/btn_inPos_inBarCode_add"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@color/line_1"
-                                    android:text="바구니에 담기"
+                                    android:text="위의 상품 바구니에 담기"
                                     android:textColor="@color/black"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
+
+
+
+
+
 
                             </LinearLayout>
 
