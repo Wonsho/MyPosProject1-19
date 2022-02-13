@@ -71,6 +71,7 @@ public final class PosDialogUtils {
                 }
             }
         });
+        ((TextView)view.findViewById(R.id.tv_setNumber)).setHint("수량을 적어주세요!!");
         builder.setView(view);
         builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
             @Override

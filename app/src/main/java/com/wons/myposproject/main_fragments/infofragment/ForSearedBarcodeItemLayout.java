@@ -49,6 +49,9 @@ public class ForSearedBarcodeItemLayout {
                             ListView lv = layOut.findViewById(R.id.lv_barcodeItem_SavedDB);
                             dataChange(ActionCode.DELETE, ((BarcodeListAdapter)lv.getAdapter()).getItems().get(position));
                         }
+                        if(!yesOrNo) {
+                            dialogForUpdate(((BarcodeListAdapter)lv.getAdapter()).getItems().get(position));
+                        }
                     }
                 });
                 alertDialog.show();

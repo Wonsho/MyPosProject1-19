@@ -6,25 +6,25 @@
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/drawable/tablayout.xml" value="0.20234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog.xml" value="0.190234375" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_barcode_item_write_info_before_insert_view.xml" value="0.134375" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_barcode_item_write_info_before_insert_view.xml" value="0.2898203592814371" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_for_change_item_name_view.xml" value="0.536" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_quantity_view.xml" value="0.264" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_view_bolt.xml" value="0.190234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_view_schedule.xml" value="0.72" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/expandable_list_child.xml" value="0.6" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/expandable_list_parent.xml" value="0.264" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/expandable_list_parent.xml" value="0.4" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_in_pos.xml" value="0.2" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_in_pos_barcode.xml" value="0.190234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_info.xml" value="0.1" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_pos_item.xml" value="0.26304347826086955" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_barcode_searched_item_view.xml" value="0.264" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_pos_item.xml" value="0.264" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_barcode_searched_item_view.xml" value="0.136" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_pos.xml" value="0.136" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_pos_barcode.xml" value="0.190234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/item_values_list_view.xml" value="0.2745253164556962" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/layout_basket.xml" value="0.536" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/schedule_list_view.xml" value="0.18064516129032257" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/search_barcode_item_view.xml" value="0.264" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/search_barcode_item_view.xml" value="0.152" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/testview.xml" value="0.2" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/value_view_in_list.xml" value="0.4" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/view_in_layout_basket.xml" value="0.144" />

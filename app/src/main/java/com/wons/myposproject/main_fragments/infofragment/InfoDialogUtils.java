@@ -26,16 +26,22 @@ public class InfoDialogUtils {
 
     public AlertDialog getAskYesOrNoDialog(Context context, InfoDiaLogCallbackForBoolean callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("수정", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                callback.callBack(false);
             }
         });
         builder.setNegativeButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 callback.callBack(true);
+            }
+        });
+        builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
         });
         builder.setTitle("삭제하시겠습니까?");

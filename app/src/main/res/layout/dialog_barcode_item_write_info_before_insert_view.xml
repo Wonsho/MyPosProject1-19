@@ -57,6 +57,7 @@
             tools:ignore="MissingConstraints" />
 
         <EditText
+            android:inputType="number"
             android:id="@+id/et_itemUnitPrice"
             android:gravity="center"
             android:hint="단가를 적어주세요"
