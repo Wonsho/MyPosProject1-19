@@ -15,6 +15,7 @@ import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class PosItemMenu_Adapter extends BaseExpandableListAdapter {
@@ -96,22 +97,24 @@ public class PosItemMenu_Adapter extends BaseExpandableListAdapter {
 
     public void putGroupList(ArrayList<Group> groupLists) {
         for(Group group : groupLists) {
-            parents.add(group.getKoreanName());
+            parents.add(group.koreanName);
             ArrayList<String> child = setChildren(group);
-            children.put(group.getKoreanName(), child);
+            children.put(group.koreanName, child);
 
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private ArrayList<String> setChildren(Group group) {
         if(children == null) {
             children = new HashMap<>();
         }
         ArrayList<String> child = new ArrayList<>();
 
-        for(int i=0; i<group.getItemList().size(); i++) {
-            Item itemList = group.getItemList().get(i);
+        for(int i=0; i<group.itemList.size(); i++) {
+            Item itemList = group.itemList.get(i);
             child.add(itemList.koreanName);
+            child.sort(Comparator.naturalOrder());
         }
         return child;
     }
