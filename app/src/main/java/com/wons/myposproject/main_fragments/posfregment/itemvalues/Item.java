@@ -90,7 +90,7 @@ public enum Item {
     public String koreanName;
     public String groupCode;
     public String itemCode;
-    public String dialogCode;
+    public ItemDialogCode dialogCode;
     public String verticalValue;
     public String horizontalValue;
 
