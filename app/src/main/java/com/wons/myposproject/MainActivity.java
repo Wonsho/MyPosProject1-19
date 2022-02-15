@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 int i = 0;
+                if(MainViewModel.getSelectedValue(getApplicationContext(), "A1").size() != 0) {
+                    return;
+                }
                 for(DataSnapshot dataSnapshot : task.getResult().getChildren()) {
                     Value value = dataSnapshot.getValue(Value.class);
                     MainViewModel.insertValue(getApplicationContext(), value);

@@ -1,9 +1,12 @@
 package com.wons.myposproject.main_fragments.posfregment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -11,7 +14,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -19,13 +26,18 @@ import com.google.zxing.integration.android.IntentResult;
 import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
+import com.wons.myposproject.adapter.ItemValueAdapter;
 import com.wons.myposproject.adapter.PosItemMenu_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.SelectedItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 enum ItemViewCode {
     BARCODE,
@@ -151,10 +163,81 @@ public class PosItemFragment extends Fragment {
         }
     }
 }
-//
-//class ForItemLayout {
-//
-//}
+
+class ForItemLayout {
+    Context context;
+    FragmentPosItemBinding binding;
+    LinearLayout layout;
+    ListView verticalList;
+    ListView horizontalList;
+    TextView tv_selectedFromMenu;
+    TextView tv_verticalValue;
+    TextView tv_horizontalValue;
+    TextView tv_selectedVerticalValueInList;
+    TextView tv_selectedHorizontalValueInList;
+    HashMap<String, HashMap<String, String>> selectedItem;
+    ForItemLayout(Context context, FragmentPosItemBinding binding) {
+        this.context = context;
+        this.binding = binding;
+        this.layout = binding.layoutItem;
+        verticalList = layout.findViewById(R.id.lv_vertical);
+        horizontalList = layout.findViewById(R.id.lv_horizontal);
+        tv_selectedFromMenu = binding.tvItemTitle;
+        tv_verticalValue = layout.findViewById(R.id.tv_vertical);
+        tv_horizontalValue = layout.findViewById(R.id.tv_horizontal);
+        tv_selectedVerticalValueInList = layout.findViewById(R.id.tv_selectedVerticalValue);
+        tv_selectedHorizontalValueInList = layout.findViewById(R.id.tv_selectedHorizontalValue);
+    }
+
+
+    private void onClick() {
+
+        //todo 선택한 물건 바구니에 담기
+        layout.findViewById(R.id.btn_add_in_pos_to_basket).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //todo 세로값 선택하는 리스트 온클릭
+        verticalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        //todo 가로값 선택하는 리스트 온클릭
+
+        horizontalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void getSelectedItemNameFromMain(Item item) {
+        ArrayList<Value> items = MainViewModel.getSelectedValue(context, item.itemCode);
+        this.selectedItem = new SelectedItem(items).item;
+        setVerticalListView();
+        tv_selectedFromMenu.setText(item.koreanName);
+    }
+
+    private void setVerticalListView() {
+        if(verticalList.getAdapter() == null) {
+            verticalList.setAdapter(new ItemValueAdapter());
+        }
+    }
+
+    private void setHorizontalListView() {
+        if(horizontalList.getAdapter() == null) {
+            horizontalList.setAdapter(new ItemValueAdapter());
+        }
+    }
+}
 
 
 

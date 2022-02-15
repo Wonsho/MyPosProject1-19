@@ -14,7 +14,7 @@ public class SelectedItem {
     public HashMap<String, HashMap<String, String>> item;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    SelectedItem(ArrayList<Value> selectedItem) {
+    public SelectedItem(ArrayList<Value> selectedItem) {
         this.selectedItem = selectedItem;
         verticalValue = new ArrayList<>();
         horizontalValue = new ArrayList<>();
