@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //this data is from FireBase
+        // Based Data base file in Project_docs_Directory
         mDataBase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
