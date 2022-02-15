@@ -40,8 +40,8 @@ public interface MyDao {
     @Query("SELECT * FROM Barcodeitem WHERE barCode = :barcode")
     BarCodeItem getBarcodeItem(String barcode);
 
-    @Query("SELECT * FROM Value WHERE itemCode = :valueCode")
-    Value getValueData(String valueCode);
+    @Query("SELECT * FROM Value WHERE itemCode = :itemCode")
+    Value[] getValueData(String itemCode);
 
     @Query("SELECT * FROM SCHEDULE WHERE date = :date")
     Schedule[] getSelectedScheduleList(String date);

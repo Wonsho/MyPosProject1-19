@@ -86,4 +86,8 @@ public class MainViewModel extends ViewModel {
         myDao = getMainDataBase(context).getDao();
         myDao.insertBarcodeItem(new BarCodeItem(barcode, itemName, unitPrice));
     }
+    public static ArrayList<Value> getSelectedValue(Context context, String itemCode) {
+        myDao = getMainDataBase(context).getDao();
+        return new ArrayList<Value>(Arrays.asList(myDao.getValueData(itemCode)));
+    }
 }

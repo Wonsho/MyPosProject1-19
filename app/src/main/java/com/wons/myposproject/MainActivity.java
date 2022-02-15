@@ -53,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot : task.getResult().getChildren()) {
                     Value value = dataSnapshot.getValue(Value.class);
                     MainViewModel.insertValue(getApplicationContext(), value);
-                    if(i == 10) {
-                        break;
-                    }
+                    Log.e("insertData", "start" + i);
                     i++;
                 }
 

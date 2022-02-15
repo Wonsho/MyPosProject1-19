@@ -22,7 +22,7 @@ public enum Group {
     ANCHOR("앙카", GroupCode.ANCHOR.groupCode),
     SAMS_BOLT("셈스볼트", GroupCode.SAMS_BOLT.groupCode),
     FRENCH_BOLT("후렌치 볼트",GroupCode.FRENCH_BOLT.groupCode),
-    OTHER_THINGS("기타류", GroupCode.OTHER_THINGS.groupCode);
+    OTHER_THINGS("기타", GroupCode.OTHER_THINGS.groupCode);
 
     public String koreanName;
     public String groupCode;
