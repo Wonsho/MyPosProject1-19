@@ -9,6 +9,7 @@ import androidx.room.Room;
 
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.BarCodeItem;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
 import com.wons.myposproject.schedule.Schedule;
 
 import java.util.ArrayList;
@@ -45,6 +46,11 @@ public class MainViewModel extends ViewModel {
     public static BarCodeItem getBarcodeItem(Context context, String barcode) {
         myDao = getMainDataBase(context).getDao();
         return myDao.getBarcodeItem(barcode);
+    }
+
+    public static void insertValue(Context context, Value value) {
+        myDao = getMainDataBase(context).getDao();
+        myDao.insertValueData(value);
     }
 
     public static void deleteSchedule(Context context, Schedule schedule) {

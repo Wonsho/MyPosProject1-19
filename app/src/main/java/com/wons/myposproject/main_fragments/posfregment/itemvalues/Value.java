@@ -12,10 +12,11 @@ public class Value {
 
     @PrimaryKey
     @NonNull
+    public String idCode;
+
     public String itemCode;
-
-
-    public String upDate;
+    public String koreanName;
+    public String Update;
     public String X0;
     public String X1;
     public String X2;
@@ -66,15 +67,29 @@ public class Value {
     public String X47;
     public String X48;
     public String X49;
+    public String X50;
+    public String X51;
+    public String X52;
+    public String X53;
+    public String X54;
+    public String X55;
+    public String X56;
+    public String X57;
+    public String X58;
+    public String X59;
+    public String X60;
+    public String X61;
 
     public ArrayList<String> valueList() {
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.addAll(Arrays.asList(
-                this.X0,this.X1,this.X2,this.X3,this.X4,this.X5,this.X6,this.X7,this.X8,this.X9,this.X10,
-                this.X11,this.X12,this.X13,this.X14,this.X15,this.X16,this.X17,this.X18,this.X19,this.X20,
-                this.X21,this.X22,this.X23,this.X24,this.X25,this.X26,this.X27,this.X28,this.X29,this.X30,
-                this.X31,this.X32,this.X33,this.X34,this.X35,this.X36,this.X37,this.X38,this.X39,this.X40,
-                this.X41,this.X42,this.X43,this.X44,this.X45,this.X46,this.X47,this.X48,this.X49));
+                this.X0, this.X1, this.X2, this.X3, this.X4, this.X5, this.X6, this.X7, this.X8, this.X9, this.X10,
+                this.X11, this.X12, this.X13, this.X14, this.X15, this.X16, this.X17, this.X18, this.X19, this.X20,
+                this.X21, this.X22, this.X23, this.X24, this.X25, this.X26, this.X27, this.X28, this.X29, this.X30,
+                this.X31, this.X32, this.X33, this.X34, this.X35, this.X36, this.X37, this.X38, this.X39, this.X40,
+                this.X41, this.X42, this.X43, this.X44, this.X45, this.X46, this.X47, this.X48, this.X49, this.X50,
+                this.X51, this.X52, this.X53, this.X54, this.X55, this.X56, this.X57, this.X58, this.X59, this.X60,
+                this.X61));
         return arrayList;
     }
 
