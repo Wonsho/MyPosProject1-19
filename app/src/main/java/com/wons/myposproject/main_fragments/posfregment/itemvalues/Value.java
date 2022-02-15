@@ -83,7 +83,7 @@ public class Value {
     public ArrayList<String> valueList() {
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.addAll(Arrays.asList(
-                this.X0, this.X1, this.X2, this.X3, this.X4, this.X5, this.X6, this.X7, this.X8, this.X9, this.X10,
+                this.X1, this.X2, this.X3, this.X4, this.X5, this.X6, this.X7, this.X8, this.X9, this.X10,
                 this.X11, this.X12, this.X13, this.X14, this.X15, this.X16, this.X17, this.X18, this.X19, this.X20,
                 this.X21, this.X22, this.X23, this.X24, this.X25, this.X26, this.X27, this.X28, this.X29, this.X30,
                 this.X31, this.X32, this.X33, this.X34, this.X35, this.X36, this.X37, this.X38, this.X39, this.X40,
