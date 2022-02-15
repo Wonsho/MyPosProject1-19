@@ -1,5 +1,6 @@
 package com.wons.myposproject.main_fragments.posfregment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -51,7 +52,8 @@ public class PosItemFragment extends Fragment {
     private Fragment fragment;
     private ForBarCodeLayout forBarcodeLayOut;
     private ForBasketLayout forBasketLayout;
-
+    private ForItemLayout forItemLayout;
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,13 +68,27 @@ public class PosItemFragment extends Fragment {
         fragment = this;
         forBarcodeLayOut = new ForBarCodeLayout(getContext(), binding);
         forBasketLayout = new ForBasketLayout(getContext(), binding);
+        forItemLayout = new ForItemLayout(getContext(), binding);
 
         //todo 아이템 메뉴 클릭
         binding.lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 binding.layoutBarcode.setVisibility(View.GONE);
                 binding.layoutItem.setVisibility(View.VISIBLE);
+                String child = ((PosItemMenu_Adapter)(binding.lvExpandable.getExpandableListAdapter())).getChild(groupPosition, childPosition);
+                Item[] items = Item.values();
+                Item item = null;
+                for(Item item1 : items) {
+                    if(item1.koreanName.equals(child)) {
+                        item = item1;
+                    } else {
+                        Log.e(TAG, "Menu is null");
+                    }
+                }
+                forItemLayout.getSelectedItemNameFromMain(item);
+                forItemLayout.setAllViewInit();
                 return false;
             }
         });
@@ -175,7 +191,11 @@ class ForItemLayout {
     TextView tv_horizontalValue;
     TextView tv_selectedVerticalValueInList;
     TextView tv_selectedHorizontalValueInList;
+    TextView tv_selectedVerticalInUnitPrice;
+    TextView tv_selectedHorizontalInUnitPrice;
+    TextView tv_unitPrice;
     HashMap<String, HashMap<String, String>> selectedItem;
+    SelectedItem itemValueClass;
     ForItemLayout(Context context, FragmentPosItemBinding binding) {
         this.context = context;
         this.binding = binding;
@@ -187,11 +207,14 @@ class ForItemLayout {
         tv_horizontalValue = layout.findViewById(R.id.tv_horizontal);
         tv_selectedVerticalValueInList = layout.findViewById(R.id.tv_selectedVerticalValue);
         tv_selectedHorizontalValueInList = layout.findViewById(R.id.tv_selectedHorizontalValue);
+        tv_selectedHorizontalInUnitPrice = layout.findViewById(R.id.tv_selectedHorizontalInUnitPrice);
+        tv_unitPrice = layout.findViewById(R.id.tv_selectedUnitPrice);
+        tv_selectedVerticalInUnitPrice = layout.findViewById(R.id.tv_selectedVerticalInUnitPrice);
+        onClick();
     }
 
 
     private void onClick() {
-
         //todo 선택한 물건 바구니에 담기
         layout.findViewById(R.id.btn_add_in_pos_to_basket).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +227,13 @@ class ForItemLayout {
         verticalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                String verticalValue = (String)((ItemValueAdapter)verticalList.getAdapter()).getItem(position);
+                setHorizontalListView(verticalValue);
+                if(verticalValue.contains("_")) {
+                    verticalValue = verticalValue.replace("_","/");
+                }
+                tv_selectedVerticalValueInList.setText(verticalValue);
+                tv_selectedVerticalInUnitPrice.setText(verticalValue);
             }
         });
 
@@ -213,29 +242,62 @@ class ForItemLayout {
         horizontalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                String horizontalValue = (String)((ItemValueAdapter)horizontalList.getAdapter()).getItem(position);
+                String verticalValue = tv_selectedVerticalValueInList.getText().toString();
+                if(verticalValue.contains("/")) {
+                    verticalValue = verticalValue.replace("/","_");
+                }
+                tv_unitPrice.setText(selectedItem.get(verticalValue).get(horizontalValue));
+                if(horizontalValue.contains("_")) {
+                    horizontalValue = horizontalValue.replace("_","/");
+                }
+                tv_selectedHorizontalValueInList.setText(horizontalValue);
+                tv_selectedHorizontalInUnitPrice.setText(horizontalValue);
             }
         });
 
     }
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getSelectedItemNameFromMain(Item item) {
         ArrayList<Value> items = MainViewModel.getSelectedValue(context, item.itemCode);
-        this.selectedItem = new SelectedItem(items).item;
+        this.itemValueClass = SelectedItem.getSelectedItem(items);
+        this.selectedItem = SelectedItem.item;
         setVerticalListView();
         tv_selectedFromMenu.setText(item.koreanName);
+        tv_verticalValue.setText(item.verticalValue);
+        tv_horizontalValue.setText(item.horizontalValue);
+        ((TextView)layout.findViewById(R.id.tv_verticalInfo)).setText(item.verticalValue + " : ");
+        ((TextView)layout.findViewById(R.id.tv_horizontalInfo)).setText(item.horizontalValue + " : ");
     }
 
     private void setVerticalListView() {
         if(verticalList.getAdapter() == null) {
             verticalList.setAdapter(new ItemValueAdapter());
         }
+        ((ItemValueAdapter)verticalList.getAdapter()).setValue(SelectedItem.verticalValue);
+        ((ItemValueAdapter)verticalList.getAdapter()).notifyDataSetChanged();
     }
 
-    private void setHorizontalListView() {
+    private void setHorizontalListView(String verticalValue) {
         if(horizontalList.getAdapter() == null) {
             horizontalList.setAdapter(new ItemValueAdapter());
         }
+        Log.e("setHorizontalListView",verticalValue);
+        ((ItemValueAdapter)horizontalList.getAdapter()).setValue(SelectedItem.valueOfKey.get(verticalValue));
+        ((ItemValueAdapter)horizontalList.getAdapter()).notifyDataSetChanged();
+    }
+    public void setAllViewInit() {
+        if(horizontalList.getAdapter() == null) {
+            horizontalList.setAdapter(new ItemValueAdapter());
+        }
+        ((ItemValueAdapter)horizontalList.getAdapter()).setValue(new ArrayList<>());
+        ((ItemValueAdapter)horizontalList.getAdapter()).notifyDataSetChanged();
+        tv_selectedHorizontalValueInList.setText("");
+        tv_selectedVerticalValueInList.setText("");
+        tv_selectedVerticalInUnitPrice.setText("");
+        tv_unitPrice.setText("");
+        tv_selectedHorizontalInUnitPrice.setText("");
     }
 }
 

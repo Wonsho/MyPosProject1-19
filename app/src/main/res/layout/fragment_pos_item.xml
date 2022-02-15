@@ -384,6 +384,7 @@
                                                     android:layout_height="0dp">
 
                                                     <ListView
+                                                        android:layout_margin="10dp"
                                                         android:id="@+id/lv_vertical"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="match_parent"/>
@@ -477,6 +478,7 @@
                                                     android:layout_height="0dp">
 
                                                     <ListView
+                                                        android:layout_margin="10dp"
                                                         android:id="@+id/lv_horizontal"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="match_parent"/>
@@ -552,6 +554,7 @@
                                                         android:layout_height="0dp">
 
                                                         <TextView
+                                                            android:id="@+id/tv_verticalInfo"
                                                             android:paddingRight="5dp"
                                                             android:textSize="20sp"
                                                             android:textStyle="bold"
@@ -560,6 +563,7 @@
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"/>
                                                         <TextView
+                                                            android:id="@+id/tv_horizontalInfo"
                                                             android:layout_marginTop="10dp"
                                                             android:paddingRight="5dp"
                                                             android:textSize="20sp"

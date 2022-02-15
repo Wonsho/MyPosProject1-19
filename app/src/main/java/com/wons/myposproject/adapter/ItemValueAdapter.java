@@ -39,7 +39,15 @@ public class ItemValueAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.value_view_in_list, parent, false);
         }
-        ((TextView)convertView.findViewById(R.id.tv_value_in_list)).setText(arrayList.get(position));
+        if(arrayList.get(position).contains("_")) {
+            ((TextView)convertView.findViewById(R.id.tv_value_in_list)).setText(arrayList.get(position).replace("_","/"));
+        } else {
+            ((TextView)convertView.findViewById(R.id.tv_value_in_list)).setText(arrayList.get(position));
+        }
         return convertView;
+    }
+
+    public void setValue(ArrayList<String> str) {
+        this.arrayList = str;
     }
 }

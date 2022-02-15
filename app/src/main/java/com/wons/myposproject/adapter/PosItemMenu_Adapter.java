@@ -43,7 +43,7 @@ public class PosItemMenu_Adapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public String getChild(int groupPosition, int childPosition) {
         return children.get(parents.get(groupPosition)).get(childPosition);
     }
 
@@ -95,6 +95,7 @@ public class PosItemMenu_Adapter extends BaseExpandableListAdapter {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void putGroupList(ArrayList<Group> groupLists) {
         for(Group group : groupLists) {
             parents.add(group.koreanName);
