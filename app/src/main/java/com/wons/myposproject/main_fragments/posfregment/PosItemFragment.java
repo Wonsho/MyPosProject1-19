@@ -1,6 +1,7 @@
 package com.wons.myposproject.main_fragments.posfregment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -31,6 +32,10 @@ import com.wons.myposproject.adapter.ItemValueAdapter;
 import com.wons.myposproject.adapter.PosItemMenu_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
+import com.wons.myposproject.main_fragments.posfregment.dialog_utils.CheckCode;
+import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallback;
+import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallbackForBolt;
+import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.SelectedItem;
@@ -158,7 +163,36 @@ public class PosItemFragment extends Fragment {
                 ((Basket_BarcodeList_Adapter) binding.lvInPosInBarcode.getAdapter()).notifyDataSetChanged();
             }
         });
+        // todo 아이템선택버튼 --> 바스켓 으로 '
+        //  항목에 따라 Dialog뷰가 다르게 보여줘야됨
+        //  먼저 그 항목의 Dialog코드를 가져와
+        //  스위치문으로 맞는 다이로그를 보여줌
+        //  그다음 콜백을 해와서 바스켓에 넘김*/
+        binding.layoutItem.findViewById(R.id.btn_add_in_pos_to_basket).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((TextView)(binding.layoutItem.findViewById(R.id.tv_selectedVerticalValue))).getText().toString().isEmpty() || ((TextView)(binding.layoutItem.findViewById(R.id.tv_selectedHorizontalValue))).getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "항목을 먼저 선택해주세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showDialogForBolt();
+            }
+        });
         return binding.getRoot();
+    }
+
+    private void showDialogForBolt() {
+        AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
+            @Override
+            public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
+
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void intentToBasket(ArrayList<BasketTypeItem> items) {
+
     }
 
 

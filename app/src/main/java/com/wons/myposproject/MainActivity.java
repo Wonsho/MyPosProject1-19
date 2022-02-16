@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         //this data is from FireBase
         // Based Data base file in Project_docs_Directory
+        //todo 만약 A1의 값이 널이면 파이어베이스에서 데이터를 가져오고
+        // 널이 아니라면 날짜를 체크  저장되어있는 날짜와 다를시 싹다 업데이트*/
         mDataBase.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {

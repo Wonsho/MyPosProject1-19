@@ -9,7 +9,7 @@
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_barcode_item_write_info_before_insert_view.xml" value="0.2898203592814371" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_for_change_item_name_view.xml" value="0.536" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_quantity_view.xml" value="0.536" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_view_bolt.xml" value="0.190234375" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_view_bolt.xml" value="0.4" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/dialog_view_schedule.xml" value="0.72" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/expandable_list_child.xml" value="0.6" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/expandable_list_parent.xml" value="0.152" />
@@ -17,7 +17,7 @@
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_in_pos.xml" value="0.2" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_in_pos_barcode.xml" value="0.190234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_info.xml" value="0.1" />
-        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_pos_item.xml" value="0.1" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/fragment_pos_item.xml" value="0.264" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_barcode_searched_item_view.xml" value="0.136" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_pos.xml" value="0.136" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/in_pos_barcode.xml" value="0.190234375" />

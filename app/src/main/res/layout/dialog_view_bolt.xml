@@ -12,12 +12,13 @@
             android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="match_parent">
+
             <TextView
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:text="수량입력 : "
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="수량입력 : "
+                android:textColor="@color/black" />
         </LinearLayout>
         <LinearLayout
             android:layout_weight="8"
@@ -25,10 +26,12 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:gravity="center"
-                android:hint="수량입력"
+                android:inputType="number"
+                android:id="@+id/et_boltQuantity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="수량입력" />
 
         </LinearLayout>
     </LinearLayout>
@@ -54,17 +57,18 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/cb"
-                android:text="수량 맞춰 추가"
-                android:layout_weight="1"
+                android:id="@+id/cb_nutSameQuantity"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 맞춰 추가" />
 
             <CheckBox
-                android:text="수량 두배 추가"
-                android:layout_weight="1"
+                android:id="@+id/cb_nut2Quantity"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 두배 추가" />
 
 
 
@@ -89,17 +93,20 @@
             android:layout_weight="8"
             android:layout_width="0dp"
             android:layout_height="match_parent">
-            <CheckBox
-                android:text="수량 맞춰 추가"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
 
             <CheckBox
-                android:text="수량 두배 추가"
-                android:layout_weight="1"
+                android:id="@+id/cb_pwSameQuantity"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 맞춰 추가" />
+
+            <CheckBox
+                android:id="@+id/cb_pw2Quantity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 두배 추가" />
 
         </LinearLayout>
     </LinearLayout>
@@ -124,16 +131,18 @@
             android:layout_height="match_parent">
 
             <CheckBox
-                android:text="수량 맞춰 추가"
-                android:layout_weight="1"
+                android:id="@+id/cb_swSameQuantity"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 맞춰 추가" />
 
             <CheckBox
-                android:text="수량 두배 추가"
-                android:layout_weight="1"
+                android:id="@+id/cb_sw2Quantity"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="수량 두배 추가" />
         </LinearLayout>
     </LinearLayout>
 

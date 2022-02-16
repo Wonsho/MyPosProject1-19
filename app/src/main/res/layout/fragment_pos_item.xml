@@ -287,7 +287,7 @@
                         <!--아이템 레이아웃-->
                         <LinearLayout
                             android:background="@color/white"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:id="@+id/layout_item"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
