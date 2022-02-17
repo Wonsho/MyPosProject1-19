@@ -13,5 +13,9 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+
+
+        String a = "034";
+        System.out.println(Double.parseDouble(a) * 2);
     }
 }

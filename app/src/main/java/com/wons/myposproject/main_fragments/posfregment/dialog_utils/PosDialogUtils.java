@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.icu.text.MessagePattern;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -147,26 +148,6 @@ public final class PosDialogUtils {
                 cb_swSame.setChecked(false);
             }
         });
-        et_boltQuantity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (et_boltQuantity.getText().toString().isEmpty()) {
-                    if (s.equals("0")) {
-                        return;
-                    }
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
         builder.setView(view);
 
         builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
@@ -217,6 +198,40 @@ public final class PosDialogUtils {
                     }
                     callback.callBack(arrayList, et_boltQuantity.getText().toString().trim());
 
+                }
+            }
+        });
+        return builder.create();
+    }
+
+    public AlertDialog getDialogForQuantity(Context context, PosDialogCallbackForBolt callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("수량을 입력해주세요");
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_view_schedule, null);
+        EditText et_quantity = view.findViewById(R.id.et_schedule);
+        et_quantity.setInputType(0x00000002);
+        builder.setView(view);
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!et_quantity.getText().toString().isEmpty()) {
+                    try {
+                        Integer.parseInt(et_quantity.getText().toString().trim());
+                    } catch (Exception e) {
+                        getDialogForQuantity(context, callback).show();
+                        Toast.makeText(context, "숫자만 입력해주세요", Toast.LENGTH_SHORT).show();
+                        Log.e("DialogForQuantity", e.getMessage());
+                    }
+                    callback.callBack(new ArrayList<>(), et_quantity.getText().toString().trim());
+                } else {
+                    getDialogForQuantity(context, callback).show();
+                    Toast.makeText(context, "수량을 입력해주세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });

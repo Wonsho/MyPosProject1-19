@@ -28,17 +28,59 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <TextView
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_gravity="right|center_vertical"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:background="@color/line_1"
+                            android:backgroundTint="@color/line_1"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/tv_basket_1"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:background="@drawable/my_background_1_selected"
+                                android:paddingLeft="30dp"
+                                android:paddingRight="30dp"
+                                android:gravity="center"
+                                android:text="바구니 1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"/>
+
+                            <TextView
+                                android:id="@+id/tv_basket_2"
+                                android:layout_marginLeft="20dp"
+                                android:textColor="@color/black"
+                                android:background="@drawable/my_background_2_unselected"
+                                android:paddingLeft="30dp"
+                                android:paddingRight="30dp"
+                                android:gravity="center"
+                                android:text="바구니 2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"/>
+
+                        </LinearLayout>
+                    <TextView
+
+                        android:paddingLeft="50dp"
+                        android:paddingRight="50dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:gravity="center"
-                        android:text="Basket"
+                        android:text=""
+                        android:textSize="20sp"
                         android:textColor="@color/black"
-                        android:textStyle="bold" />
-
+                        android:textStyle="bold"
+                        tools:ignore="Suspicious0dp" />
+                </LinearLayout>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"

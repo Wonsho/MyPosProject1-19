@@ -21,6 +21,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 class ForBasketLayout {
+    //todo 1번 바스켓 2번 바스켓을 임시저장함
+    // 라이브데이터에 바스켓아이디를 키값으로 저장
+    // 그 map에 바스켓의 객체를 저장
+    // 나중에 바스켓의 텍스트를 클릭을 하면 그 키값을 가져와서 뿌려줌*/
     Context context;
     FragmentPosItemBinding binding;
     ListView lv;
@@ -109,11 +113,11 @@ class ForBasketLayout {
     }
 
     private void setPrice() {
-        int price = 0;
+        double price = 0.0;
         for(BasketTypeItem item : adapter.getItems()) {
-            price += (Integer.parseInt(item.unitPrice) * (Integer.parseInt(item.quantity)));
+            price += (Double.parseDouble(item.unitPrice) * (Integer.parseInt(item.quantity)));
         }
-        DecimalFormat df = new DecimalFormat("###,###,###");
+        DecimalFormat df = new DecimalFormat("###,###,###.##");
         ((TextView)layout.findViewById(R.id.tv_allPrice)).setText(df.format(price));
     }
 }

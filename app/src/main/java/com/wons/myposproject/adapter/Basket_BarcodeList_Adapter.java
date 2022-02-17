@@ -2,6 +2,7 @@ package com.wons.myposproject.adapter;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
         tv_name = convertView.findViewById(R.id.tv_itemName);
         tv_name.setText(basketItem.itemName);
 
-        DecimalFormat df = new DecimalFormat("###,###,###");
+        DecimalFormat df = new DecimalFormat("###,###,###.##");
         tv_standard = convertView.findViewById(R.id.tv_itemStandard);
         tv_standard.setText(basketItem.itemStandard);
 
@@ -57,7 +58,7 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
         tv_quantity.setText(df.format(Integer.parseInt(basketItem.quantity.trim())));
 
         tv_unitPrice = convertView.findViewById(R.id.tv_itemUnitPrice);
-        tv_unitPrice.setText(df.format(Integer.parseInt(basketItem.unitPrice.trim())));
+        tv_unitPrice.setText(df.format(Double.parseDouble(basketItem.unitPrice.trim())));
         return convertView;
     }
 
@@ -82,28 +83,32 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
     private void sameCheckItem(BasketTypeItem item) {
         if (items.size() == 0) {
             items.add(item);
+            Log.e("sameCheckItem","passed");
             return;
         }
         for (int i = 0; i < items.size(); i++) {
+            Log.e("sameCheckItem-1","passed");
             if (items.get(i).itemName.equals(item.itemName)) {
+                Log.e("sameCheckItem2","passed");
                 if (items.get(i).itemStandard == null) {
                     setItem(i, item);
+                    Log.e("sameCheckItem3","passed");
                     return;
                 }
                 if (items.get(i).itemStandard.equals(item.itemStandard)) {
                     setItem(i, item);
+                    Log.e("sameCheckItem4","passed");
                     return;
                 }
-                items.add(item);
-                return;
             }
         }
+        Log.e("sameCheckItem6","passed");
         items.add(item);
     }
 
     private void setItem(int i, BasketTypeItem item) {
         BasketTypeItem item1 = items.get(i);
-        item1.quantity = String.valueOf(Integer.parseInt(item1.quantity) + (Integer.parseInt(item.quantity)));
+        item1.quantity = String.valueOf(Integer.parseInt(item1.quantity) + (Double.parseDouble(item.quantity)));
         items.set(i, item1);
     }
 

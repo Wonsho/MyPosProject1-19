@@ -38,6 +38,7 @@ import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCa
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.ItemDialogCode;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.SelectedItem;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
 
@@ -58,6 +59,7 @@ public class PosItemFragment extends Fragment {
     private ForBarCodeLayout forBarcodeLayOut;
     private ForBasketLayout forBasketLayout;
     private ForItemLayout forItemLayout;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,11 +84,11 @@ public class PosItemFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 binding.layoutBarcode.setVisibility(View.GONE);
                 binding.layoutItem.setVisibility(View.VISIBLE);
-                String child = ((PosItemMenu_Adapter)(binding.lvExpandable.getExpandableListAdapter())).getChild(groupPosition, childPosition);
+                String child = ((PosItemMenu_Adapter) (binding.lvExpandable.getExpandableListAdapter())).getChild(groupPosition, childPosition);
                 Item[] items = Item.values();
                 Item item = null;
-                for(Item item1 : items) {
-                    if(item1.koreanName.equals(child)) {
+                for (Item item1 : items) {
+                    if (item1.koreanName.equals(child)) {
                         item = item1;
                     } else {
                         Log.e(TAG, "Menu is null");
@@ -171,16 +173,33 @@ public class PosItemFragment extends Fragment {
         binding.layoutItem.findViewById(R.id.btn_add_in_pos_to_basket).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((TextView)(binding.layoutItem.findViewById(R.id.tv_selectedVerticalValue))).getText().toString().isEmpty() || ((TextView)(binding.layoutItem.findViewById(R.id.tv_selectedHorizontalValue))).getText().toString().isEmpty()) {
+                if (((TextView) (binding.layoutItem.findViewById(R.id.tv_selectedVerticalValue))).getText().toString().isEmpty() || ((TextView) (binding.layoutItem.findViewById(R.id.tv_selectedHorizontalValue))).getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), "항목을 먼저 선택해주세요", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    String itemTitle = binding.tvItemTitle.getText().toString();
+                    for (Item item : Item.values()) {
+                        if (item.koreanName.equals(itemTitle)) {
+                            switch (item.dialogCode) {
+                                case QUANTITY: {
+                                    showDialogForQuantity();
+                                    break;
+                                }
+                                case QUANTITY_NUT_SW_PW: {
+                                    showDialogForBolt();
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
-                showDialogForBolt();
             }
         });
         return binding.getRoot();
     }
 
+
+    //todo 수량과 셋트 메뉴 묻는 다이로그
     private void showDialogForBolt() {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
             @Override
@@ -191,9 +210,39 @@ public class PosItemFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void intentToBasket(ArrayList<BasketTypeItem> items) {
-
+    //todo 단순 수량만 묻는 다이로그
+    private void showDialogForQuantity() {
+        AlertDialog alertDialog = new PosDialogUtils().getDialogForQuantity(getContext(), new PosDialogCallbackForBolt() {
+            @Override
+            public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
+                String itemQuantity = quantity;
+                String itemName = binding.tvItemTitle.getText().toString().trim();
+                String itemStandard = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
+                        + " ->\n" + ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
+                String unitPrice = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
+                intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+            }
+        });
+        alertDialog.show();
     }
+
+
+    //todo 바스켓으로 보내기
+    private void intentToBasket(ArrayList<BasketTypeItem> items) {
+        for(BasketTypeItem basketTypeItem : items) {
+            Log.e("IntentValue", basketTypeItem.itemName + " " + basketTypeItem.itemStandard + " " + basketTypeItem.unitPrice + " " + basketTypeItem.quantity);
+        }
+        Basket_BarcodeList_Adapter adapter = ((Basket_BarcodeList_Adapter) forBasketLayout.lv.getAdapter());
+        adapter.addItem(items);
+        forBasketLayout.callSetViewFromPosMain();
+        binding.drawer.openDrawer(Gravity.RIGHT);
+        Toast.makeText(getContext(), "추가되었습니다", Toast.LENGTH_SHORT).show();
+    }
+
+    //todo 셋트메뉴 단가 리턴
+//    private BasketTypeItem searchOtherThingsUnitPrice(String material,String width ,String itemCode) {
+//
+//    }
 
 
     @Override
@@ -214,6 +263,32 @@ public class PosItemFragment extends Fragment {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class ForItemLayout {
     Context context;
     FragmentPosItemBinding binding;
@@ -230,6 +305,7 @@ class ForItemLayout {
     TextView tv_unitPrice;
     HashMap<String, HashMap<String, String>> selectedItem;
     SelectedItem itemValueClass;
+
     ForItemLayout(Context context, FragmentPosItemBinding binding) {
         this.context = context;
         this.binding = binding;
@@ -261,11 +337,14 @@ class ForItemLayout {
         verticalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String verticalValue = (String)((ItemValueAdapter)verticalList.getAdapter()).getItem(position);
+                String verticalValue = (String) ((ItemValueAdapter) verticalList.getAdapter()).getItem(position);
                 setHorizontalListView(verticalValue);
-                if(verticalValue.contains("_")) {
-                    verticalValue = verticalValue.replace("_","/");
+                if (verticalValue.contains("_")) {
+                    verticalValue = verticalValue.replace("_", "/");
                 }
+                tv_selectedHorizontalValueInList.setText("");
+                tv_selectedHorizontalInUnitPrice.setText("");
+                tv_unitPrice.setText("");
                 tv_selectedVerticalValueInList.setText(verticalValue);
                 tv_selectedVerticalInUnitPrice.setText(verticalValue);
             }
@@ -276,14 +355,14 @@ class ForItemLayout {
         horizontalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String horizontalValue = (String)((ItemValueAdapter)horizontalList.getAdapter()).getItem(position);
+                String horizontalValue = (String) ((ItemValueAdapter) horizontalList.getAdapter()).getItem(position);
                 String verticalValue = tv_selectedVerticalValueInList.getText().toString();
-                if(verticalValue.contains("/")) {
-                    verticalValue = verticalValue.replace("/","_");
+                if (verticalValue.contains("/")) {
+                    verticalValue = verticalValue.replace("/", "_");
                 }
                 tv_unitPrice.setText(selectedItem.get(verticalValue).get(horizontalValue));
-                if(horizontalValue.contains("_")) {
-                    horizontalValue = horizontalValue.replace("_","/");
+                if (horizontalValue.contains("_")) {
+                    horizontalValue = horizontalValue.replace("_", "/");
                 }
                 tv_selectedHorizontalValueInList.setText(horizontalValue);
                 tv_selectedHorizontalInUnitPrice.setText(horizontalValue);
@@ -291,6 +370,7 @@ class ForItemLayout {
         });
 
     }
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void getSelectedItemNameFromMain(Item item) {
@@ -301,32 +381,33 @@ class ForItemLayout {
         tv_selectedFromMenu.setText(item.koreanName);
         tv_verticalValue.setText(item.verticalValue);
         tv_horizontalValue.setText(item.horizontalValue);
-        ((TextView)layout.findViewById(R.id.tv_verticalInfo)).setText(item.verticalValue + " : ");
-        ((TextView)layout.findViewById(R.id.tv_horizontalInfo)).setText(item.horizontalValue + " : ");
+        ((TextView) layout.findViewById(R.id.tv_verticalInfo)).setText(item.verticalValue + " : ");
+        ((TextView) layout.findViewById(R.id.tv_horizontalInfo)).setText(item.horizontalValue + " : ");
     }
 
     private void setVerticalListView() {
-        if(verticalList.getAdapter() == null) {
+        if (verticalList.getAdapter() == null) {
             verticalList.setAdapter(new ItemValueAdapter());
         }
-        ((ItemValueAdapter)verticalList.getAdapter()).setValue(SelectedItem.verticalValue);
-        ((ItemValueAdapter)verticalList.getAdapter()).notifyDataSetChanged();
+        ((ItemValueAdapter) verticalList.getAdapter()).setValue(SelectedItem.verticalValue);
+        ((ItemValueAdapter) verticalList.getAdapter()).notifyDataSetChanged();
     }
 
     private void setHorizontalListView(String verticalValue) {
-        if(horizontalList.getAdapter() == null) {
+        if (horizontalList.getAdapter() == null) {
             horizontalList.setAdapter(new ItemValueAdapter());
         }
-        Log.e("setHorizontalListView",verticalValue);
-        ((ItemValueAdapter)horizontalList.getAdapter()).setValue(SelectedItem.valueOfKey.get(verticalValue));
-        ((ItemValueAdapter)horizontalList.getAdapter()).notifyDataSetChanged();
+        Log.e("setHorizontalListView", verticalValue);
+        ((ItemValueAdapter) horizontalList.getAdapter()).setValue(SelectedItem.valueOfKey.get(verticalValue));
+        ((ItemValueAdapter) horizontalList.getAdapter()).notifyDataSetChanged();
     }
+
     public void setAllViewInit() {
-        if(horizontalList.getAdapter() == null) {
+        if (horizontalList.getAdapter() == null) {
             horizontalList.setAdapter(new ItemValueAdapter());
         }
-        ((ItemValueAdapter)horizontalList.getAdapter()).setValue(new ArrayList<>());
-        ((ItemValueAdapter)horizontalList.getAdapter()).notifyDataSetChanged();
+        ((ItemValueAdapter) horizontalList.getAdapter()).setValue(new ArrayList<>());
+        ((ItemValueAdapter) horizontalList.getAdapter()).notifyDataSetChanged();
         tv_selectedHorizontalValueInList.setText("");
         tv_selectedVerticalValueInList.setText("");
         tv_selectedVerticalInUnitPrice.setText("");
