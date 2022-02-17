@@ -39,6 +39,7 @@ class ForBasketLayout {
         setView();
         onClick();
         getLiveData();
+        setBasket();
     }
 
     private void onClick() {
@@ -90,6 +91,28 @@ class ForBasketLayout {
                 return false;
             }
         });
+
+        binding.layoutBasket.findViewById(R.id.tv_basket_1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_1_selected);
+                binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_2_unselected);
+                MainViewModel.setBasketKey(R.id.tv_basket_1);
+                adapter.itemClear();
+                getLiveData();
+            }
+        });
+
+        binding.layoutBasket.findViewById(R.id.tv_basket_2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_2_unselected);
+                binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_1_selected);
+                MainViewModel.setBasketKey(R.id.tv_basket_2);
+                adapter.itemClear();
+                getLiveData();
+            }
+        });
     }
 
     public void callSetViewFromPosMain() {
@@ -101,6 +124,21 @@ class ForBasketLayout {
         adapter.addItem(items);
         setView();
         MainViewModel.setLiveDataBasketList(adapter.getItems());
+    }
+
+    private void setBasket() {
+        switch (MainViewModel.getBasketKey()) {
+            case R.id.tv_basket_1: {
+                binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_1_selected);
+                binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_2_unselected);
+                break;
+            }
+            case R.id.tv_basket_2: {
+                binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_2_unselected);
+                binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_1_selected);
+                break;
+            }
+        }
     }
 
     private void setView() {

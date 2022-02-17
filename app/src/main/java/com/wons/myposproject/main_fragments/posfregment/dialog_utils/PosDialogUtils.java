@@ -221,17 +221,23 @@ public final class PosDialogUtils {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(!et_quantity.getText().toString().isEmpty()) {
+                    if(et_quantity.getText().toString().equals("0")) {
+                        getDialogForQuantity(context, callback).show();
+                        return;
+                    }
                     try {
                         Integer.parseInt(et_quantity.getText().toString().trim());
                     } catch (Exception e) {
                         getDialogForQuantity(context, callback).show();
                         Toast.makeText(context, "숫자만 입력해주세요", Toast.LENGTH_SHORT).show();
                         Log.e("DialogForQuantity", e.getMessage());
+                        return;
                     }
                     callback.callBack(new ArrayList<>(), et_quantity.getText().toString().trim());
                 } else {
                     getDialogForQuantity(context, callback).show();
                     Toast.makeText(context, "수량을 입력해주세요", Toast.LENGTH_SHORT).show();
+                    return;
                 }
             }
         });

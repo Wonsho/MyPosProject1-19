@@ -3,12 +3,12 @@ package com.wons.myposproject.main_fragments.posfregment.itemvalues;
 public enum Item {
 
     //todo  다이로그 코드는 수량만 묻기 , 너트와샤평와샤 묻기, 길이 묻기*/
-    HEX_BOLT_NORMAL("일반볼트", GroupCode.HEX_BOLT.groupCode, "A1",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean,ShowCode.LENGTH.korean),
-    HEX_BOLT_NORMAL_INCH("일반볼트 인치",GroupCode.HEX_BOLT.groupCode,"A2",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
-    HEX_BOLT_STS("스텐볼트",GroupCode.HEX_BOLT.groupCode,"A3",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
-    HEX_BOLT_STS_INCH("스텐볼트 인치",GroupCode.HEX_BOLT.groupCode,"A4",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
-    HEX_BOLT_CM_KOREA("콜라볼트(국산)",GroupCode.HEX_BOLT.groupCode,"A5",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
-    HEX_BOLT_CM_KOREA_INCH("콜라볼트 인치(국산)",GroupCode.HEX_BOLT.groupCode,"A6",ItemDialogCode.QUANTITY_NUT_SW_PW,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
+    HEX_BOLT_NORMAL("일반볼트", GroupCode.HEX_BOLT.groupCode, "A1",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean,ShowCode.LENGTH.korean),
+    HEX_BOLT_NORMAL_INCH("일반볼트 인치",GroupCode.HEX_BOLT.groupCode,"A2",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
+    HEX_BOLT_STS("스텐볼트",GroupCode.HEX_BOLT.groupCode,"A3",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
+    HEX_BOLT_STS_INCH("스텐볼트 인치",GroupCode.HEX_BOLT.groupCode,"A4",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
+    HEX_BOLT_CM_KOREA("콜라볼트(국산)",GroupCode.HEX_BOLT.groupCode,"A5",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
+    HEX_BOLT_CM_KOREA_INCH("콜라볼트 인치(국산)",GroupCode.HEX_BOLT.groupCode,"A6",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.LENGTH.korean),
     WASHER_SPRING("스프링와샤",GroupCode.WASHER.groupCode,"A7",ItemDialogCode.QUANTITY,ShowCode.MARTERIAL.korean, ShowCode.WIDTH.korean),
     WASHER_PLAT("평와샤", GroupCode.WASHER.groupCode,"A8",ItemDialogCode.QUANTITY,ShowCode.MARTERIAL.korean, ShowCode.WIDTH.korean),
     WASHER_PLAT_BIG_STS("대와샤 스텐", GroupCode.WASHER.groupCode,"A9",ItemDialogCode.QUANTITY,ShowCode.WIDTH.korean, ShowCode.OUTSIDE_LENGTH.korean),
