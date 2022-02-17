@@ -71,7 +71,6 @@
 
         <TextView
             android:layout_gravity="center"
-
             android:id="@+id/tv_itemQuantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

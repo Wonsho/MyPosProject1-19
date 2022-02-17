@@ -55,7 +55,7 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
         tv_standard.setText(basketItem.itemStandard);
 
         tv_quantity = convertView.findViewById(R.id.tv_itemQuantity);
-        tv_quantity.setText(df.format(Integer.parseInt(basketItem.quantity.trim())));
+        tv_quantity.setText(df.format(Double.parseDouble(basketItem.quantity.trim())));
 
         tv_unitPrice = convertView.findViewById(R.id.tv_itemUnitPrice);
         tv_unitPrice.setText(df.format(Double.parseDouble(basketItem.unitPrice.trim())));
@@ -108,7 +108,7 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
 
     private void setItem(int i, BasketTypeItem item) {
         BasketTypeItem item1 = items.get(i);
-        item1.quantity = String.valueOf(Integer.parseInt(item1.quantity) + (Double.parseDouble(item.quantity)));
+        item1.quantity = String.valueOf(Double.parseDouble(item1.quantity) + (Double.parseDouble(item.quantity)));
         items.set(i, item1);
     }
 

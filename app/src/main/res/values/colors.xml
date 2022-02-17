@@ -10,4 +10,5 @@
     <color name="background">#939393</color>
     <color name="line_1">#AFAFAF</color>
     <color name="itemList_value">#AFAFAF</color>
+    <color name="unselected">#C6C6C6</color>
 </resources>

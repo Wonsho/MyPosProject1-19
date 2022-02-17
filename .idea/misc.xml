@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/drawable/my_background_1.xml" value="0.127734375" />
+        <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/drawable/my_background_1_selected.xml" value="0.1" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/drawable/my_background_2_unselected.xml" value="0.20234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/drawable/tablayout.xml" value="0.20234375" />
         <entry key="..\:/Users/wono9/AndroidStudioProjects/MyPosProject/app/src/main/res/layout/activity_main.xml" value="0.2" />

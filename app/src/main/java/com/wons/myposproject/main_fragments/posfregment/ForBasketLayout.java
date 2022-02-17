@@ -8,11 +8,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wons.myposproject.layout_class.BasketLayout;
 import com.wons.myposproject.MainViewModel;
 import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
+import com.wons.myposproject.layout_class.BasketLayout;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallback;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
@@ -115,7 +115,7 @@ class ForBasketLayout {
     private void setPrice() {
         double price = 0.0;
         for(BasketTypeItem item : adapter.getItems()) {
-            price += (Double.parseDouble(item.unitPrice) * (Integer.parseInt(item.quantity)));
+            price += (Double.parseDouble(item.unitPrice) * (Double.parseDouble(item.quantity)));
         }
         DecimalFormat df = new DecimalFormat("###,###,###.##");
         ((TextView)layout.findViewById(R.id.tv_allPrice)).setText(df.format(price));
