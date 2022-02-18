@@ -37,8 +37,11 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_1"
             android:textColor="@color/black"
@@ -47,8 +50,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_2"
             android:textColor="@color/black"
@@ -57,8 +62,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_3"
             android:textColor="@color/black"
@@ -74,8 +81,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_4"
             android:textColor="@color/black"
@@ -84,8 +93,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_5"
             android:textColor="@color/black"
@@ -94,8 +105,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_6"
             android:textColor="@color/black"
@@ -118,8 +131,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_7"
             android:textColor="@color/black"
@@ -128,8 +143,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_8"
             android:textColor="@color/black"
@@ -138,8 +155,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <Button
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:layout_margin="5dp"
             android:id="@+id/btn_9"
             android:textColor="@color/black"
@@ -154,8 +173,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_margin="5dp"
                 android:id="@+id/btn_0"
                 android:textColor="@color/black"
@@ -165,8 +186,10 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"/>
             <Button
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_margin="5dp"
                 android:id="@+id/btn_delete"
                 android:textColor="@color/black"

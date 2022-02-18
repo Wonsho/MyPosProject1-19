@@ -9,12 +9,13 @@
         app:cardCornerRadius="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/itemList_value">
+        android:backgroundTint="#BAB9B9">
         <LinearLayout
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                android:textStyle="bold"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 android:id="@+id/tv_value_in_list"

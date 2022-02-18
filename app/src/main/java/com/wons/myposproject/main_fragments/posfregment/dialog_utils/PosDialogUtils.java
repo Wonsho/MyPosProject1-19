@@ -207,9 +207,44 @@ public final class PosDialogUtils {
     public AlertDialog getDialogForQuantity(Context context, PosDialogCallbackForBolt callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("수량을 입력해주세요");
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_view_schedule, null);
-        EditText et_quantity = view.findViewById(R.id.et_schedule);
-        et_quantity.setInputType(0x00000002);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_quantity_view, null);
+        TextView tv = view.findViewById(R.id.tv_setNumber);
+        Button button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonD, button0;
+        button1 = view.findViewById(R.id.btn_1);
+        button2 = view.findViewById(R.id.btn_2);
+        button3 = view.findViewById(R.id.btn_3);
+        button4 = view.findViewById(R.id.btn_4);
+        button5 = view.findViewById(R.id.btn_5);
+        button6 = view.findViewById(R.id.btn_6);
+        button7 = view.findViewById(R.id.btn_7);
+        button8 = view.findViewById(R.id.btn_8);
+        button9 = view.findViewById(R.id.btn_9);
+        buttonD = view.findViewById(R.id.btn_delete);
+        button0 = view.findViewById(R.id.btn_0);
+        Button[] buttons = {button0, button1, button2, button3, button4, button5, button6, button7, button8, button9};
+        for (Button button : buttons) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+                    if (tv.getText().toString().isEmpty()) {
+                        if (v.getId() == R.id.btn_0) {
+                            return;
+                        }
+                    }
+                    tv.setText(tv.getText().toString() + ((Button) v).getText().toString());
+                }
+            });
+        }
+        buttonD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!(tv.getText().toString().isEmpty())) {
+                    tv.setText(tv.getText().toString().substring(0, tv.getText().toString().length() - 1));
+                }
+            }
+        });
+        ((TextView) view.findViewById(R.id.tv_setNumber)).setHint("수량을 적어주세요!!");
         builder.setView(view);
         builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
             @Override
@@ -220,20 +255,20 @@ public final class PosDialogUtils {
         builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(!et_quantity.getText().toString().isEmpty()) {
-                    if(et_quantity.getText().toString().equals("0")) {
+                if(!tv.getText().toString().isEmpty()) {
+                    if(tv.getText().toString().equals("0")) {
                         getDialogForQuantity(context, callback).show();
                         return;
                     }
                     try {
-                        Integer.parseInt(et_quantity.getText().toString().trim());
+                        Integer.parseInt(tv.getText().toString().trim());
                     } catch (Exception e) {
                         getDialogForQuantity(context, callback).show();
                         Toast.makeText(context, "숫자만 입력해주세요", Toast.LENGTH_SHORT).show();
                         Log.e("DialogForQuantity", e.getMessage());
                         return;
                     }
-                    callback.callBack(new ArrayList<>(), et_quantity.getText().toString().trim());
+                    callback.callBack(new ArrayList<>(), tv.getText().toString().trim());
                 } else {
                     getDialogForQuantity(context, callback).show();
                     Toast.makeText(context, "수량을 입력해주세요", Toast.LENGTH_SHORT).show();

@@ -72,8 +72,32 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:background="@color/black" />
+                        <TextView
+                            android:id="@+id/btn_search_credit"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:textSize="15dp"
+                            android:textColor="@color/black"
+                            android:paddingTop="20dp"
+                            android:paddingBottom="20dp"
+                            android:gravity="center"
+                            android:text="외상 판매 조회"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@color/black" />
+
+
                     </LinearLayout>
+
+
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
@@ -124,6 +148,11 @@
                           android:visibility="gone"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"/>
+                        <com.wons.myposproject.layout_class.Info_credit_layout
+                            android:id="@+id/layout_searched_credit"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
                     </FrameLayout>
 
                     <TextView

@@ -90,10 +90,13 @@ public class Basket_BarcodeList_Adapter extends BaseAdapter {
             Log.e("sameCheckItem-1","passed");
             if (items.get(i).itemName.equals(item.itemName)) {
                 Log.e("sameCheckItem2","passed");
-                if (items.get(i).itemStandard == null) {
+                if ((items.get(i).itemStandard == null) && (items.get(i).unitPrice.equals(item.unitPrice))) {
                     setItem(i, item);
                     Log.e("sameCheckItem3","passed");
                     return;
+                }
+                if(items.get(i).itemStandard == null) {
+                    continue;
                 }
                 if (items.get(i).itemStandard.equals(item.itemStandard)) {
                     setItem(i, item);
