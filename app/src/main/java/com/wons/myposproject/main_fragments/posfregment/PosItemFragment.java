@@ -1,4 +1,5 @@
 package com.wons.myposproject.main_fragments.posfregment;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -178,9 +179,21 @@ public class PosItemFragment extends Fragment {
     //todo 수량과 셋트 메뉴 묻는 다이로그
     private void showDialogForBolt() {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
+            @SuppressLint("LongLogTag")
             @Override
             public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
-
+                if(checkCode.size() == 0) {
+                    String itemQuantity = quantity;
+                    String itemName = binding.tvItemTitle.getText().toString().trim();
+                    String itemStandard = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
+                            + " ->\n" + ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
+                    String unitPrice = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
+                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+                } else {
+                    //todo 세트메뉴 추가시
+                    Log.e("When BoltItem Need Other Item", "Passed");
+                    searchOtherItem(null,null,null);
+                }
             }
         });
         alertDialog.show();
@@ -199,6 +212,10 @@ public class PosItemFragment extends Fragment {
             }
         });
         alertDialog.show();
+    }
+    //todo 세트메뉴 추가시 데이터 서칭
+    private void searchOtherItem(String itemCode,String material, String width) {
+
     }
     //todo 바스켓으로 보내기
     private void intentToBasket(ArrayList<BasketTypeItem> items) {

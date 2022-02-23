@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,50 +106,46 @@ public final class PosDialogUtils {
         builder.setTitle("볼트 수량을 입력해주세요");
         builder.setMessage("수량같음은 적은 수량과 일치하는 수량입니다!");
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_view_bolt, null);
-        EditText et_boltQuantity = view.findViewById(R.id.et_boltQuantity);
-        CheckBox cb_nutSame = view.findViewById(R.id.cb_nutSameQuantity);
-        CheckBox cb_nut2 = view.findViewById(R.id.cb_nut2Quantity);
-        CheckBox cb_swSame = view.findViewById(R.id.cb_swSameQuantity);
-        CheckBox cb_sw2 = view.findViewById(R.id.cb_sw2Quantity);
-        CheckBox cb_pwSame = view.findViewById(R.id.cb_pwSameQuantity);
-        CheckBox cb_pw2 = view.findViewById(R.id.cb_pw2Quantity);
-
-        cb_nutSame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        TextView tv = view.findViewById(R.id.tv_setNumber);
+        Button button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonD, button0;
+        button1 = view.findViewById(R.id.btn_1);
+        button2 = view.findViewById(R.id.btn_2);
+        button3 = view.findViewById(R.id.btn_3);
+        button4 = view.findViewById(R.id.btn_4);
+        button5 = view.findViewById(R.id.btn_5);
+        button6 = view.findViewById(R.id.btn_6);
+        button7 = view.findViewById(R.id.btn_7);
+        button8 = view.findViewById(R.id.btn_8);
+        button9 = view.findViewById(R.id.btn_9);
+        buttonD = view.findViewById(R.id.btn_delete);
+        button0 = view.findViewById(R.id.btn_0);
+        Button[] buttons = {button0, button1, button2, button3, button4, button5, button6, button7, button8, button9};
+        for (Button button : buttons) {
+            button.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+                    if (tv.getText().toString().isEmpty()) {
+                        if (v.getId() == R.id.btn_0) {
+                            return;
+                        }
+                    }
+                    tv.setText(tv.getText().toString() + ((Button) v).getText().toString());
+                }
+            });
+        }
+        buttonD.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_nut2.setChecked(false);
+            public void onClick(View v) {
+                if (!(tv.getText().toString().isEmpty())) {
+                    tv.setText(tv.getText().toString().substring(0, tv.getText().toString().length() - 1));
+                }
             }
         });
-        cb_nut2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_nutSame.setChecked(false);
-            }
-        });
-        cb_pwSame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_pw2.setChecked(false);
-            }
-        });
-        cb_pw2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_pwSame.setChecked(false);
-            }
-        });
-        cb_swSame.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_sw2.setChecked(false);
-            }
-        });
-        cb_sw2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cb_swSame.setChecked(false);
-            }
-        });
+        RadioGroup rg_nut, rg_sw, rg_pw;
+        rg_nut = view.findViewById(R.id.rdg_nutQuantity);
+        rg_sw = view.findViewById(R.id.rdg_swQuantity);
+        rg_pw = view.findViewById(R.id.rdg_pwQuantity);
         builder.setView(view);
 
         builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
@@ -157,51 +155,57 @@ public final class PosDialogUtils {
             }
         });
         builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
-            @SuppressLint("NonConstantResourceId")
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!et_boltQuantity.getText().toString().isEmpty()) {
-                    ArrayList<CheckCode> arrayList = new ArrayList<>();
-                    CheckBox[] checkBoxes = {cb_pwSame, cb_nutSame, cb_swSame, cb_nut2, cb_pw2, cb_sw2};
-                    for (CheckBox checkBox : checkBoxes) {
-                        if (checkBox.isChecked()) {
-                            switch (checkBox.getId()) {
-                                case R.id.cb_nut2Quantity: {
-                                    arrayList.add(CheckCode.NUT_2_QUANTITY);
-                                    break;
-                                }
-                                case R.id.cb_pw2Quantity: {
-                                    arrayList.add(CheckCode.PW_2_QUANTITY);
-                                    break;
-                                }
-                                case R.id.cb_sw2Quantity: {
-                                    arrayList.add(CheckCode.SW_2_QUANTITY);
-                                    break;
-                                }
-
-                                case R.id.cb_nutSameQuantity: {
-                                    arrayList.add(CheckCode.NUT_SAME_QUANTITY);
-                                    break;
-                                }
-
-                                case R.id.cb_pwSameQuantity: {
-                                    arrayList.add(CheckCode.PW_SAME_QUANTITY);
-                                    break;
-                                }
-
-                                case R.id.cb_swSameQuantity: {
-                                    arrayList.add(CheckCode.SW_SAME_QUANTITY);
-                                    break;
-                                }
-                            }
+                if (!tv.getText().toString().isEmpty()) {
+                    ArrayList<CheckCode> checkCodeArr = new ArrayList<CheckCode>();
+                    switch (rg_nut.getCheckedRadioButtonId()) {
+                        case R.id.rb_same: {
+                            checkCodeArr.add(CheckCode.NUT_SAME_QUANTITY);
+                            break;
                         }
+                        case R.id.rb_2: {
+                            checkCodeArr.add(CheckCode.NUT_2_QUANTITY);
+                            break;
+                        }
+                        default:
+                            break;
                     }
-                    callback.callBack(arrayList, et_boltQuantity.getText().toString().trim());
-
+                    switch (rg_pw.getCheckedRadioButtonId()) {
+                        case R.id.rb_pwSame: {
+                            checkCodeArr.add(CheckCode.PW_SAME_QUANTITY);
+                            break;
+                        }
+                        case R.id.rb_pw2: {
+                            checkCodeArr.add(CheckCode.PW_2_QUANTITY);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    switch (rg_sw.getCheckedRadioButtonId()) {
+                        case R.id.rdg_swQuantity: {
+                            checkCodeArr.add(CheckCode.SW_SAME_QUANTITY);
+                            break;
+                        }
+                        case R.id.rb_sw2: {
+                            checkCodeArr.add(CheckCode.SW_2_QUANTITY);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    callback.callBack(checkCodeArr, tv.getText().toString().trim());
+                } else {
+                    Log.e("AlertDialogForBolt", "Passed");
+                    Toast.makeText(context, "수량을 적어주세요", Toast.LENGTH_SHORT).show();
+                    getDialogForBoltQuantity(context, callback).show();
                 }
             }
         });
+
         return builder.create();
+
     }
 
     public AlertDialog getDialogForQuantity(Context context, PosDialogCallbackForBolt callback) {
@@ -255,8 +259,8 @@ public final class PosDialogUtils {
         builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(!tv.getText().toString().isEmpty()) {
-                    if(tv.getText().toString().equals("0")) {
+                if (!tv.getText().toString().isEmpty()) {
+                    if (tv.getText().toString().equals("0")) {
                         getDialogForQuantity(context, callback).show();
                         return;
                     }
