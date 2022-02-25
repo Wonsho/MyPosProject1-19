@@ -28,6 +28,9 @@ import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCa
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.SelectedItem;
+import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -179,6 +182,7 @@ public class PosItemFragment extends Fragment {
     //todo 수량과 셋트 메뉴 묻는 다이로그
     private void showDialogForBolt() {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @SuppressLint("LongLogTag")
             @Override
             public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
@@ -214,7 +218,10 @@ public class PosItemFragment extends Fragment {
         alertDialog.show();
     }
     //todo 세트메뉴 추가시 데이터 서칭
-    private void searchOtherItem(String itemCode,String material, String width) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void searchOtherItem(String itemCode, String material, String width) {
+        ArrayList<Value> items = MainViewModel.getSelectedValue(getContext(), itemCode);
+        SelectedItem.getSelectedItem(items);
 
     }
     //todo 바스켓으로 보내기
@@ -228,12 +235,6 @@ public class PosItemFragment extends Fragment {
         binding.drawer.openDrawer(Gravity.RIGHT);
         Toast.makeText(getContext(), "추가되었습니다", Toast.LENGTH_SHORT).show();
     }
-
-    //todo 셋트메뉴 단가 리턴
-//    private BasketTypeItem searchOtherThingsUnitPrice(String material,String width ,String itemCode) {
-//
-//    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
