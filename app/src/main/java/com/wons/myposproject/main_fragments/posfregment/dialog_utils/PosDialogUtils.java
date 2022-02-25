@@ -143,6 +143,13 @@ public final class PosDialogUtils {
             }
         });
         RadioGroup rg_nut, rg_sw, rg_pw;
+        RadioButton rb_non, rb_non2, rb_non3;
+        rb_non = view.findViewById(R.id.rb_non);
+        rb_non.setChecked(true);
+        rb_non2 = view.findViewById(R.id.rb_non2);
+        rb_non2.setChecked(true);
+        rb_non3 = view.findViewById(R.id.rb_non3);
+        rb_non3.setChecked(true);
         rg_nut = view.findViewById(R.id.rdg_nutQuantity);
         rg_sw = view.findViewById(R.id.rdg_swQuantity);
         rg_pw = view.findViewById(R.id.rdg_pwQuantity);
@@ -155,36 +162,43 @@ public final class PosDialogUtils {
             }
         });
         builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (!tv.getText().toString().isEmpty()) {
                     ArrayList<CheckCode> checkCodeArr = new ArrayList<CheckCode>();
                     switch (rg_nut.getCheckedRadioButtonId()) {
                         case R.id.rb_same: {
+                            Log.e("AlertDialog nut", "Passed");
                             checkCodeArr.add(CheckCode.NUT_SAME_QUANTITY);
                             break;
                         }
                         case R.id.rb_2: {
+                            Log.e("AlertDialog nut", "Passed");
                             checkCodeArr.add(CheckCode.NUT_2_QUANTITY);
                             break;
                         }
-                        default:
-                            break;
                     }
+                    Log.e("1", "Passed");
                     switch (rg_pw.getCheckedRadioButtonId()) {
                         case R.id.rb_pwSame: {
+
                             checkCodeArr.add(CheckCode.PW_SAME_QUANTITY);
                             break;
                         }
                         case R.id.rb_pw2: {
+                            Log.e("rb_pw2 nut", "Passed");
+
                             checkCodeArr.add(CheckCode.PW_2_QUANTITY);
                             break;
                         }
-                        default:
-                            break;
                     }
+                    Log.e("2", "Passed");
                     switch (rg_sw.getCheckedRadioButtonId()) {
-                        case R.id.rdg_swQuantity: {
+
+                        case R.id.rb_swSame: {
+                            Log.e("rdg_swQuantity nut", "Passed");
+
                             checkCodeArr.add(CheckCode.SW_SAME_QUANTITY);
                             break;
                         }
@@ -192,8 +206,6 @@ public final class PosDialogUtils {
                             checkCodeArr.add(CheckCode.SW_2_QUANTITY);
                             break;
                         }
-                        default:
-                            break;
                     }
                     callback.callBack(checkCodeArr, tv.getText().toString().trim());
                 } else {

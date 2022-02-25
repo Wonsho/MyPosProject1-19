@@ -328,7 +328,7 @@
                     android:textStyle="bold" />
 
                 <RadioButton
-                    android:id="@+id/rb_qwSame"
+                    android:id="@+id/rb_pwSame"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -387,7 +387,7 @@
                     android:textStyle="bold" />
 
                 <RadioButton
-                    android:id="@+id/rb_pwSame"
+                    android:id="@+id/rb_swSame"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -1,12 +1,15 @@
 package com.wons.myposproject.main_fragments.posfregment;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.wons.myposproject.MainViewModel;
@@ -125,7 +129,7 @@ public class PosItemFragment extends Fragment {
                 Toast.makeText(getContext(), "계산이 완료되었습니다", Toast.LENGTH_SHORT).show();
                 forBasketLayout.adapter.itemClear();
                 MainViewModel.setLiveDataBasketList(new ArrayList<>());
-                forBasketLayout.callSetViewFromPosMain();
+                forBasketLayout.getLiveData();
             }
         });
 
@@ -168,7 +172,7 @@ public class PosItemFragment extends Fragment {
                                     break;
                                 }
                                 case QUANTITY_NUT_SW_PW: {
-                                    showDialogForBolt();
+                                    showDialogForBolt(item);
                                     break;
                                 }
                             }
@@ -179,29 +183,80 @@ public class PosItemFragment extends Fragment {
         });
         return binding.getRoot();
     }
+
     //todo 수량과 셋트 메뉴 묻는 다이로그
-    private void showDialogForBolt() {
+    private void showDialogForBolt(Item item) {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @SuppressLint("LongLogTag")
             @Override
             public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
-                if(checkCode.size() == 0) {
+                if (checkCode.size() == 0) {
                     String itemQuantity = quantity;
                     String itemName = binding.tvItemTitle.getText().toString().trim();
-                    String itemStandard = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
-                            + " ->\n" + ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
-                    String unitPrice = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
+                    String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
+                            + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
+                    String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
                     intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
                 } else {
                     //todo 세트메뉴 추가시
-                    Log.e("When BoltItem Need Other Item", "Passed");
-                    searchOtherItem(null,null,null);
+                    String itemQuantity = quantity;
+                    String itemName = binding.tvItemTitle.getText().toString().trim();
+                    String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
+                            + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
+                    String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
+                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+
+                    Log.e("checkCodeSize", String.valueOf(checkCode.size()));
+                    String width = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim();
+                    for (CheckCode code : checkCode) {
+                        Log.e("When BoltItem Need Other Item", "Passed");
+                        switch (code) {
+                            case PW_2_QUANTITY: {
+                                Log.e("PW_2_QUANTITY", "Passed");
+
+                                searchOtherItem(item.pwCode, item.materialCode, width, String.valueOf(Integer.parseInt(quantity) * 2));
+                                break;
+                            }
+                            case SW_2_QUANTITY: {
+                                Log.e("SW_2_QUANTITY", "Passed");
+                                searchOtherItem(item.swCode, item.materialCode, width, String.valueOf(Integer.parseInt(quantity) * 2));
+                                break;
+                            }
+
+                            case NUT_2_QUANTITY: {
+                                Log.e("NUT_2_QUANTITY", "Passed");
+
+                                searchOtherItem(item.nutCode, item.materialCode, width, String.valueOf(Integer.parseInt(quantity) * 2));
+                                break;
+                            }
+                            case PW_SAME_QUANTITY: {
+                                Log.e("PW_SAME_QUANTITY", "Passed");
+
+                                searchOtherItem(item.pwCode, item.materialCode, width, quantity);
+                                break;
+                            }
+                            case SW_SAME_QUANTITY: {
+                                Log.e("SW_SAME_QUANTITY", "Passed");
+
+                                searchOtherItem(item.swCode, item.materialCode, width, quantity);
+                                break;
+                            }
+
+                            case NUT_SAME_QUANTITY: {
+                                Log.e("NUT_SAME_QUANTITY", "Passed");
+
+                                searchOtherItem(item.nutCode, item.materialCode, width, quantity);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         });
         alertDialog.show();
     }
+
     //todo 단순 수량만 묻는 다이로그
     private void showDialogForQuantity() {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForQuantity(getContext(), new PosDialogCallbackForBolt() {
@@ -209,24 +264,40 @@ public class PosItemFragment extends Fragment {
             public void callBack(ArrayList<CheckCode> checkCode, String quantity) {
                 String itemQuantity = quantity;
                 String itemName = binding.tvItemTitle.getText().toString().trim();
-                String itemStandard = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
-                        + " ->\n" + ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
-                String unitPrice = ((TextView)binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
+                String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
+                        + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
+                String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
                 intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
             }
         });
         alertDialog.show();
     }
+
     //todo 세트메뉴 추가시 데이터 서칭
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void searchOtherItem(String itemCode, String material, String width) {
-        ArrayList<Value> items = MainViewModel.getSelectedValue(getContext(), itemCode);
-        SelectedItem.getSelectedItem(items);
-
+    private void searchOtherItem(String itemCode, String material, String width, String quantity) {
+        Log.e("searchOtherItem1", width);
+        ArrayList<Value> itemStandard = MainViewModel.getValueForSetMenu(getContext(), itemCode, "standard");
+        ArrayList<Value> setItem = MainViewModel.getValueForSetMenu(getContext(), itemCode, material);
+        ArrayList<String> arrItemStandard = itemStandard.get(0).valueList();
+        ArrayList<String> arrSetItem = setItem.get(0).valueList();
+        String itemUnitPrice = null;
+        for(int i = 0 ; i< arrItemStandard.size() ; i++) {
+            if(arrItemStandard.get(i).equals(width.replace("/","_"))) {
+                itemUnitPrice = arrSetItem.get(i);
+                Log.e("searchOtherItem", itemUnitPrice);
+                break;
+            }
+        }
+        BasketTypeItem item = new BasketTypeItem(setItem.get(0).koreanName, material.trim()
+                + " ->\n" + width.trim(), itemUnitPrice, quantity);
+        intentToBasket(new ArrayList<>(Arrays.asList(item)));
     }
+
+
     //todo 바스켓으로 보내기
     private void intentToBasket(ArrayList<BasketTypeItem> items) {
-        for(BasketTypeItem basketTypeItem : items) {
+        for (BasketTypeItem basketTypeItem : items) {
             Log.e("IntentValue", basketTypeItem.itemName + " " + basketTypeItem.itemStandard + " " + basketTypeItem.unitPrice + " " + basketTypeItem.quantity);
         }
         Basket_BarcodeList_Adapter adapter = ((Basket_BarcodeList_Adapter) forBasketLayout.lv.getAdapter());

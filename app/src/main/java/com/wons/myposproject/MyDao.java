@@ -48,4 +48,7 @@ public interface MyDao {
 
     @Query("SELECT * FROM BarCodeItem")
     BarCodeItem[] getBarcodeItemList();
+
+    @Query("SELECT * FROM (SELECT * FROM Value WHERE itemCode =  :code) WHERE X0 = :standard")
+    Value[] getValueForSet(String code, String standard);
 }

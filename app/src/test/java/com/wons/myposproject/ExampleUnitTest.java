@@ -14,8 +14,42 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
 
+        int a = 7;
 
-        String a = "034";
-        System.out.println(Double.parseDouble(a) * 2);
+        switch (a) {
+            case 1: {
+                System.out.println("a");
+                break;
+
+            }
+            case 2: {
+                System.out.println("B");
+                break;
+
+            }
+        }
+        switch (a) {
+            case 7: {
+                System.out.println("a1");
+                break;
+            }
+            case 2: {
+                System.out.println("B");
+                break;
+
+            }
+        }
+        switch (a) {
+            case 7: {
+                System.out.println("a2");
+                break;
+
+            }
+            case 2: {
+                System.out.println("B");
+                break;
+
+            }
+        }
     }
 }

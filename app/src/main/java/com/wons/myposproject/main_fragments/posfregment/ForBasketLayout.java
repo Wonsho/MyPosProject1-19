@@ -58,6 +58,7 @@ class ForBasketLayout {
                             setView();
                             Toast.makeText(context, "모두 삭제 되었습니다", Toast.LENGTH_SHORT).show();
                             MainViewModel.setLiveDataBasketList(new ArrayList<>());
+                            getLiveData();
                         }
                     }
                     @Override
@@ -98,6 +99,7 @@ class ForBasketLayout {
                 binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_1_selected);
                 binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_2_unselected);
                 MainViewModel.setBasketKey(R.id.tv_basket_1);
+
                 adapter.itemClear();
                 getLiveData();
             }
@@ -109,6 +111,7 @@ class ForBasketLayout {
                 binding.layoutBasket.findViewById(R.id.tv_basket_1).setBackgroundResource(R.drawable.my_background_2_unselected);
                 binding.layoutBasket.findViewById(R.id.tv_basket_2).setBackgroundResource(R.drawable.my_background_1_selected);
                 MainViewModel.setBasketKey(R.id.tv_basket_2);
+
                 adapter.itemClear();
                 getLiveData();
             }
@@ -119,7 +122,7 @@ class ForBasketLayout {
         setView();
     }
 
-    private void getLiveData() {
+    public void getLiveData() {
         ArrayList<BasketTypeItem> items = MainViewModel.getLiveDataBasketList();
         adapter.addItem(items);
         setView();

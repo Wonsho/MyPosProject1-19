@@ -62,18 +62,12 @@ public class MainViewModel extends ViewModel {
         itemMap.put(getBasketKey(), itemArrayList);
         basketData.setValue(itemMap);
     }
-//    public static ArrayList<BasketTypeItem> getLiveDataBasketList() {
-//        if (liveDataBasketList == null) {
-//            liveDataBasketList = new MutableLiveData<>();
-//            liveDataBasketList.setValue(new ArrayList<BasketTypeItem>());
-//        }
-//        return liveDataBasketList.getValue();
-//    }
 
+    public static ArrayList<Value> getValueForSetMenu(Context context,String code ,String standard) {
+        myDao = getMainDataBase(context).getDao();
+        return new ArrayList<>(Arrays.asList(myDao.getValueForSet(code, standard)));
+    }
 
-//    public static void setLiveDataBasketList(ArrayList<BasketTypeItem> itemArrayList) {
-//        liveDataBasketList.setValue(itemArrayList);
-//    }
 
 
     public static MainDataBase getMainDataBase(Context context) {
