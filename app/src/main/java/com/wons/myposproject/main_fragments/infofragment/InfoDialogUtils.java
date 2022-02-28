@@ -263,4 +263,21 @@ public class InfoDialogUtils {
         builder.create().show();
     }
 
+    public AlertDialog showCheck(Context context, InfoDiaLogCallbackForBoolean callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("외상기록을 삭제 하시겠습니까?");
+        builder.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.callBack(true);
+            }
+        });
+        return builder.create();
+    }
 }

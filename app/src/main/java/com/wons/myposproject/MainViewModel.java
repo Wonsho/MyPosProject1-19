@@ -182,4 +182,12 @@ public class MainViewModel extends ViewModel {
         return dateArr;
     }
 
+    public static void deleteItemsInDB(ArrayList<BasketTypeItem> items, String date, Context context) {
+        myDao = getMainDataBase(context).getDao();
+        for(BasketTypeItem item : items) {
+            myDao.deleteItemInBasket(item);
+        }
+        myDao.deleteBasket(myDao.getBasket(date));
+    }
+
 }
