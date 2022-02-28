@@ -294,4 +294,48 @@ public final class PosDialogUtils {
         });
         return builder.create();
     }
+
+    public AlertDialog getAlertDialogForSetCreditTag(Context context, PosDialogCallback callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_view_schedule, null);
+        EditText editText = view.findViewById(R.id.et_schedule);
+        builder.setTitle("외상을 분류할 태그를 적어주세요");
+        builder.setView(view);
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("추가", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!editText.getText().toString().isEmpty()) {
+                    showAlert(context, editText.getText().toString().trim(), callback);
+                } else {
+                    Toast.makeText(context, "다시 확인후 적어주세요",Toast.LENGTH_SHORT).show();
+                    getAlertDialogForSetCreditTag(context, callback).show();
+                }
+            }
+        });
+        return builder.create();
+    }
+
+    private void showAlert(Context context, String msg, PosDialogCallback callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("지정할 태그가 '"+msg+"' 가 맞습니까?");
+        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                callback.callBackString(msg.trim());
+            }
+        });
+        builder.setPositiveButton("아니요", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getAlertDialogForSetCreditTag(context, callback).show();
+            }
+        });
+        builder.create().show();
+    }
 }

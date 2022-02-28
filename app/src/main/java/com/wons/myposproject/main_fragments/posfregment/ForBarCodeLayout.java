@@ -105,7 +105,7 @@ public class ForBarCodeLayout {
             @Override
             public void callBackString(String str) {
                 if (!str.isEmpty()) {
-                    ((Basket_BarcodeList_Adapter) lv.getAdapter()).addItem(new BasketTypeItem(item.name, null, item.unitPrice, str.trim()));
+                    ((Basket_BarcodeList_Adapter) lv.getAdapter()).addItem(new BasketTypeItem(item.name, null, item.unitPrice, str.trim(), null));
                     setView();
                     Toast.makeText(context, "추가 되었습니다", Toast.LENGTH_SHORT).show();
                 } else {

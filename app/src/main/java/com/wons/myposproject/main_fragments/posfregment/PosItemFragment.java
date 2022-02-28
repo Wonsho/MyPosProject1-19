@@ -26,8 +26,10 @@ import com.wons.myposproject.R;
 import com.wons.myposproject.adapter.Basket_BarcodeList_Adapter;
 import com.wons.myposproject.adapter.PosItemMenu_Adapter;
 import com.wons.myposproject.databinding.FragmentPosItemBinding;
+import com.wons.myposproject.enums.SoldCode;
 import com.wons.myposproject.main_fragments.posfregment.Basket_Value.BasketTypeItem;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.CheckCode;
+import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallback;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogCallbackForBolt;
 import com.wons.myposproject.main_fragments.posfregment.dialog_utils.PosDialogUtils;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Group;
@@ -35,8 +37,10 @@ import com.wons.myposproject.main_fragments.posfregment.itemvalues.Item;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.SelectedItem;
 import com.wons.myposproject.main_fragments.posfregment.itemvalues.Value;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class PosItemFragment extends Fragment {
     private FragmentPosItemBinding binding;
@@ -103,13 +107,31 @@ public class PosItemFragment extends Fragment {
                     Toast.makeText(getContext(), "항목을 먼저 추가해주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Toast.makeText(getContext(), "외상으로 등록되었습니다", Toast.LENGTH_SHORT).show();
-                forBasketLayout.adapter.itemClear();
-                MainViewModel.setLiveDataBasketList(new ArrayList<>());
-                forBasketLayout.callSetViewFromPosMain();
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String getTime = simpleDate.format(date);
+                AlertDialog alertDialog = new PosDialogUtils().getAlertDialogForSetCreditTag(getContext(), new PosDialogCallback() {
+                    @Override
+                    public void callBack(Boolean yOrN) {
+                    }
+
+                    @Override
+                    public void callBackString(String str) {
+                        ArrayList<BasketTypeItem> items = forBasketLayout.adapter.getItems();
+                        Log.e("Credit", String.valueOf(items.size()));
+                        MainViewModel.insertCreditItem(getContext(), getTime, items, SoldCode.CREDIT, str);
+                        Toast.makeText(getContext(), "외상으로 등록되었습니다" + getTime, Toast.LENGTH_SHORT).show();
+                        forBasketLayout.adapter.itemClear();
+                        MainViewModel.setLiveDataBasketList(new ArrayList<>());
+                        forBasketLayout.callSetViewFromPosMain();
+                    }
+                });
+                alertDialog.show();
 
             }
         });
+
         //todo 영수증 클릭 버튼
         binding.layoutBasket.findViewById(R.id.tv_printReceipt_likeBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +206,8 @@ public class PosItemFragment extends Fragment {
         return binding.getRoot();
     }
 
+    //todo 외상 저장
+
     //todo 수량과 셋트 메뉴 묻는 다이로그
     private void showDialogForBolt(Item item) {
         AlertDialog alertDialog = new PosDialogUtils().getDialogForBoltQuantity(getContext(), new PosDialogCallbackForBolt() {
@@ -197,7 +221,7 @@ public class PosItemFragment extends Fragment {
                     String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
                             + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
                     String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
-                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity, null))));
                 } else {
                     //todo 세트메뉴 추가시
                     String itemQuantity = quantity;
@@ -205,7 +229,7 @@ public class PosItemFragment extends Fragment {
                     String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
                             + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
                     String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
-                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+                    intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity, null))));
 
                     Log.e("checkCodeSize", String.valueOf(checkCode.size()));
                     String width = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim();
@@ -267,7 +291,7 @@ public class PosItemFragment extends Fragment {
                 String itemStandard = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedVerticalInUnitPrice)).getText().toString().trim()
                         + " ->\n" + ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedHorizontalInUnitPrice)).getText().toString().trim();
                 String unitPrice = ((TextView) binding.layoutItem.findViewById(R.id.tv_selectedUnitPrice)).getText().toString().trim();
-                intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity))));
+                intentToBasket(new ArrayList<>(Arrays.asList(new BasketTypeItem(itemName, itemStandard, unitPrice, itemQuantity, null))));
             }
         });
         alertDialog.show();
@@ -282,15 +306,15 @@ public class PosItemFragment extends Fragment {
         ArrayList<String> arrItemStandard = itemStandard.get(0).valueList();
         ArrayList<String> arrSetItem = setItem.get(0).valueList();
         String itemUnitPrice = null;
-        for(int i = 0 ; i< arrItemStandard.size() ; i++) {
-            if(arrItemStandard.get(i).equals(width.replace("/","_"))) {
+        for (int i = 0; i < arrItemStandard.size(); i++) {
+            if (arrItemStandard.get(i).equals(width.replace("/", "_"))) {
                 itemUnitPrice = arrSetItem.get(i);
                 Log.e("searchOtherItem", itemUnitPrice);
                 break;
             }
         }
         BasketTypeItem item = new BasketTypeItem(setItem.get(0).koreanName, material.trim()
-                + " ->\n" + width.trim(), itemUnitPrice, quantity);
+                + " ->\n" + width.trim(), itemUnitPrice, quantity, null);
         intentToBasket(new ArrayList<>(Arrays.asList(item)));
     }
 

@@ -2,6 +2,7 @@ package com.wons.myposproject.main_fragments.posfregment.Basket_Value;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,7 +12,7 @@ public class BasketTypeItem {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    int itemId;
+    public int itemId;
 
     public String itemName;
     public String itemStandard;
@@ -19,10 +20,12 @@ public class BasketTypeItem {
     public String quantity;
     public String basketCode;
 
-    public BasketTypeItem(String itemName, String itemStandard, String unitPrice, String quantity) {
+    public BasketTypeItem(String itemName, String itemStandard, String unitPrice, String quantity, @Nullable String basketCode) {
         this.itemName = itemName;
         this.itemStandard = itemStandard;
         this.unitPrice = unitPrice;
         this.quantity = quantity;
+        this.basketCode = basketCode;
     }
+
 }
